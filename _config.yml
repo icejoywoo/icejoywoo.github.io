@@ -1,1 +1,5 @@
-baseurl: 
+highlighter: pygments
+safe: true
+lsi: false
+source: your top-level directory
+# baseurl: /blog/  # if needed
