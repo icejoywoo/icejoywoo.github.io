@@ -3,6 +3,7 @@ layout: default
 title: Hello, World
 category: others
 tags: ['hello']
+disqus: true
 ---
 ## {{ page.title }}
 开始构建最近的技术博客，记录自己的点滴成长。
