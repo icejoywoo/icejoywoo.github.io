@@ -16,4 +16,8 @@ def show
   end
 end
 {% endhighlight %}
+
+```python
+print "hello"
+```
 {{ page.date | date_to_string }}

@@ -3,6 +3,7 @@ name: icejoywoo's blog
 description: 程序员的自我修养
 meta_description: "icejoywoo, blog"
 safe: true
+fenced_code_blocks: true
 
 aboutPage: true
 
