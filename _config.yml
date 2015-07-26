@@ -14,6 +14,7 @@ baseurl: /
 
 author:         'icejoywoo'
 authorTwitter:  'icejoywoo'
+disqus_shortname: 'icejoywoo'
 
 permalink:       /:year/:title/
 
