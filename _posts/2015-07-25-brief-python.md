@@ -60,7 +60,7 @@ for i, c in enumerate(a):
 ```python
 a = [1, 'abc', None, 2.4, [1, 2, 3]]  # 可以存放多种类型
 b = list()  # list函数可以将iterator转换为list，也可以申明为空的list，和[]定义是一样的
-# 列表推导式([list comprehensions][]): 可以替代map和filter的功能
+# 列表推导式(list comprehensions): 可以替代map和filter的功能
 c = [i for i in a if i]  # [1, 'abc', 2.4, [1, 2, 3]]
 d = [1, 4, 5, 0, 2, 3, 9]
 e = [i + 3 for i in d]  # 同map(lambda i: i + 3, d): [4, 7, 8, 3, 5, 6, 12]
@@ -86,6 +86,8 @@ a = [
 a.sort(key=lambda i: i['age'])
 print a  # [{'age': 20, 'name': 'John'}, {'age': 21, 'name': 'Susan'}, {'age': 23, 'name': 'George'}, {'age': 25, 'name': 'Mike'}]
 ```
+
+列表推导式([list comprehensions][]): 可以替代map和filter的功能
 
 [list comprehensions]: https://www.python.org/dev/peps/pep-0202/ "PEP 202"
 
@@ -117,6 +119,9 @@ for v in a.values():
 for k, v in a.items():
     print k, v
 ```
+
+字典推导式(dict comprehensions)
+
 *注意: dict不保证key的顺序和其插入的顺序是一致的, 如果需要顺序可以参考[collections.OrderedDict](https://docs.python.org/2/library/collections.html#collections.OrderedDict "collections.OrderedDict")*
 [dict comprehensions]: https://www.python.org/dev/peps/pep-0274/ "PEP 274"
 
