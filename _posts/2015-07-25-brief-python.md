@@ -9,10 +9,10 @@ disqus: true
 
 Life is short, you need Python. <http://www.zhihu.com/question/20830223>
 
-Python是一门简洁优雅的强类型动态语言, 目前有2.x和3.x两个分支, 本文以2.7.x来进行汇总,
-基本是一些基础语言和基本类型的使用总结, 方便快速重温知识点.
+Python是一门简洁优雅的强类型动态语言, 目前有2.x和3.x两个分支, 本文以2.7.x来进行汇总, 基本是一些基础语言和基本类型的使用总结, 方便快速重温知识点.
 
 Python的官网: <https://www.python.org/>
+PEP(Python Enhancement Proposals): <https://www.python.org/dev/peps/> (PEP是个好东西, Python程序员必备)
 
 第一个经典的程序。
 
@@ -85,23 +85,31 @@ a = [
 ]
 a.sort(key=lambda i: i['age'])
 print a  # [{'age': 20, 'name': 'John'}, {'age': 21, 'name': 'Susan'}, {'age': 23, 'name': 'George'}, {'age': 25, 'name': 'Mike'}]
+
+# list的stack接口
+# https://docs.python.org/2/tutorial/datastructures.html#using-lists-as-stacks
+a = []
+a.append(6)  # [6]
+a.append(7)  # [6, 7]
+a.pop()  # 7
+a.pop()  # 6
 ```
 
-列表推导式([list comprehensions][]): 可以替代map和filter的功能
-
-[list comprehensions]: https://www.python.org/dev/peps/pep-0202/ "PEP 202"
+列表推导式([list comprehensions][])可以替代map和filter的功能
 
 ## 字典(dict)
 
 ```python
 a = {'key': 'value', 5: 'five'}
+# dict有多种初始化的方法
 b = dict()  # {}
 c = dict(a) # {5: 'five', 'key': 'value'}
 d = dict(((1, 'one'), (2, 'two'), (3, 'three')))  # {1: 'one', 2: 'two', 3: 'three'}
+e = dict(one=1, two=2, three=3)  # {'one': 1, 'three': 3, 'two': 2}
 
-# 字典推导式([dict comprehensions][])
+# 字典推导式(dict comprehensions)
 # dict的key和value反转: {1: 'one'} -> {'one': 1}
-e = {v: k for k, v in d.items()}
+f = {v: k for k, v in d.items()}
 
 # 遍历: keys和iterkeys, values和itervalues, items和iteritems, iter开头的方法返回一个迭代器, 前者返回是一个list
 # 只遍历key
@@ -118,12 +126,30 @@ for v in a.values():
 # key和value一起遍历
 for k, v in a.items():
     print k, v
+
+# dict.setdefault
+a.setdefault('counter', 0)  # 当key中不存在'counter'的时候, 初始化为0, 否则无操作
+# dict.get
+a.get('counter', None)  # 当key中不存在'counter'的时候, 返回None, 否则返回其对应value
 ```
 
-字典推导式(dict comprehensions)
+字典推导式([dict comprehensions][])可以极大简化代码
 
 *注意: dict不保证key的顺序和其插入的顺序是一致的, 如果需要顺序可以参考[collections.OrderedDict](https://docs.python.org/2/library/collections.html#collections.OrderedDict "collections.OrderedDict")*
-[dict comprehensions]: https://www.python.org/dev/peps/pep-0274/ "PEP 274"
 
+## 集合(set)
+
+```python
+# 将已有的list转换为set
+a = [0, 2, 1, 0, 4, 3, 3]
+b = set(a)  # {0, 1, 2, 3, 4}
+
+# set是可以通过{}来进行定义的
+c = {0, 3, 4, 5, 6, 7, 7}  # {0, 3, 4, 5, 6, 7}
+```
+
+
+[list comprehensions]: https://www.python.org/dev/peps/pep-0202/ "PEP 202"
+[dict comprehensions]: https://www.python.org/dev/peps/pep-0274/ "PEP 274"
 
 {{ page.date | date_to_string }}
