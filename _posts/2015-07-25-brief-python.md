@@ -96,6 +96,7 @@ a.pop()  # 6
 ```
 
 列表推导式([list comprehensions][])可以替代map和filter的功能
+*list comprehensions文档: https://docs.python.org/2/tutorial/datastructures.html#list-comprehensions*
 
 ## 字典(dict)
 
@@ -146,8 +147,36 @@ b = set(a)  # {0, 1, 2, 3, 4}
 
 # set是可以通过{}来进行定义的
 c = {0, 3, 4, 5, 6, 7, 7}  # {0, 3, 4, 5, 6, 7}
+
+# set comprehensions
+d = {i for i in a if i > 2}  # {3, 4}
+
+# 集合运算
+a = {0, 1, 2, 3, 4, 5, 6}
+b = {4, 5, 6, 7, 8, 9, 10}
+
+# 交集
+a & b  # {4, 5, 6}
+a.intersection(b)  # {4, 5, 6}
+
+# 并集
+a | b  # {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
+a.union(b)  # {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
+
+# 差集
+a - b  # {0, 1, 2, 3}
+a.difference(b)  # {0, 1, 2, 3}
+
+# 对称差(Symmetric difference)
+a ^ b  # {0, 1, 2, 3, 7, 8, 9, 10}
+a.symmetric_difference(b)  # {0, 1, 2, 3, 7, 8, 9, 10}
 ```
 
+# 其他参考资料
+1. Magic Methods: <http://www.rafekettler.com/magicmethods.html>
+1. [官方手册]Python HOWTOs: <https://docs.python.org/2/howto/index.html>
+1. [书]编写高质量代码：改善Python程序的91个建议: <https://book.douban.com/subject/25910544/>
+1. [书]Python基础教程: <https://book.douban.com/subject/4866934/>
 
 [list comprehensions]: https://www.python.org/dev/peps/pep-0202/ "PEP 202"
 [dict comprehensions]: https://www.python.org/dev/peps/pep-0274/ "PEP 274"
