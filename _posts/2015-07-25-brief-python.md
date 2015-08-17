@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Python语法简介
+title: Python知识点汇总
 category: python
 tags: ['python']
 disqus: true
@@ -222,6 +222,14 @@ a.symmetric_difference(b)  # {0, 1, 2, 3, 7, 8, 9, 10}
 f & b  # frozenset({4})
 b & f  # {4}
 ```
+
+# 函数(function)
+
+1. 默认函数参数列表中的可变参数: <https://docs.python.org/2/tutorial/controlflow.html#default-argument-values> <http://effbot.org/zone/default-values.htm>
+
+# 类(class)
+
+1. 多重继承的顺序 mro: <https://www.python.org/download/releases/2.3/mro/>
 
 # 其他参考资料
 1. Magic Methods: <http://www.rafekettler.com/magicmethods.html>
