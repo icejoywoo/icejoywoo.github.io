@@ -10,6 +10,7 @@ disqus: true
 Life is short, you need Python. <http://www.zhihu.com/question/20830223>
 
 Python是一门简洁优雅的强类型动态语言, 目前有2.x和3.x两个分支, 本文以2.7.x来进行汇总, 基本是一些基础语言和基本类型的使用总结, 方便快速重温知识点.
+不是一个入门教程, 是一个知识点的汇总.
 
 Python的官网: <https://www.python.org/>
 PEP(Python Enhancement Proposals): <https://www.python.org/dev/peps/> (PEP是个好东西, Python程序员必备)
@@ -21,6 +22,10 @@ print "Hello, World!"
 ```
 
 # 基本类型
+
+Data Model: <https://docs.python.org/2/reference/datamodel.html>
+Sequence Types: <https://docs.python.org/2/library/stdtypes.html#sequence-types-str-unicode-list-tuple-bytearray-buffer-xrange>
+
 ## 字符串（str & unicode）
 
 在python的2.x中, 字符串有两种类型: str和unicode. 很多乱码问题都源于字符串有两个类型的问题,
@@ -53,7 +58,26 @@ for c in a:
 # 带有index的iterate
 for i, c in enumerate(a):
     print i, c
+
+# 字符串格式化, 有%和format两种方式
+print "Hello, %s!" % 'world'  # Hello, world!
+print "%d + %d is %d" % (4, 4, 8)  # 4 + 4 is 8
+
+params = {
+    'title': 'manager',
+    'name': 'John',
+    'age': 25
+}
+print "My name is %(name)s. I am a %(title)s. I am %(age)d." % params  # My name is John. I am a manager. I am 25.
+
+# 只有1个参数的时候可以不写序号
+print "params is {}.".format(params)  # params is {'age': 25, 'name': 'John', 'title': 'manager'}.
+print "Name is {1[name]}. Hello, {0}!".format('world', params)  # Name is John. Hello, world!
+print "My name is {p[name]}. {{literal curly brace}}".format(p=params)  # My name is John. {literal curly brace}
 ```
+
+
+format文档: <https://docs.python.org/2/library/string.html#format-string-syntax>
 
 ## 列表（list）
 
@@ -65,6 +89,9 @@ c = [i for i in a if i]  # [1, 'abc', 2.4, [1, 2, 3]]
 d = [1, 4, 5, 0, 2, 3, 9]
 e = [i + 3 for i in d]  # 同map(lambda i: i + 3, d): [4, 7, 8, 3, 5, 6, 12]
 f = [i for i in d if i > 3]  # 同filter(lambda i: i > 3, d): [4, 5, 9]
+
+# access by index
+a[0]  # 1
 
 # 遍历
 for i in a:
@@ -97,6 +124,19 @@ a.pop()  # 6
 
 列表推导式([list comprehensions][])可以替代map和filter的功能
 *list comprehensions文档: https://docs.python.org/2/tutorial/datastructures.html#list-comprehensions*
+
+## 元组(tuple)
+
+比较类似于list, 但是tuple是不可变的. 可以用作dict的key和set, 是可以hash的([hashable][]).
+
+```python
+a = (1, 2, 3)
+
+a[0]  # 1
+
+# 一个元素的tuple定义, 结尾要带一个逗号
+b = ('hello',)
+```
 
 ## 字典(dict)
 
@@ -137,6 +177,7 @@ a.get('counter', None)  # 当key中不存在'counter'的时候, 返回None, 否�
 字典推导式([dict comprehensions][])可以极大简化代码
 
 *注意: dict不保证key的顺序和其插入的顺序是一致的, 如果需要顺序可以参考[collections.OrderedDict](https://docs.python.org/2/library/collections.html#collections.OrderedDict "collections.OrderedDict")*
+*注意: dict的key必须是可以hash的([hashable][]), list和dict都是不可hash的, 会报错: (TypeError: unhashable type: 'list')*
 
 ## 集合(set)
 
@@ -144,6 +185,12 @@ a.get('counter', None)  # 当key中不存在'counter'的时候, 返回None, 否�
 # 将已有的list转换为set
 a = [0, 2, 1, 0, 4, 3, 3]
 b = set(a)  # {0, 1, 2, 3, 4}
+
+# frozenset 不可变的set
+f = frozenset(a)  # frozenset({0, 1, 2, 3, 4})
+
+# 初始化空的set
+empty_set = set()  # 这里不能使用{}来初始化,
 
 # set是可以通过{}来进行定义的
 c = {0, 3, 4, 5, 6, 7, 7}  # {0, 3, 4, 5, 6, 7}
@@ -170,6 +217,10 @@ a.difference(b)  # {0, 1, 2, 3}
 # 对称差(Symmetric difference)
 a ^ b  # {0, 1, 2, 3, 7, 8, 9, 10}
 a.symmetric_difference(b)  # {0, 1, 2, 3, 7, 8, 9, 10}
+
+# frozenset和set进行集合运算的时候, 返回的类型是左边参数的类型
+f & b  # frozenset({4})
+b & f  # {4}
 ```
 
 # 其他参考资料
@@ -180,5 +231,6 @@ a.symmetric_difference(b)  # {0, 1, 2, 3, 7, 8, 9, 10}
 
 [list comprehensions]: https://www.python.org/dev/peps/pep-0202/ "PEP 202"
 [dict comprehensions]: https://www.python.org/dev/peps/pep-0274/ "PEP 274"
+[hashable]: https://docs.python.org/2/glossary.html#term-hashable "hashable"
 
 {{ page.date | date_to_string }}
