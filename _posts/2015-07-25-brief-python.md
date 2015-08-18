@@ -122,8 +122,8 @@ a.pop()  # 7
 a.pop()  # 6
 ```
 
-列表推导式([list comprehensions][])可以替代map和filter的功能
-*list comprehensions文档: https://docs.python.org/2/tutorial/datastructures.html#list-comprehensions*
+1. 列表推导式([list comprehensions][])可以替代map和filter的功能
+1. *list comprehensions文档: https://docs.python.org/2/tutorial/datastructures.html#list-comprehensions*
 
 ## 元组(tuple)
 
@@ -176,8 +176,8 @@ a.get('counter', None)  # 当key中不存在'counter'的时候, 返回None, 否�
 
 字典推导式([dict comprehensions][])可以极大简化代码
 
-*注意: dict不保证key的顺序和其插入的顺序是一致的, 如果需要顺序可以参考[collections.OrderedDict](https://docs.python.org/2/library/collections.html#collections.OrderedDict "collections.OrderedDict")*
-*注意: dict的key必须是可以hash的([hashable][]), list和dict都是不可hash的, 会报错: (TypeError: unhashable type: 'list')*
+1. *注意: dict不保证key的顺序和其插入的顺序是一致的, 如果需要顺序可以参考[collections.OrderedDict](https://docs.python.org/2/library/collections.html#collections.OrderedDict "collections.OrderedDict")*
+1. *注意: dict的key必须是可以hash的([hashable][]), list和dict都是不可hash的, 会报错: (TypeError: unhashable type: 'list')*
 
 ## 集合(set)
 
