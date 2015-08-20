@@ -25,6 +25,7 @@ print "Hello, World!"
 # 基本类型
 
 Data Model: <https://docs.python.org/2/reference/datamodel.html>
+
 Sequence Types: <https://docs.python.org/2/library/stdtypes.html#sequence-types-str-unicode-list-tuple-bytearray-buffer-xrange>
 
 ## 字符串（str & unicode）
@@ -76,7 +77,6 @@ print "params is {}.".format(params)  # params is {'age': 25, 'name': 'John', 't
 print "Name is {1[name]}. Hello, {0}!".format('world', params)  # Name is John. Hello, world!
 print "My name is {p[name]}. {{literal curly brace}}".format(p=params)  # My name is John. {literal curly brace}
 ```
-
 
 format文档: <https://docs.python.org/2/library/string.html#format-string-syntax>
 
@@ -137,6 +137,8 @@ a[0]  # 1
 
 # 一个元素的tuple定义, 结尾要带一个逗号
 b = ('hello',)
+
+hash(b)  # -1171690294
 ```
 
 ## 字典(dict)
