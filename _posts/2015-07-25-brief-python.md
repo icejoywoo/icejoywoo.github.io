@@ -225,7 +225,65 @@ b & f  # {4}
 
 # 函数(function)
 
-1. 默认函数参数列表中的可变参数: <https://docs.python.org/2/tutorial/controlflow.html#default-argument-values> <http://effbot.org/zone/default-values.htm>
+```python
+# 函数的定义
+def f(x):
+    """ This is a sample function.
+    Args:
+        x: input number
+    Return:
+        x + 1
+    """
+    return x + 1
+
+# lambda的定义, 默认表达式的值为返回值，有局限性
+f = lambda x: x + 1
+
+f(3)  # 4
+
+# 可变参数, args是按顺序的tuple，kwargs是一个dict
+def f(*args, **kwargs):
+    print args, kwargs
+
+f(1, 2, a=3, b=4)  # (1, 2) {'a': 3, 'b': 4}
+
+# 默认参数
+def f(x, factor=1, addend=2):
+    return x * factor + addend
+
+f(5)  # 7
+# 可以通过名字来调用后面的参数，无需依赖顺序
+f(5, addend=3)  # 8
+f(5, 2)  # 12
+
+# 注意：默认参数中有可变参数的时候
+def f(a, l=[]):
+    """ 本意是希望在默认情况下每次调用初始化一个空的list给l
+    """
+    l.append(a)
+    return l
+
+f(1)  # [1]
+# 因为l是list，是可变类型，def在定义函数的同时会执行默认参数的初始化，之后不会因为每次调用而再次被执行
+f(1)  # [1, 1]
+f(1)  # [1, 1, 1]
+
+# 查看函数的默认参数
+ f.func_defaults  # ([1, 1, 1],)
+
+# 改正
+def f(a, l=None):
+    if l is None:
+        l = []
+    l.append(a)
+    return l
+
+f(1)  # [1]
+f(1)  # [1]
+```
+1. 默认函数参数列表中的可变参数:
+ <https://docs.python.org/2/tutorial/controlflow.html#default-argument-values>
+ <http://effbot.org/zone/default-values.htm>
 
 # 类(class)
 
@@ -236,6 +294,7 @@ b & f  # {4}
 1. [官方手册]Python HOWTOs: <https://docs.python.org/2/howto/index.html>
 1. [书]编写高质量代码：改善Python程序的91个建议: <https://book.douban.com/subject/25910544/>
 1. [书]Python基础教程: <https://book.douban.com/subject/4866934/>
+1. [书]Python Algorithms: Mastering Basic Algorithms in the Python Language: <http://book.douban.com/subject/4915945/>
 
 [list comprehensions]: https://www.python.org/dev/peps/pep-0202/ "PEP 202"
 [dict comprehensions]: https://www.python.org/dev/peps/pep-0274/ "PEP 274"
