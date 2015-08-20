@@ -13,6 +13,7 @@ Python是一门简洁优雅的强类型动态语言, 目前有2.x和3.x两个分
 不是一个入门教程, 是一个知识点的汇总.
 
 Python的官网: <https://www.python.org/>
+
 PEP(Python Enhancement Proposals): <https://www.python.org/dev/peps/> (PEP是个好东西, Python程序员必备)
 
 第一个经典的程序。
