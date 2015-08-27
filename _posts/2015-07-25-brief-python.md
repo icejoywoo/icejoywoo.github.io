@@ -15,6 +15,8 @@ Python的官网: <https://www.python.org/>
 
 PEP(Python Enhancement Proposals): <https://www.python.org/dev/peps/> (PEP是个好东西, Python程序员必备)
 
+学好python的最好方法，就是多看官方手册<https://docs.python.org/2/index.html>。
+
 第一个经典的程序。
 
 ```python
@@ -338,10 +340,39 @@ print d("key")  # ('value', {'key': 'value'})
 
 # 类(class)
 
+```python
+# 类的基本定义
+class T:
+
+    def __init__(self, name):
+        """ constructor 构造函数
+        """
+        self.name = name
+
+    def hello(self):
+        return "hello, %s!" % self.name
+
+t = T('John')
+t.hello()  # hello
+
+# new-style class 继承自object就是new-style class, since python 2.2
+class N(object):
+    pass
+
+```
+
 1. 多重继承的顺序 mro: <https://www.python.org/download/releases/2.3/mro/>
+1. Unifying types and classes in Python 2.2: <https://www.python.org/download/releases/2.2.3/descrintro/>
+1. python中的 new-style class 及其实例详解: <http://wiki.woodpecker.org.cn/moin/PyNewStyleClass>
+1. 类中的__slots__: <https://docs.python.org/2/reference/datamodel.html#slots>
+
+# 其他
+
+1. PEP 343 - The "with" statement: <https://www.python.org/dev/peps/pep-0343/>
 
 # 其他参考资料
 1. Magic Methods: <http://www.rafekettler.com/magicmethods.html>
+1. 第三方库整理: <https://github.com/vinta/awesome-python>
 1. [官方手册]Python HOWTOs: <https://docs.python.org/2/howto/index.html>
 1. [书]编写高质量代码：改善Python程序的91个建议: <https://book.douban.com/subject/25910544/>
 1. [书]Python基础教程: <https://book.douban.com/subject/4866934/>
