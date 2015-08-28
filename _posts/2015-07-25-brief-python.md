@@ -1,15 +1,15 @@
 ---
 layout: post
-title: Python知识点汇总
+title: Python简明手册
 category: python
 tags: ['python']
 ---
-## {{ page.title }}
 
 Life is short, you need Python. <http://www.zhihu.com/question/20830223>
 
 Python是一门简洁优雅的强类型动态语言, 目前有2.x和3.x两个分支, 本文以2.7.x来进行汇总, 基本是一些基础语言和基本类型的使用总结, 方便快速重温知识点.
-不是一个入门教程, 是一个知识点的汇总.
+
+*注意：不是一个入门教程, 是一个知识点的汇总.*
 
 Python的官网: <https://www.python.org/>
 
