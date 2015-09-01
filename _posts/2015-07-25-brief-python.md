@@ -408,6 +408,7 @@ if __name__ == "__main__":
 ```
 
 几点说明:
+
 1. sys.getsizeof可以获取内建类型的bytes, 对于自定义类型只可以获取直接占用的内存, 无法获取引用对象的内存
 1. guppy-pe的官网: http://guppy-pe.sourceforge.net/
 
