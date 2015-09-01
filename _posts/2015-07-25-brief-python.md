@@ -358,7 +358,81 @@ t.hello()  # hello
 # new-style class 继承自object就是new-style class, since python 2.2
 class N(object):
     pass
+```
 
+python new-style class的slots详解
+
+文档中的描述: This class variable can be assigned a string, iterable, or sequence of strings with variable names used by instances. If defined in a new-style class, __slots__ reserves space for the declared variables and prevents the automatic creation of __dict__ and__weakref__ for each instance.
+
+```python
+import sys
+from guppy import hpy
+
+
+class Person_(object):
+    __slots__ = ("name", "age", "gender")
+
+    def __init__(self):
+        pass
+
+
+class Person(object):
+    def __init__(self):
+        pass
+
+
+if __name__ == "__main__":
+    persons = []
+    for i in xrange(100000):
+        p = Person()
+        p.name = "name_%d" % i
+        p.age = i
+        p.gender = "female"
+        persons.append(p)
+
+    persons_ = []
+    for i in xrange(100000):
+        p = Person_()
+        p.name = "name_%d" % i
+        p.age = i
+        p.gender = "female"
+        persons_.append(p)
+
+    print "size without slots: %d" % sum([sys.getsizeof(p) for p in persons])
+    print "size of the __dict__ without slots: %d" % sum([sys.getsizeof(p.__dict__) for p in persons])
+    print "size of the __weakref__ without slots: %d" % sum([sys.getsizeof(p.__weakref__) for p in persons])
+    print "size with slots: %d" % sum([sys.getsizeof(p) for p in persons_])
+
+    h = hpy()
+    print h.heap()
+```
+
+几点说明:
+1. sys.getsizeof可以获取内建类型的bytes, 对于自定义类型只可以获取直接占用的内存, 无法获取引用对象的内存
+1. guppy-pe的官网: http://guppy-pe.sourceforge.net/
+
+*递归sys.getsizeof的实现参考:http://code.activestate.com/recipes/577504/*
+
+程序数据结果:
+
+```
+size without slots: 6400000
+size of the __dict__ without slots: 28000000
+size of the __weakref__ without slots: 1600000
+size with slots: 7200000
+Partition of a set of 724234 objects. Total size = 60815264 bytes.
+ Index  Count   %     Size   % Cumulative  % Kind (class / dict of class)
+     0 100000  14 28000000  46  28000000  46 dict of __main__.Person
+     1 210735  29 10508280  17  38508280  63 str
+     2 100000  14  7200000  12  45708280  75 __main__.Person_
+     3 100000  14  6400000  11  52108280  86 __main__.Person
+     4 199826  28  4795824   8  56904104  94 int
+     5    176   0  1663168   3  58567272  96 list
+     6   5707   1   457184   1  59024456  97 tuple
+     7    201   0   212184   0  59236640  97 dict of type
+     8     64   0   205312   0  59441952  98 dict of module
+     9   1596   0   204288   0  59646240  98 types.CodeType
+<93 more rows. Type e.g. '_.more' to view.>
 ```
 
 1. 多重继承的顺序 mro: <https://www.python.org/download/releases/2.3/mro/>
