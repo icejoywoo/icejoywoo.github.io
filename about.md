@@ -4,7 +4,7 @@ permalink: about/
 profile: true
 ---
 
-目前就职于百度, 从事数据平台研发工作.
+码农一名，目前就职于百度。
 
 
 {% include footer.html %}
