@@ -11,7 +11,8 @@ Stack是一种常见的数据结构，是一种后进先出（LIFO，Last In Fir
 
 思路分析：
 
-这道题要求三个函数的时间复杂度为O(1)，pop和push时间度为O(1)是很容易做到的，min如果是蛮力法的话，遍历一遍stack寻找最小值。
+这道题要求三个函数的时间复杂度为O(1)，pop和push时间度为O(1)是很容易做到的，min如果是蛮力法的话，
+遍历一遍stack寻找最小值，时间复杂度为O(n)。
 
 用空间换取时间的方式，Stack的每个element不止包含一个element，而是包含element和当前element作为栈顶时的最小值min，同时stack中包含一个当前状态的最小值\_min和一个\_stack。
 
