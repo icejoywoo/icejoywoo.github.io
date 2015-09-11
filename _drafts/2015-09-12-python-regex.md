@@ -25,4 +25,17 @@ to match certain strings.” —Ken Thompson
 
 # 简单的模式匹配
 
+# 匹配Unicode
+
 # 边界（Boundaries）
+
+# 量词（Quantifier）
+
+# 字符组（Character Classes）
+
+# 环视（Lookaround）
+
+## 正前瞻（Positive Lookaheads）
+## 反前瞻（Negative Lookaheads）
+## 正后顾（Positive Lookbehinds）
+## 反后顾（Negative Lookbehinds）
