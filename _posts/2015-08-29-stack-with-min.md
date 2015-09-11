@@ -20,9 +20,23 @@ Stack是一种常见的数据结构，是一种后进先出（LIFO，Last In Fir
 1. pop操作的时候，pop出一个element，将\_min更新为pop完之后的栈顶元素(element, min)中的min，返回之前pop出来的element
 1. min就直接返回\_min
 
+测试case：
+
+1. stack的基本功能，保证LIFO
+1. stack为空的时候，min的返回
+1. stack在push一些数据之后，min的返回
+1. stack在push一些数据再pop几个数据之后，min的返回
+1. stack在push一些数据再pop为空后，min的返回
+
 完整python的实现如下
 
 ```python
+#!/bin/env python
+# encoding: utf-8
+
+__author__ = 'icejoywoo'
+
+
 class Stack(object):
 
     def __init__(self):
@@ -38,7 +52,10 @@ class Stack(object):
 
     def pop(self):
         last, _ = self._stack.pop()
-        self._min = self._stack[-1][1]
+        if self._stack:
+            self._min = self._stack[-1][1]
+        else:
+            self._min = None
         return last
 
     def min(self):
@@ -66,4 +83,10 @@ if __name__ == '__main__':
 
     s.pop()
     assert s.min() == 3
+
+    s.pop()
+    s.pop()
+    s.pop()
+    assert s.min() is None
+
 ```
