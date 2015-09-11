@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 实现一个栈，满足min()、pop()、push()方法的时间复杂度都为O(1)
+title: 带有min或max函数的Stack实现
 category: algorithm
 tags: ['algorithm']
 ---
