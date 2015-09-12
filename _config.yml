@@ -9,15 +9,33 @@ aboutPage: true
 
 markdown: redcarpet
 redcarpet:
-  extensions: ["no_intra_emphasis", "fenced_code_blocks", "autolink", "tables", "with_toc_data"]
+  extensions: [
+   "no_intra_emphasis"
+   ,"fenced_code_blocks"
+   ,"autolink"
+   ,"tables"
+   ,"strikethrough"
+   ,"superscript"
+   ,"with_toc_data"
+   ,"footnotes"
+   ,"highlight"
+   ,"underline"
+   ,"quote"
+   ,"lax_spacing"
+   ,"prettify"
+#   ,"html_toc"
+  ]
 highlighter: pygments
 
 paginate: 20
-baseurl: /
+paginate_path: ":num"
+baseurl: ""
 
+email: "icejoywoo@gmail.com"
 author:         'icejoywoo'
 authorTwitter:  'icejoywoo'
 disqus_shortname: 'icejoywoo'
+github_username:  'icejoywoo'
 
 permalink:       /:categories/:year/:month/:day/:title.html
 

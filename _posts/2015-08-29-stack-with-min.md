@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 带有min或max函数的Stack实现
+title: 带有min函数的Stack实现
 category: algorithm
 tags: ['algorithm']
 ---

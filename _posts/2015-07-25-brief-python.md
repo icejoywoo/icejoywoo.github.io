@@ -371,7 +371,7 @@ class N(object):
 
 python new-style class的slots详解
 
-文档中的描述: This class variable can be assigned a string, iterable, or sequence of strings with variable names used by instances. If defined in a new-style class, __slots__ reserves space for the declared variables and prevents the automatic creation of __dict__ and__weakref__ for each instance.
+文档中的描述: This class variable can be assigned a string, iterable, or sequence of strings with variable names used by instances. If defined in a new-style class, \_\_slots\_\_ reserves space for the declared variables and prevents the automatic creation of \_\_dict\_\_ and\_\_weakref\_\_ for each instance.
 
 ```python
 import sys
