@@ -1,23 +1,27 @@
 ---
 layout: post
-title: Python简明手册
+title: Python知识点整理
 category: python
 tags: ['python']
 ---
 
-Life is short, you need Python. <http://www.zhihu.com/question/20830223>
+有句话说得好啊：“Life is short, you need Python!”
 
-Python是一门简洁优雅的强类型动态语言, 目前有2.x和3.x两个分支, 本文以2.7.x来进行汇总, 基本是一些基础语言和基本类型的使用总结, 方便快速重温知识点.
+Python是一门简洁优雅的强类型动态语言，目前有2.x和3.x两个分支，本文以2.7.x来进行汇总，
+基本是一些基础语言和基本类型的使用总结，方便快速重温知识点。
 
-*注意：不是一个入门教程, 是一个知识点的汇总.*
+**注意：不是一个入门教程, 是一个知识点的汇总.**
 
-Python的官网: <https://www.python.org/>
+应该常去的几个地方：
 
-PEP(Python Enhancement Proposals): <https://www.python.org/dev/peps/> (PEP是个好东西, Python程序员必备)
+- [Python的官网](https://www.python.org/)
+- [PEP(Python Enhancement Proposals)](https://www.python.org/dev/peps/)(PEP是个好东西, Python程序员必备)
+- [官方手册](https://docs.python.org/2/index.html)
 
-学好python的最好方法，就是多看官方手册<https://docs.python.org/2/index.html>。
+个人感觉学好python的最好方法，就是多看[官方手册](https://docs.python.org/2/index.html)，
+平时碰到的很多问题可以在手册中找到相关的解答，要好好理解消化，把手册当成是最权威的指南。
 
-第一个经典的程序。
+再来一个经典的入门脚本。
 
 ```python
 print "Hello, World!"
@@ -25,9 +29,11 @@ print "Hello, World!"
 
 # 基本类型
 
-Data Model: <https://docs.python.org/2/reference/datamodel.html>
+官方文档中基本类型的说明：
 
-Sequence Types: <https://docs.python.org/2/library/stdtypes.html#sequence-types-str-unicode-list-tuple-bytearray-buffer-xrange>
+  - [Data Model](https://docs.python.org/2/reference/datamodel.html)
+  - [Sequence Types](https://docs.python.org/2/library/stdtypes.html#sequence-types-str-unicode-list-tuple-bytearray-buffer-xrange)
+
 
 ## 字符串（str & unicode）
 
@@ -79,7 +85,9 @@ print "Name is {1[name]}. Hello, {0}!".format('world', params)  # Name is John. 
 print "My name is {p[name]}. {{literal curly brace}}".format(p=params)  # My name is John. {literal curly brace}
 ```
 
-format文档: <https://docs.python.org/2/library/string.html#format-string-syntax>
+### 扩展阅读
+
+- [format官方文档](https://docs.python.org/2/library/string.html#format-string-syntax)
 
 ## 列表（list）
 
@@ -125,7 +133,7 @@ a.pop()  # 6
 ```
 
 1. 列表推导式([list comprehensions][])可以替代map和filter的功能
-1. *list comprehensions文档: https://docs.python.org/2/tutorial/datastructures.html#list-comprehensions*
+1. **[list comprehensions文档](https://docs.python.org/2/tutorial/datastructures.html#list-comprehensions)**
 
 ## 元组(tuple)
 
@@ -180,8 +188,8 @@ a.get('counter', None)  # 当key中不存在'counter'的时候, 返回None, 否�
 
 字典推导式([dict comprehensions][])可以极大简化代码
 
-1. *注意: dict不保证key的顺序和其插入的顺序是一致的, 如果需要顺序可以参考[collections.OrderedDict](https://docs.python.org/2/library/collections.html#collections.OrderedDict "collections.OrderedDict")*
-1. *注意: dict的key必须是可以hash的([hashable][]), list和dict都是不可hash的, 会报错: (TypeError: unhashable type: 'list')*
+1. **注意: dict不保证key的顺序和其插入的顺序是一致的, 如果需要顺序可以参考[collections.OrderedDict](https://docs.python.org/2/library/collections.html#collections.OrderedDict "collections.OrderedDict")**
+1. **注意: dict的key必须是可以hash的([hashable][]), list和dict都是不可hash的, 会报错: (TypeError: unhashable type: 'list')**
 
 ## 集合(set)
 
@@ -334,9 +342,10 @@ print d("key")  # (None, {})
 print d("key", "value")  # {'key': 'value'}
 print d("key")  # ('value', {'key': 'value'})
 ```
-1. 默认函数参数列表中的可变参数:
- <https://docs.python.org/2/tutorial/controlflow.html#default-argument-values>
- <http://effbot.org/zone/default-values.htm>
+默认函数参数列表中的可变参数:
+
+ - [官方文档中关于可变参数的说明](https://docs.python.org/2/tutorial/controlflow.html#default-argument-values)
+ - [Default Parameter Values in Python](http://effbot.org/zone/default-values.htm)
 
 # 类(class)
 
@@ -409,10 +418,10 @@ if __name__ == "__main__":
 
 几点说明:
 
-1. sys.getsizeof可以获取内建类型的bytes, 对于自定义类型只可以获取直接占用的内存, 无法获取引用对象的内存
-1. guppy-pe的官网: http://guppy-pe.sourceforge.net/
-
-*递归sys.getsizeof的实现参考:http://code.activestate.com/recipes/577504/*
+1. sys.getsizeof可以获取内建类型的bytes，对于自定义类型只可以获取直接占用的内存，
+无法获取引用对象的内存，需要递归来获取真正的大小
+([递归sys.getsizeof的实现参考](http://code.activestate.com/recipes/577504/))。
+1. [guppy-pe的官网](http://guppy-pe.sourceforge.net/)
 
 程序数据结果:
 
@@ -436,22 +445,22 @@ Partition of a set of 724234 objects. Total size = 60815264 bytes.
 <93 more rows. Type e.g. '_.more' to view.>
 ```
 
-1. 多重继承的顺序 mro: <https://www.python.org/download/releases/2.3/mro/>
-1. Unifying types and classes in Python 2.2: <https://www.python.org/download/releases/2.2.3/descrintro/>
-1. python中的 new-style class 及其实例详解: <http://wiki.woodpecker.org.cn/moin/PyNewStyleClass>
-1. 类中的__slots__: <https://docs.python.org/2/reference/datamodel.html#slots>
+1. [多重继承的顺序 mro](https://www.python.org/download/releases/2.3/mro/)
+1. [Unifying types and classes in Python 2.2](https://www.python.org/download/releases/2.2.3/descrintro/)
+1. [python中的 new-style class 及其实例详解](http://wiki.woodpecker.org.cn/moin/PyNewStyleClass)
+1. [类中的\_\_slots\_\_](https://docs.python.org/2/reference/datamodel.html#slots)
 
 # 其他
 
-1. PEP 343 - The "with" statement: <https://www.python.org/dev/peps/pep-0343/>
+1. [PEP 343 - The "with" statement](https://www.python.org/dev/peps/pep-0343/)
 
 # 其他参考资料
-1. Magic Methods: <http://www.rafekettler.com/magicmethods.html>
-1. 第三方库整理: <https://github.com/vinta/awesome-python>
-1. [官方手册]Python HOWTOs: <https://docs.python.org/2/howto/index.html>
-1. [书]编写高质量代码：改善Python程序的91个建议: <https://book.douban.com/subject/25910544/>
-1. [书]Python基础教程: <https://book.douban.com/subject/4866934/>
-1. [书]Python Algorithms: Mastering Basic Algorithms in the Python Language: <http://book.douban.com/subject/4915945/>
+1. [Magic Methods](http://www.rafekettler.com/magicmethods.html)
+1. [Awesome Python: A curated list of awesome Python frameworks, libraries and software](http://awesome-python.com/)
+1. [Python HOWTOs](https://docs.python.org/2/howto/index.html)
+1. [《编写高质量代码：改善Python程序的91个建议》](https://book.douban.com/subject/25910544/)
+1. [《Python基础教程》](https://book.douban.com/subject/4866934/)
+1. [*Python Algorithms: Mastering Basic Algorithms in the Python Language*](http://book.douban.com/subject/4915945/)
 
 [list comprehensions]: https://www.python.org/dev/peps/pep-0202/ "PEP 202"
 [dict comprehensions]: https://www.python.org/dev/peps/pep-0274/ "PEP 274"
