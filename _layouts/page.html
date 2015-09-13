@@ -1,5 +1,6 @@
 ---
 layout: default
+scripts: [disqus.js, tagCloud.js, tags.js]
 ---
 <div class="row">
     <div class="content">
@@ -11,6 +12,10 @@ layout: default
             <article>
                 {{ content }}
             </article>
+        </div>
+        <div class="pad-min"></div>
+        <div id="post-comment" class="sheet post">
+            <div id="disqus_thread"></div>
         </div>
     </div>
 </div>
