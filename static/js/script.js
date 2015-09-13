@@ -3,7 +3,7 @@
  */
 $(document).ready(function() {
 
-    console.log("你不乖哦，彼此之间留点神秘感不好吗？");
+    console.log("欢迎来到icejoywoo的博客！");
 
     backToTop();
     search();
