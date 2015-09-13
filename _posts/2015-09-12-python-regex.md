@@ -57,7 +57,7 @@ print re.findall(r'strings\.', test_string)  # ['strings.']
 ## 字符组（Character Classes）或字符集（Character Set）
 
 字符组（Character Classes）或字符集（Character Set），用方括号来表示一组字符，例如：[0-9]、[a-z]。
-字符组还可以进行取反的操作，例如：[^0-9]表示匹配非数字的字符，与\D含义一致。
+字符组还可以进行取反的操作，例如：[\^0-9]表示匹配非数字的字符，与\D含义一致。
 
 常见的字符简写（Character shorthands）
 
