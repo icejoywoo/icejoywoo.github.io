@@ -374,7 +374,7 @@ packageJobJar: [mapper.py, reducer.py, /tmp/hadoop-unjar707084306300214621/] [] 
 
 使用Archive来上传一份Python的二进制环境
 
-```python
+```bash
 $ wget https://www.python.org/ftp/python/2.7.10/Python-2.7.10.tgz
 $ tar xzf Python-2.7.10.tgz
 $ cd Python-2.7.10
