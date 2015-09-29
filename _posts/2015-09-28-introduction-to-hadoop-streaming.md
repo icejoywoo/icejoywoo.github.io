@@ -276,8 +276,8 @@ $ ${HADOOP_HOME}/bin/hadoop jar ${HADOOP_HOME}/share/hadoop/tools/lib/hadoop-str
 $ ${HADOOP_HOME}/bin/hadoop jar ${HADOOP_HOME}/share/hadoop/tools/lib/hadoop-streaming-2.6.0.jar \
     -D mapred.reduce.tasks=3 \
     -files "mapper.py,reducer.py" \
-    -input /user/wujiabin/wordcount/input \
-    -output /user/wujiabin/wordcount/output \
+    -input /user/<username>/wordcount/input \
+    -output /user/<username>/wordcount/output \
     -mapper "python mapper.py" \
     -reducer "python reducer.py"
 
