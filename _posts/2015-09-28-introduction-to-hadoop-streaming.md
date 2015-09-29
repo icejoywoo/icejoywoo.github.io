@@ -67,7 +67,7 @@ $ cat <input_file> | python mapper.py | sort | python reducer.py
 
 准备数据
 
-自行替换其中的<username>
+自行替换其中的&lt;username&gt;
 
 ```bash
 
@@ -255,9 +255,9 @@ for line in sys.stdin:
 
 >How do I update counters in streaming applications?
 
->A streaming process can use the stderr to emit counter information. reporter:counter:<group>,<counter>,<amount> should be sent to stderr to update the counter.
+>A streaming process can use the stderr to emit counter information. reporter:counter:&lt;group&gt;,&lt;counter&gt;,&lt;amount&gt; should be sent to stderr to update the counter.
 
-就是向stderr中打印reporter:counter:<group>,<counter>,<amount>的字符串就可以更新counter信息了，简单有用的一个工具。
+就是向stderr中打印reporter:counter:&lt;group&gt;,&lt;counter&gt;,&lt;amount&gt;的字符串就可以更新counter信息了，简单有用的一个工具。
 
 
 在集群上运行（reducer个数设置为3）
