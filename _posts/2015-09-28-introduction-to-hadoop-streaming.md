@@ -16,7 +16,7 @@ Hadoop Streaming是Hadoop提供的一种编程工具，提供了一种非常灵�
 
 ```bash
 $ ${HADOOP_HOME}/bin/hadoop jar ${HADOOP_HOME}/share/hadoop/tools/lib/hadoop-streaming-2.6.0.jar \
-    -input <输入目录> \
+    -input <输入目录> \ # 可以指定多个输入路径，例如：-input '/user/foo/dir1' -input '/user/foo/dir2'
     -inputformat <输入格式 JavaClassName> \
     -output <输出目录> \
     -outputformat <输出格式 JavaClassName> \
@@ -33,16 +33,18 @@ $ ${HADOOP_HOME}/bin/hadoop jar ${HADOOP_HOME}/share/hadoop/tools/lib/hadoop-str
 
 ## 常见的作业属性
 
-|                 属性                 | 新名称                |                 含义                 |             备注            |
-|:------------------------------------:|-----------------------|:------------------------------------:|:---------------------------:|
-| mapred.map.tasks                     | mapreduce.job.maps    | 每个Job运行map task的数量            | map启动的个数无法被完全控制 |
-| mapred.reduce.tasks                  | mapreduce.job.reduces | 每个Job运行reduce task的数量         |                             |
-| stream.map.input.field.separator     |                       | Map输入数据的分隔符                  | 默认是\t                    |
-| stream.reduce.input.field.separator  |                       | Reduce输入数据的分隔符               | 默认是\t                    |
-| stream.map.output.field.separator    |                       | Map输出数据的分隔符                  | 默认是\t                    |
-| stream.reduce.output.field.separator |                       | Reduce输出数据的分隔符               |                             |
-| stream.num.map.output.key.fields     |                       | Map task输出record中key所占的个数    |                             |
-| stream.num.reduce.output.key.fields  |                       | Reduce task输出record中key所占的个数 |                             |
+|                 属性                 | 新名称                 |                 含义                 |                备注                |
+|:------------------------------------:|------------------------|:------------------------------------:|:----------------------------------:|
+| mapred.job.name                      | mapreduce.job.name     | 作业名称                             |                                    |
+| mapred.map.tasks                     | mapreduce.job.maps     | 每个Job运行map task的数量            | map启动的个数无法被完全控制        |
+| mapred.reduce.tasks                  | mapreduce.job.reduces  | 每个Job运行reduce task的数量         |                                    |
+| mapred.job.priority                  | mapreduce.job.priority | 作业优先级                           | VERY_LOW,LOW,NORMAL,HIGH,VERY_HIGH |
+| stream.map.input.field.separator     |                        | Map输入数据的分隔符                  | 默认是\t                           |
+| stream.reduce.input.field.separator  |                        | Reduce输入数据的分隔符               | 默认是\t                           |
+| stream.map.output.field.separator    |                        | Map输出数据的分隔符                  | 默认是\t                           |
+| stream.reduce.output.field.separator |                        | Reduce输出数据的分隔符               |                                    |
+| stream.num.map.output.key.fields     |                        | Map task输出record中key所占的个数    |                                    |
+| stream.num.reduce.output.key.fields  |                        | Reduce task输出record中key所占的个数 |                                    |
 
 *注意：2.6.0的Streaming文档中只提到了stream.num.reduce.output.fields，
 没提到stream.num.reduce.output.key.fields，后续需要看下二者的关系。*
@@ -263,18 +265,12 @@ for line in sys.stdin:
 在集群上运行（reducer个数设置为3）
 
 ```bash
-$ ${HADOOP_HOME}/bin/hadoop jar ${HADOOP_HOME}/share/hadoop/tools/lib/hadoop-streaming-2.6.0.jar \
-    -D mapred.reduce.tasks=3 \
-    -input /user/<username>/wordcount/input \
-    -output /user/<username>/wordcount/output \
-    -mapper "python mapper.py" \
-    -reducer "python reducer.py" \
-    -file mapper.py \
-    -file reducer.py
-
 # 使用-files，注意：-D -files选项放在最前面，放在后面会报错，不懂为何
 $ ${HADOOP_HOME}/bin/hadoop jar ${HADOOP_HOME}/share/hadoop/tools/lib/hadoop-streaming-2.6.0.jar \
+    -D mapred.job.name="streaming_wordcount" \
+    -D mapred.map.tasks=3 \
     -D mapred.reduce.tasks=3 \
+    -D mapred.job.priority=HIGH \
     -files "mapper.py,reducer.py" \
     -input /user/<username>/wordcount/input \
     -output /user/<username>/wordcount/output \
@@ -282,8 +278,7 @@ $ ${HADOOP_HOME}/bin/hadoop jar ${HADOOP_HOME}/share/hadoop/tools/lib/hadoop-str
     -reducer "python reducer.py"
 
 
-# output 不同的版本可能输出有所不同
-15/09/29 10:35:13 WARN streaming.StreamJob: -file option is deprecated, please use generic option -files instead.
+# output 不同的版本可能输出有所不同 -D这里使用的老配置名，前面会有一些警告，这里未显示
 packageJobJar: [mapper.py, reducer.py, /tmp/hadoop-unjar707084306300214621/] [] /tmp/streamjob5287904745550112970.jar tmpDir=null
 15/09/29 10:35:14 INFO client.RMProxy: Connecting to ResourceManager at xxxxx/x.x.x.x:y
 15/09/29 10:35:14 INFO client.RMProxy: Connecting to ResourceManager at xxxxx/x.x.x.x:y
@@ -405,6 +400,52 @@ $ ${HADOOP_HOME}/bin/hadoop jar ${HADOOP_HOME}/share/hadoop/tools/lib/hadoop-str
     -reducer "py/python27/bin/python reducer.py"
 ```
 
+## Reduce多路输出
+
+有时候我们的MapReduce程序的输出希望是输出两份不同的数据，这种情况下可以使用多路输出。
+
+旧版本使用的是outputformat，org.apache.hadoop.mapred.lib.SuffixMultipleTextOutputFormat和
+org.apache.hadoop.mapred.lib.SuffixMultipleSequenceFileOutputFormat是支持多路输出的，
+输出的格式是由原来的<key, value>变成<key, value#suffix>，suffix是A-Z，如果为其他会报错，
+不同suffix代表不同的输出，支持26路输出。最终的输出文件会有part-xxxx-A和part-xxxx-B等，与不同的suffix相对应。
+
+
+
+新版本只剩下[MultipleOutputs](https://hadoop.apache.org/docs/r2.6.0/api/org/apache/hadoop/mapreduce/lib/output/MultipleOutputs.html)，
+我暂时未找到在Streaming中使用的方法。
+
+## Map多路输入
+
+配置多个-input的时候可以进行多路输入，在实际中可能需要对不同的输入进行不同的处理，这个时候需要获取输入的路径信息，
+来区分是哪个输入路径或文件。Streaming提供了[Configured_Parameters](https://hadoop.apache.org/docs/r2.6.0/hadoop-mapreduce-client/hadoop-mapreduce-client-core/MapReduceTutorial.html#Configured_Parameters)，
+可以获取一些运行时的信息。
+
+|            Name            |   Type  |                   Description                  |
+|:--------------------------:|:-------:|:----------------------------------------------:|
+| mapreduce.job.id           | String  | The job id                                     |
+| mapreduce.job.jar          | String  | job.jar location in job directory              |
+| mapreduce.job.local.dir    | String  | The job specific shared scratch space          |
+| mapreduce.task.id          | String  | The task id                                    |
+| mapreduce.task.attempt.id  | String  | The task attempt id                            |
+| mapreduce.task.is.map      | boolean | Is this a map task                             |
+| mapreduce.task.partition   | int     | The id of the task within the job              |
+| mapreduce.map.input.file   | String  | The filename that the map is reading from      |
+| mapreduce.map.input.start  | long    | The offset of the start of the map input split |
+| mapreduce.map.input.length | long    | The number of bytes in the map input split     |
+| mapreduce.task.output.dir  | String  | The task's temporary output directory          |
+
+在Streaming job运行的过程中，这些mapreduce的参数格式会有所变化，所有的点（.）会变成下划线（_）。例如，mapreduce.job.id变成mapreduce_job_id。
+所有的参数都可以通过环境变量来获取。
+
+回到上面的问题，可以通过mapreduce.map.input.file来获取输入的路径名称。
+
+```python
+import os
+
+input_file = os.environ['mapreduce_map_input_file']
+```
+
+
 # 其他
 
 Python对streaming的封装的类库
@@ -419,3 +460,4 @@ Hadoop周边的类库
 
 1. [Apache Hadoop MapReduce Streaming](https://hadoop.apache.org/docs/r2.6.0/hadoop-mapreduce-client/hadoop-mapreduce-client-core/HadoopStreaming.html)
 1. [Hadoop Streaming 编程 - 董西成](http://dongxicheng.org/mapreduce/hadoop-streaming-programming/)
+1. [Deprecated Properties: 新旧参数名字对照](http://hadoop.apache.org/docs/current/hadoop-project-dist/hadoop-common/DeprecatedProperties.html)
