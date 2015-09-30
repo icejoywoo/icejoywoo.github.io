@@ -502,9 +502,41 @@ assert any(b)
 assert not all(b)
 ```
 
+# with statement用法
+
+with是一种语法糖（syntax sugar），通常用来进行资源的关闭操作。
+
+传统的打开一个文件，然后关闭，在读取文件进行操作的过程可能出现异常，这个时候需要进行异常捕获，资源的关闭需要放在finally语句中，保证文件正常关闭。
+
+```python
+f = open('test.txt')
+try:
+    # do something
+    pass
+finally:
+    f.close()
+```
+
+使用with语句可以简化这部分代码，文件的关闭不需要显示调用。
+
+```python
+with open('test.txt') as f:
+    # do something
+    pass
+```
+
+with可以一次打开多个文件
+
+```python
+with open('a') as a, open('b') as b:
+    # do something
+    pass
+```
+
 ## 延伸阅读
 
 1. [PEP 343 - The "with" statement](https://www.python.org/dev/peps/pep-0343/)
+1. [The with statement](https://docs.python.org/2/reference/compound_stmts.html#the-with-statement)
 1. [Built-in Functions](https://docs.python.org/2/library/functions.html)
 
 # 其他参考资料
