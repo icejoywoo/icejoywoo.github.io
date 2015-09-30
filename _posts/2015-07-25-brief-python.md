@@ -535,9 +535,10 @@ with open('a') as a, open('b') as b:
 
 ## 延伸阅读
 
-1. [PEP 343 - The "with" statement](https://www.python.org/dev/peps/pep-0343/)
+1. [PEP 343 -- The "with" Statement](https://www.python.org/dev/peps/pep-0343/)
 1. [The with statement](https://docs.python.org/2/reference/compound_stmts.html#the-with-statement)
 1. [Built-in Functions](https://docs.python.org/2/library/functions.html)
+1. [PEP 339 -- Design of the CPython Compiler](https://www.python.org/dev/peps/pep-0339/)
 
 # 其他参考资料
 1. [Magic Methods](http://www.rafekettler.com/magicmethods.html)
