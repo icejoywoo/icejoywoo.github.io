@@ -465,7 +465,47 @@ Partition of a set of 724234 objects. Total size = 60815264 bytes.
 
 # 其他
 
+## all和any内置函数
+
+all和any都是用于iterable对象的，必须是一个可遍历的对象，Python 2.5开始引入的。
+
+all函数的含义：当iterable中所有的对象都为True的时候，才返回True；当iterable为空的时候,返回True。等价实现如下：
+
+```python
+def all(iterable):
+    for element in iterable:
+        if not element:
+            return False
+    return True
+```
+
+any函数的含义：当iterable中任意的对象为True的时候，都返回True；当iterable为空的时候，返回False。等价实现如下：
+
+```python
+def any(iterable):
+    for element in iterable:
+        if element:
+            return True
+    return False
+```
+
+简单示例如下
+
+```python
+a = [True, True]
+b = [True, False]
+
+assert any(a)
+assert all(a)
+
+assert any(b)
+assert not all(b)
+```
+
+## 延伸阅读
+
 1. [PEP 343 - The "with" statement](https://www.python.org/dev/peps/pep-0343/)
+1. [Built-in Functions](https://docs.python.org/2/library/functions.html)
 
 # 其他参考资料
 1. [Magic Methods](http://www.rafekettler.com/magicmethods.html)
