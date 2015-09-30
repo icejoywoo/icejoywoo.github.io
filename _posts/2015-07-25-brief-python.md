@@ -518,5 +518,3 @@ assert not all(b)
 [list comprehensions]: https://www.python.org/dev/peps/pep-0202/ "PEP 202"
 [dict comprehensions]: https://www.python.org/dev/peps/pep-0274/ "PEP 274"
 [hashable]: https://docs.python.org/2/glossary.html#term-hashable "hashable"
-
-{{ page.date | date_to_string }}
