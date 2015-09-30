@@ -253,13 +253,13 @@ for line in sys.stdin:
 
 
 
-打印counter的方法：
+[Streaming文档](https://hadoop.apache.org/docs/r2.6.0/hadoop-mapreduce-client/hadoop-mapreduce-client-core/HadoopStreaming.html#How_do_I_update_counters_in_streaming_applications)中描述打印counter的方法：
 
 >How do I update counters in streaming applications?
 
 >A streaming process can use the stderr to emit counter information. reporter:counter:&lt;group&gt;,&lt;counter&gt;,&lt;amount&gt; should be sent to stderr to update the counter.
 
-就是向stderr中打印reporter:counter:&lt;group&gt;,&lt;counter&gt;,&lt;amount&gt;的字符串就可以更新counter信息了，简单有用的一个工具。
+就是向stderr中打印reporter:counter:&lt;group&gt;,&lt;counter&gt;,&lt;amount&gt;的字符串就可以更新counter信息了，非常简单有用的一个工具，对于job的调试和监控非常有帮助。
 
 
 在集群上运行（reducer个数设置为3）
@@ -404,15 +404,11 @@ $ ${HADOOP_HOME}/bin/hadoop jar ${HADOOP_HOME}/share/hadoop/tools/lib/hadoop-str
 
 有时候我们的MapReduce程序的输出希望是输出两份不同的数据，这种情况下可以使用多路输出。
 
-旧版本使用的是outputformat，org.apache.hadoop.mapred.lib.SuffixMultipleTextOutputFormat和
-org.apache.hadoop.mapred.lib.SuffixMultipleSequenceFileOutputFormat是支持多路输出的，
-输出的格式是由原来的<key, value>变成<key, value#suffix>，suffix是A-Z，如果为其他会报错，
-不同suffix代表不同的输出，支持26路输出。最终的输出文件会有part-xxxx-A和part-xxxx-B等，与不同的suffix相对应。
+旧版本使用的是outputformat，org.apache.hadoop.mapred.lib.SuffixMultipleTextOutputFormat和org.apache.hadoop.mapred.lib.SuffixMultipleSequenceFileOutputFormat是支持多路输出的，输出的格式是由原来的<key, value>变成<key, value#suffix>，suffix是A-Z，如果为其他会报错，不同suffix代表不同的输出，支持26路输出。最终的输出文件会有part-xxxx-A和part-xxxx-B等，与不同的suffix相对应。
 
 
 
-新版本只剩下[MultipleOutputs](https://hadoop.apache.org/docs/r2.6.0/api/org/apache/hadoop/mapreduce/lib/output/MultipleOutputs.html)，
-我暂时未找到在Streaming中使用的方法。
+新版本只剩下[MultipleOutputs](https://hadoop.apache.org/docs/r2.6.0/api/org/apache/hadoop/mapreduce/lib/output/MultipleOutputs.html)，我暂时未找到在Streaming中使用的方法。
 
 ## Map多路输入
 
