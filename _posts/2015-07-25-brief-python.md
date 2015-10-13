@@ -502,7 +502,7 @@ assert any(b)
 assert not all(b)
 ```
 
-# with statement用法
+## with statement用法
 
 with是一种语法糖（syntax sugar），通常用来进行资源的关闭操作。
 
@@ -532,6 +532,26 @@ with open('a') as a, open('b') as b:
     # do something
     pass
 ```
+
+## pep8 代码规范
+
+pep8是python的一个代码规范，有pep8的一个工具作为检测工具，还有一个autopep8的辅助工具，可以自动修改代码格式。
+
+```bash
+# 通过pip安装
+$ pip install pep8
+
+# 检查目录的代码，exclude忽略文件夹，ignore忽略某些错误
+$ pep8 --exclude=migrations --ignore=E501,E265,E731 src
+src/validator.py:147:31: W503 line break before binary operator
+src/log.py:9:1: E402 module level import not at top of file
+```
+
+
+1. [pep8](http://pep8.readthedocs.org/)
+1. [autopep8](https://github.com/hhatto/autopep8)
+1. [pep8 Error Codes](http://pep8.readthedocs.org/en/latest/intro.html#error-codes)
+1. [PEP 008](https://www.python.org/dev/peps/pep-0008/)
 
 ## 延伸阅读
 
