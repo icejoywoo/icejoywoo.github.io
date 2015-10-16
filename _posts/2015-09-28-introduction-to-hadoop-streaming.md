@@ -65,7 +65,7 @@ $ cat <input_file> | <mapper executable> | sort | <reducer executable>
 $ cat <input_file> | python mapper.py | sort | python reducer.py
 ```
 
-# Streaming的WordCount示例
+# WordCount示例
 
 准备数据
 
