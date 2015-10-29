@@ -561,6 +561,7 @@ src/log.py:9:1: E402 module level import not at top of file
 1. [PEP 339 -- Design of the CPython Compiler](https://www.python.org/dev/peps/pep-0339/)
 1. [Python Best Practice Patterns](http://stevenloria.com/python-best-practice-patterns-by-vladimir-keleshev-notes/)
 1. [Understanding Python Decorators in 12 Easy Steps!](http://simeonfranklin.com/blog/2012/jul/1/python-decorators-in-12-steps/)
+1. [Python 练习册，每天一个小程序](https://github.com/Show-Me-the-Code/show-me-the-code)
 
 # 其他参考资料
 1. [Magic Methods](http://www.rafekettler.com/magicmethods.html)
