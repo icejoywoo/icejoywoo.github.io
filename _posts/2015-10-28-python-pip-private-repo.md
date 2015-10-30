@@ -9,7 +9,7 @@ Python 有个非常好用的包管理工具——pip，在国内的网络环境�
 
 在工作或其他环境中，因为安全等各种原因导致机器是无法直接连接外网的，这样就无法使用 pip 的公网的 pypi repo。这种情况下我们需要自己动手来打造供内部使用的 pypi repo。
 
-经过在 Google 进行搜索之后发现了 [PEP 381](https://www.python.org/dev/peps/pep-0381/) 和[ Create a local PyPI mirror](https://aboutsimon.com/2012/02/24/create-a-local-pypi-mirror/)，尝试运行后得到的结果是空的，pep381client已经很久未更新了，pypi 现在已经从 http 换成了 https，在 google 中查到一个[stackoverflow上的回答](http://stackoverflow.com/questions/17667835/pep381clientpep381run-wont-download-packages-from-the-official-pypi-server)，发现了 bandersnatch，最新版是 1.8，上传日期为 2015.03.16。
+经过在 Google 进行搜索之后发现了 [PEP 381](https://www.python.org/dev/peps/pep-0381/) 和 [Create a local PyPI mirror](https://aboutsimon.com/2012/02/24/create-a-local-pypi-mirror/)，尝试运行后得到的结果是空的，pep381client已经很久未更新了，pypi 现在已经从 http 换成了 https，在 google 中查到一个[stackoverflow上的回答](http://stackoverflow.com/questions/17667835/pep381clientpep381run-wont-download-packages-from-the-official-pypi-server)，发现了 bandersnatch，最新版是 1.8，上传日期为 2015.03.16。
 
 # 搭建私有pypi
 
@@ -73,7 +73,7 @@ server {
 
 # 配置pip的repo
 
-Linux 的配置如下（Windows 下的配置文件在用户目录的pip 目录下），配置采用了 shell 命令的形式：
+Linux 的配置如下（Windows 下的配置文件在用户目录的 pip 目录下），配置采用了 shell 命令的形式：
 
 ```bash
 mkdir -p $HOME/.pip/
@@ -106,8 +106,14 @@ bandersnatch 运行一段时间后，开始报错，错误信息为 OSError: [Er
 >Many sub-directories needed
 >The PyPI has a quite extensive list of packages that we need to maintain in a flat directory. Filesystems with small limits on the number of sub-directories per directory can run into a problem like this:
 
-```
-2013-07-09 16:11:33,331 ERROR: Error syncing package: zweb@802449
-OSError: [Errno 31] Too many links: '../pypi/web/simple/zweb'
-```
+>```
+>2013-07-09 16:11:33,331 ERROR: Error syncing package: zweb@802449
+>OSError: [Errno 31] Too many links: '../pypi/web/simple/zweb'
+>```
 >Specifically we recommend to avoid using ext3. Ext4 and newer does not have the limitation of 32k sub-directories.
+
+# 参考
+
+1. [Create a local PyPI mirror](https://aboutsimon.com/2012/02/24/create-a-local-pypi-mirror/)
+1. [pep381client(pep381run) wont download packages from the official pypi server](http://stackoverflow.com/questions/17667835/pep381clientpep381run-wont-download-packages-from-the-official-pypi-server)
+1. [brandersnatch](https://pypi.python.org/pypi/bandersnatch)
