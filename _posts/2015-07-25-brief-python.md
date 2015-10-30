@@ -563,13 +563,14 @@ src/log.py:9:1: E402 module level import not at top of file
 1. [Understanding Python Decorators in 12 Easy Steps!](http://simeonfranklin.com/blog/2012/jul/1/python-decorators-in-12-steps/)
 1. [Python 练习册，每天一个小程序](https://github.com/Show-Me-the-Code/show-me-the-code)
 
-# 其他参考资料
+# 其他学习资料
 1. [Magic Methods](http://www.rafekettler.com/magicmethods.html)
 1. [Awesome Python: A curated list of awesome Python frameworks, libraries and software](http://awesome-python.com/)
 1. [Python HOWTOs](https://docs.python.org/2/howto/index.html)
 1. [《编写高质量代码：改善Python程序的91个建议》](https://book.douban.com/subject/25910544/)
 1. [《Python基础教程》](https://book.douban.com/subject/4866934/)
 1. [*Python Algorithms: Mastering Basic Algorithms in the Python Language*](http://book.douban.com/subject/4915945/)
+1. [Google's Python Class](https://developers.google.com/edu/python/)
 
 [list comprehensions]: https://www.python.org/dev/peps/pep-0202/ "PEP 202"
 [dict comprehensions]: https://www.python.org/dev/peps/pep-0274/ "PEP 274"
