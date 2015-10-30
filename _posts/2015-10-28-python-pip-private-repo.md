@@ -5,17 +5,17 @@ category: python
 tags: ['python', 'PyPI', 'pep381']
 ---
 
-Python 有个非常好用的包管理工具——pip，在国内的网络环境下，使用[官方的 pypi](https://pypi.python.org/simple/)速度有点慢，而且不稳定，可以考虑使用[豆瓣的 pypi](http://pypi.douban.com/simple/)，这是在可以连接外网的情况下我们可以选择比较容易的使用pip。
+Python 有个非常好用的包管理工具——pip，在国内的网络环境下，使用[官方的 pypi](https://pypi.python.org/simple/)速度有点慢，而且不稳定，可以考虑使用[豆瓣的 pypi](http://pypi.douban.com/simple/)，这是在可以连接外网的情况下我们可以选择比较容易的使用 pip。
 
-在工作或其他环境中，因为安全等各种原因导致机器是无法直接连接外网的，这样就无法使用pip的公网的pypi repo。这种情况下我们需要自己动手来打造供内部使用的pypi repo。
+在工作或其他环境中，因为安全等各种原因导致机器是无法直接连接外网的，这样就无法使用 pip 的公网的 pypi repo。这种情况下我们需要自己动手来打造供内部使用的 pypi repo。
 
-经过在google进行搜索之后发现了 [PEP 381](https://www.python.org/dev/peps/pep-0381/) 和[ Create a local PyPI mirror](https://aboutsimon.com/2012/02/24/create-a-local-pypi-mirror/)，尝试运行后得到的结果是空的，pep381client已经很久未更新了，pypi 现在已经从 http 换成了 https，在 google 中查到一个[stackoverflow上的回答](http://stackoverflow.com/questions/17667835/pep381clientpep381run-wont-download-packages-from-the-official-pypi-server)，发现了 bandersnatch，最新版是 1.8，上传日期为 2015.03.16。
+经过在 Google 进行搜索之后发现了 [PEP 381](https://www.python.org/dev/peps/pep-0381/) 和[ Create a local PyPI mirror](https://aboutsimon.com/2012/02/24/create-a-local-pypi-mirror/)，尝试运行后得到的结果是空的，pep381client已经很久未更新了，pypi 现在已经从 http 换成了 https，在 google 中查到一个[stackoverflow上的回答](http://stackoverflow.com/questions/17667835/pep381clientpep381run-wont-download-packages-from-the-official-pypi-server)，发现了 bandersnatch，最新版是 1.8，上传日期为 2015.03.16。
 
 # 搭建私有pypi
 
-我使用的环境是 Python 2.7.3，搭建pypi的机器是需要有公网权限的，用来更新pypi，然后其他机器可以通过这个机器上的pypi来进行更新。
+我使用的环境是 Python 2.7.3，搭建pypi的机器是需要有公网权限的，用来更新 pypi，然后其他机器可以通过这个机器上的 pypi 来进行更新。
 
-首先是安装bandersnatch，这部分在[官方文档](https://pypi.python.org/pypi/bandersnatch#installation)有详细步骤。
+首先是安装 bandersnatch，这部分在[官方文档](https://pypi.python.org/pypi/bandersnatch#installation)有详细步骤。
 
 ```bash
 # 创建工作目录
@@ -47,14 +47,14 @@ stop-on-error = false
 delete-packages = true
 
 [statistics]
-; access log 的目录，这里配置的是nginx
+; access log 的目录，这里配置的是 nginx
 access-log-pattern = /var/log/nginx/*.pypi.python.org*access*
 
-# 同步官方的pypi，因为需要同步的数据量非常大，所以建议 nohup 运行
+# 同步官方的 pypi，因为需要同步的数据量非常大，所以建议 nohup 运行
 $ nohup bandersnatch -c ./default.conf mirror > ./bandersnatch.log 2>&1 &
 ```
 
-例行的更新可以通过crontab进行配置，在配置的 directory 下有一个 web 目录，需要通过 web server 来进行访问，这里提供一个nginx的参考配置
+例行的更新可以通过 crontab 进行配置，在配置的 directory 下有一个 web 目录，需要通过 web server 来进行访问，这里提供一个 nginx 的参考配置
 
 ```
 server {
@@ -83,7 +83,7 @@ echo -e "[install]\ntrusted-host = xxx.com" >> $HOME/.pip/pip.conf
 echo -e "[easy_install]\nindex-url = http://xxx.com/pypi/simple" >> $HOME/.pydistutils.cfg
 ```
 
-pip.conf文件内容如下
+pip.conf 文件内容如下
 
 ```ini
 [global]
@@ -92,14 +92,14 @@ index-url = http://xxx.com/pypi/simple
 trusted-host = xxx.com
 ```
 
-trusted-host的配置是因为服务是 http，不是 https，会有警告，设置信任的 http。
+trusted-host 的配置是因为服务是 http，不是 https，会有警告，设置信任的 http。
 
 配置好之后，可以通过 pip 来尝试安装一个包来测试一下。
 
 # 常见问题
 
 ## OSError: [Errno 31] Too many links
-bandersnatch运行一段时间后，开始报错，错误信息为 OSError: [Errno 31] Too many links。通过搜索发现在 [brandersnatch的文档](https://pypi.python.org/pypi/bandersnatch#operational-notes)中有说明，这个是文件系统子目录的32k限制，ext2 和 ext3 都有这个问题，ext4 没有类似限制。通过查看发现 web/simple 目录下的子目录个数为 31999 个。需要更换为 ext4 才可以解决这个问题，pypi 上的包太多了！
+bandersnatch 运行一段时间后，开始报错，错误信息为 OSError: [Errno 31] Too many links。通过搜索发现在 [brandersnatch的文档](https://pypi.python.org/pypi/bandersnatch#operational-notes)中有说明，这个是文件系统子目录的32k限制，ext2 和 ext3 都有这个问题，ext4 没有类似限制。通过查看发现 web/simple 目录下的子目录个数为 31999 个。需要更换为 ext4 才可以解决这个问题，pypi 上的包太多了！
 
 文档中的说明：
 
