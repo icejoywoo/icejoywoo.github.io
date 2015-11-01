@@ -146,7 +146,7 @@ a.pop()  # 6
 ```
 
 1. 列表推导式([list comprehensions][])可以替代map和filter的功能
-1. **[list comprehensions文档](https://docs.python.org/2/tutorial/datastructures.html#list-comprehensions)**
+2. **[list comprehensions文档](https://docs.python.org/2/tutorial/datastructures.html#list-comprehensions)**
 
 ## 元组(tuple)
 
@@ -434,7 +434,7 @@ if __name__ == "__main__":
 1. sys.getsizeof可以获取内建类型的bytes，对于自定义类型只可以获取直接占用的内存，
 无法获取引用对象的内存，需要递归来获取真正的大小
 ([递归sys.getsizeof的实现参考](http://code.activestate.com/recipes/577504/))。
-1. [guppy-pe的官网](http://guppy-pe.sourceforge.net/)
+2. [guppy-pe的官网](http://guppy-pe.sourceforge.net/)
 
 程序数据结果:
 
@@ -459,9 +459,9 @@ Partition of a set of 724234 objects. Total size = 60815264 bytes.
 ```
 
 1. [多重继承的顺序 mro](https://www.python.org/download/releases/2.3/mro/)
-1. [Unifying types and classes in Python 2.2](https://www.python.org/download/releases/2.2.3/descrintro/)
-1. [python中的 new-style class 及其实例详解](http://wiki.woodpecker.org.cn/moin/PyNewStyleClass)
-1. [类中的\_\_slots\_\_](https://docs.python.org/2/reference/datamodel.html#slots)
+2. [Unifying types and classes in Python 2.2](https://www.python.org/download/releases/2.2.3/descrintro/)
+3. [python中的 new-style class 及其实例详解](http://wiki.woodpecker.org.cn/moin/PyNewStyleClass)
+4. [类中的\_\_slots\_\_](https://docs.python.org/2/reference/datamodel.html#slots)
 
 # 其他
 
@@ -549,28 +549,28 @@ src/log.py:9:1: E402 module level import not at top of file
 
 
 1. [pep8](http://pep8.readthedocs.org/)
-1. [autopep8](https://github.com/hhatto/autopep8)
-1. [pep8 Error Codes](http://pep8.readthedocs.org/en/latest/intro.html#error-codes)
-1. [PEP 008](https://www.python.org/dev/peps/pep-0008/)
+2. [autopep8](https://github.com/hhatto/autopep8)
+3. [pep8 Error Codes](http://pep8.readthedocs.org/en/latest/intro.html#error-codes)
+4. [PEP 008](https://www.python.org/dev/peps/pep-0008/)
 
 ## 延伸阅读
 
 1. [PEP 343 -- The "with" Statement](https://www.python.org/dev/peps/pep-0343/)
-1. [The with statement](https://docs.python.org/2/reference/compound_stmts.html#the-with-statement)
-1. [Built-in Functions](https://docs.python.org/2/library/functions.html)
-1. [PEP 339 -- Design of the CPython Compiler](https://www.python.org/dev/peps/pep-0339/)
-1. [Python Best Practice Patterns](http://stevenloria.com/python-best-practice-patterns-by-vladimir-keleshev-notes/)
-1. [Understanding Python Decorators in 12 Easy Steps!](http://simeonfranklin.com/blog/2012/jul/1/python-decorators-in-12-steps/)
-1. [Python 练习册，每天一个小程序](https://github.com/Show-Me-the-Code/show-me-the-code)
+2. [The with statement](https://docs.python.org/2/reference/compound_stmts.html#the-with-statement)
+3. [Built-in Functions](https://docs.python.org/2/library/functions.html)
+4. [PEP 339 -- Design of the CPython Compiler](https://www.python.org/dev/peps/pep-0339/)
+5. [Python Best Practice Patterns](http://stevenloria.com/python-best-practice-patterns-by-vladimir-keleshev-notes/)
+6. [Understanding Python Decorators in 12 Easy Steps!](http://simeonfranklin.com/blog/2012/jul/1/python-decorators-in-12-steps/)
+7. [Python 练习册，每天一个小程序](https://github.com/Show-Me-the-Code/show-me-the-code)
 
 # 其他学习资料
 1. [Magic Methods](http://www.rafekettler.com/magicmethods.html)
-1. [Awesome Python: A curated list of awesome Python frameworks, libraries and software](http://awesome-python.com/)
-1. [Python HOWTOs](https://docs.python.org/2/howto/index.html)
-1. [《编写高质量代码：改善Python程序的91个建议》](https://book.douban.com/subject/25910544/)
-1. [《Python基础教程》](https://book.douban.com/subject/4866934/)
-1. [*Python Algorithms: Mastering Basic Algorithms in the Python Language*](http://book.douban.com/subject/4915945/)
-1. [Google's Python Class](https://developers.google.com/edu/python/)
+2. [Awesome Python: A curated list of awesome Python frameworks, libraries and software](http://awesome-python.com/)
+3. [Python HOWTOs](https://docs.python.org/2/howto/index.html)
+4. [《编写高质量代码：改善Python程序的91个建议》](https://book.douban.com/subject/25910544/)
+5. [《Python基础教程》](https://book.douban.com/subject/4866934/)
+6. [*Python Algorithms: Mastering Basic Algorithms in the Python Language*](http://book.douban.com/subject/4915945/)
+7. [Google's Python Class](https://developers.google.com/edu/python/)
 
 [list comprehensions]: https://www.python.org/dev/peps/pep-0202/ "PEP 202"
 [dict comprehensions]: https://www.python.org/dev/peps/pep-0274/ "PEP 274"
