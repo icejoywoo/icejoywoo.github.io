@@ -520,10 +520,12 @@ IP2Location_cleanup(IP2Location* self)
 定义 PyTypeObject
 
 ```cpp
+// 定义成员
 static PyMemberDef IP2Location_members[] = {
     {NULL}  /* Sentinel */
 };
 
+// 定义属性的getter和setter
 static PyGetSetDef IP2Location_getseters[] = {
     {NULL} /* Sentinel */
 };
