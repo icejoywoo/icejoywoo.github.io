@@ -2,8 +2,10 @@
 layout: post
 title: 编写你自己的 Python C 扩展（Extending Python）
 category: python
-tags: ['python', 'CPython']
+tags: ['python', 'CPython', 'extension']
 ---
+
+# 前言
 
 Python 是一门简单强大的编程语言，非常灵活，可以极大地提升程序员的编程效率。但是，Python 本身的灵活带来了运行效率低，内存占用相对较大的问题，这限制了 Python 在某些场景下的应用。
 
@@ -215,7 +217,7 @@ $ python test.py
 2. [Keyword Parameters for Extension Functions](https://docs.python.org/2/extending/extending.html#keyword-parameters-for-extension-functions)
 3. [Building Arbitrary Values](https://docs.python.org/2/extending/extending.html#building-arbitrary-values)
 
-摘抄部分文档中的示例，这些示例可以快速了解基本用法。
+摘抄部分文档中的示例，这些示例可以快速了解基本用法，加入了少量注释。
 
 PyArg_ParseTuple 用法示例。
 
@@ -243,6 +245,7 @@ ok = PyArg_ParseTuple(args, "(ii)s#", &i, &j, &s, &size);
     const char *file;
     const char *mode = "r";
     int bufsize = 0;
+    // | 表示后面的参数是可选的
     ok = PyArg_ParseTuple(args, "s|si", &file, &mode, &bufsize);
     /* A string, and optionally another string and an integer */
     /* Possible Python calls:
@@ -262,6 +265,7 @@ ok = PyArg_ParseTuple(args, "(ii)s#", &i, &j, &s, &size);
 
 {
     Py_complex c;
+    // : 之后是一个函数名字，用来错误信息提示用的
     ok = PyArg_ParseTuple(args, "D:myfunction", &c);
     /* a complex, also providing a function name for errors */
     /* Possible Python call: myfunction(1+2j) */
@@ -285,6 +289,7 @@ keywdarg_parrot(PyObject *self, PyObject *args, PyObject *keywds)
 
     if (!PyArg_ParseTupleAndKeywords(args, keywds, "i|sss", kwlist,
                                      &voltage, &state, &action, &type))
+        // | 表示后面的参数是可选的
         return NULL;
 
     printf("-- This parrot wouldn't %s if you put %i Volts through it.\n",
@@ -316,7 +321,7 @@ initkeywdarg(void)
 
 Py_BuildValue 和 Python 类型对照
 
-```
+```cpp
 Py_BuildValue("")                        None
 Py_BuildValue("i", 123)                  123
 Py_BuildValue("iii", 123, 456, 789)      (123, 456, 789)
@@ -334,7 +339,7 @@ Py_BuildValue("((ii)(ii)) (ii)",
               1, 2, 3, 4, 5, 6)          (((1, 2), (3, 4)), (5, 6))
 ```
 
-我们可以发现，之前的这部分处理是不够简介的，可以修改一下。
+我们可以发现，之前的输入参数处理部分是不够简洁的，可以修改一下。
 
 ```cpp
 static PyObject* load_dict_function(PyObject *self, PyObject *args) {
@@ -367,10 +372,241 @@ static PyObject* get_country_function(PyObject *self, PyObject *args) {
 }
 ```
 
+本部分的完整代码在[module_version](https://github.com/icejoywoo/iputils/tree/master/module_version)。
+
 # 自定义新类型
 
+自定义新类型的含义是，使用 C/C++ 扩展来编写一个类。基本功能示例
+
+```python
+# filename: test.py
+import _iputils
+
+ip = _iputils.IP2Location("../dict/czip.txt")
+print ip.get_country("180.214.232.50")
 
 
+def parse(line):
+    fields = line.split()
+    return tuple(fields[:3])
+
+# 自定义字典的数据解析方式，针对不同格式的处理
+ip = _iputils.IP2Location("../dict/cz88ip.txt", parse)
+print ip.get_country("180.214.232.50")
+```
+
+这里的头文件需要比之前多引入一个
+
+```cpp
+#include "structmember.h"
+```
+
+主要提供了一些类属性相关的操作。
+
+首先，自定义一个类型
+
+```cpp
+typedef struct {
+    PyObject_HEAD
+    IPLib* ip_lib;
+} IP2Location;
+```
+
+这同样是一个 PyObject 的子类型，任何 Python 的类型都必须是 PyObject 的子类型。
+
+有了类型之后，要创建和删除对象，有内存相关的操作。
+
+```cpp
+static void
+IP2Location_dealloc(IP2Location* self) {
+    delete self->ip_lib;
+    self->ob_type->tp_free((PyObject*)self);
+}
+
+static PyObject*
+IP2Location_new(PyTypeObject *type, PyObject *args, PyObject *kwds) {
+    IP2Location* self;
+    self = (IP2Location *)type->tp_alloc(type, 0);
+    self->ip_lib = new IPLib();
+    return (PyObject*) self;
+}
+```
+
+函数命名采用了 <type>\_funcname 的形式，是一种约定的方式，可以提升代码可读性。new 是用来创建对象的，相当于\_\_new\_\_，分配内存，dealloc 是用来回收内存的。
+
+下面需要有构造函数，相当于\_\_init\_\_
+
+```cpp
+static int
+IP2Location_init(IP2Location* self, PyObject* args, PyObject* kwds) {
+    const char* dict_path = NULL;
+    PyObject* callback = NULL;
+
+    static char* kwlist[] = {"dict_path", "callback", NULL};
+
+    if (!PyArg_ParseTupleAndKeywords(args, kwds, "s|O", kwlist, &dict_path, &callback)) {
+        return -1;
+    }
+
+    if (callback) {
+        if (!PyCallable_Check(callback)) {
+            PyErr_SetString(PyExc_TypeError,
+                            "The callback must be a function");
+            return -1;
+        }
+        FILE* f = fopen(dict_path, "r");
+        char buf[1024];
+        PyObject* arglist;
+        PyObject* result;
+
+        const char* start;
+        const char* end;
+        const char* country;
+        while (fgets(buf, sizeof(buf), f)) {
+            arglist = Py_BuildValue("(s)", buf);
+            result = PyObject_CallObject(callback, arglist);
+            Py_DECREF(arglist);
+            if (PyArg_ParseTuple(result, "sss", &start, &end, &country)) {
+                self->ip_lib->PushItem(start, end, country);
+            }
+            Py_DECREF(result);
+        }
+    } else {
+        self->ip_lib->LoadDict(dict_path);
+    }
+
+    return 0;
+}
+```
+
+这里引入了一个可选参数，是一个回调函数，用于自定义的解析。
+
+[在 C/C++ 中调用 Python 函数](https://docs.python.org/2/extending/extending.html#calling-python-functions-from-c)是非常容易的，使用 PyCallable_Check 来检查类型，通过 PyObject_CallObject 就可以完成调用，返回 NULL 表示失败。
+
+**注意：Py_BuildValue 和 PyObject_CallObject 返回的指针要 Py_DECREF，否则会内存泄漏。**
+
+定义类的两个方法
+
+```cpp
+static PyObject *
+IP2Location_get_country(IP2Location* self, PyObject* args)
+{
+    const char* ip;
+
+    if (!PyArg_ParseTuple(args, "s", &ip)) {
+        return NULL;
+    }
+
+    std::string country;
+    self->ip_lib->GetCountry(ip, country);
+
+    if (country.empty()) {
+        Py_INCREF(Py_None);
+        return Py_None;
+    } else {
+        return Py_BuildValue("s", country.c_str());
+    }
+}
+
+static PyObject *
+IP2Location_cleanup(IP2Location* self)
+{
+    self->ip_lib->CleanUp();
+    Py_INCREF(Py_True);
+    return Py_True;
+}
+```
+
+定义 PyTypeObject
+
+```cpp
+static PyMemberDef IP2Location_members[] = {
+    {NULL}  /* Sentinel */
+};
+
+static PyGetSetDef IP2Location_getseters[] = {
+    {NULL} /* Sentinel */
+};
+
+static PyMethodDef IP2Location_methods[] = {
+    {"get_country", (PyCFunction)IP2Location_get_country, METH_VARARGS, "get country by ip"},
+    {"cleanup", (PyCFunction)IP2Location_cleanup, METH_NOARGS, "cleanup"},
+    {NULL}  /* Sentinel */
+};
+
+static PyTypeObject IP2LocationType = {
+    PyObject_HEAD_INIT(NULL)
+    0,                                        /*ob_size*/
+    "_iputils.IP2Location",                     /*tp_name*/
+    sizeof(IP2Location),                      /*tp_basicsize*/
+    0,                                        /*tp_itemsize*/
+    (destructor)IP2Location_dealloc,          /*tp_dealloc*/
+    0,                                        /*tp_print*/
+    0,                                        /*tp_getattr*/
+    0,                                        /*tp_setattr*/
+    0,                                        /*tp_compare*/
+    0,                                        /*tp_repr*/
+    0,                                        /*tp_as_number*/
+    0,                                        /*tp_as_sequence*/
+    0,                                        /*tp_as_mapping*/
+    0,                                        /*tp_hash */
+    0,                                        /*tp_call*/
+    0,                                        /*tp_str*/
+    0,                                        /*tp_getattro*/
+    0,                                        /*tp_setattro*/
+    0,                                        /*tp_as_buffer*/
+    Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE, /*tp_flags*/
+    "IP2Location objects",                    /* tp_doc */
+    0,                                        /* tp_traverse */
+    0,                                        /* tp_clear */
+    0,                                        /* tp_richcompare */
+    0,                                        /* tp_weaklistoffset */
+    0,                                        /* tp_iter */
+    0,                                        /* tp_iternext */
+    IP2Location_methods,                      /* tp_methods */
+    IP2Location_members,                      /* tp_members */
+    IP2Location_getseters,                    /* tp_getset */
+    0,                                        /* tp_base */
+    0,                                        /* tp_dict */
+    0,                                        /* tp_descr_get */
+    0,                                        /* tp_descr_set */
+    0,                                        /* tp_dictoffset */
+    (initproc)IP2Location_init,               /* tp_init */
+    0,                                        /* tp_alloc */
+    IP2Location_new,                          /* tp_new */
+};
+```
+
+最后初始化模块
+
+```cpp
+static PyMethodDef module_methods[] = {
+    {NULL, NULL, 0, NULL}
+};
+
+PyMODINIT_FUNC init_iputils(void) {
+    PyObject* m;
+    if (PyType_Ready(&IP2LocationType) < 0) {
+        return;
+    }
+
+    m = Py_InitModule3("_iputils", module_methods, "ip utils");
+    if (m == NULL) {
+        return;
+    }
+    PyModule_AddObject(m, "IP2Location", (PyObject*)&IP2LocationType);
+}
+```
+
+**注意：PyType_Ready 一定要调用，否则可能导致莫名其妙的 core。**
+
+编译和测试方法与模块扩展相同，不再赘述。
+
+本部分代码在[newtype_version](https://github.com/icejoywoo/iputils/tree/master/newtype_version)上可以找到。
+
+# 性能对比
+
+暂空
 
 # 参考
 
