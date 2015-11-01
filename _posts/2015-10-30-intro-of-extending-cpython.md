@@ -608,7 +608,9 @@ PyMODINIT_FUNC init_iputils(void) {
 
 # 性能对比
 
-暂空
+纯 Python 的实现，比较 C/C++ 扩展和纯 Python 代码的性能差异。
+
+在使用纯 Python 的实现下，比较 CPython 和 Pypy 的性能差异，Pypy 不支持 C/C++ 扩展。
 
 # 参考
 
