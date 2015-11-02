@@ -600,7 +600,7 @@ PyMODINIT_FUNC init_iputils(void) {
 }
 ```
 
-**注意：PyType_Ready 一定要调用，否则可能导致莫名其妙的 core。**
+**注意：PyType_Ready 一定要调用，否则会导致莫名其妙的 core。**
 
 编译和测试方法与模块扩展相同，不再赘述。
 
