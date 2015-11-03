@@ -608,7 +608,7 @@ PyMODINIT_FUNC init_iputils(void) {
 
 # 性能对比
 
-纯 Python 的实现（[py_version](https://github.com/icejoywoo/iputils/tree/master/py_version)），比较 C/C++ 扩展和纯 Python 代码的性能差异。
+纯 Python 的实现（[py_version](https://github.com/icejoywoo/iputils/tree/master/py_version/iputils.py)），比较 C/C++ 扩展和纯 Python 代码的性能差异。
 
 ```
 load dict perf:
