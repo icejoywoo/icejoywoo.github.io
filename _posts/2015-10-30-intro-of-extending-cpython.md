@@ -23,7 +23,7 @@ Python 的官方实现 CPython 本身提供了一个扩展机制，可以方便�
 
 示例代码未经过充分测试，请不要使用在生产环境中。
 
-本文的示例代码可以在 [github](https://github.com/icejoywoo/iputils) 上找到。
+本文的示例代码可以在 [github](https://github.com/icejoywoo/iputils) 上找到，与本文的示例有少许出入。
 
 **如果您在阅读本文，发现任何问题，请留言指正，谢谢！**
 
@@ -608,9 +608,39 @@ PyMODINIT_FUNC init_iputils(void) {
 
 # 性能对比
 
-纯 Python 的实现，比较 C/C++ 扩展和纯 Python 代码的性能差异。
+纯 Python 的实现（[py_version](https://github.com/icejoywoo/iputils/tree/master/py_version)），比较 C/C++ 扩展和纯 Python 代码的性能差异。
+
+```
+load dict perf:
+c ext load dict: 8.6370/10 s
+c ext load dict with user-defined parse: 14.4615/10 s
+py load dict: 52.7173/10 s
+py load dict with user-defined parse: 55.2053/10 s
+
+query perf:
+c ext query: 0.9968/1000000 s
+c ext query(load dict with user-defined parse): 0.9875/1000000 s
+py query: 18.1608/1000000 s
+py query(load dict with user-defined parse): 18.3461/1000000 s
+```
+
+我们可以看出字典加载速度大概 C++ 扩展大概比纯 Python 快了 6 倍多，查询快了18倍。内存占用方面，C++ 扩展大约占用 41M 左右，纯 Python 大约占用 90M 左右。
 
 在使用纯 Python 的实现下，比较 CPython 和 Pypy 的性能差异，Pypy 不支持 C/C++ 扩展。
+
+```
+load dict perf:
+py load dict: 9.0626/10 s
+py load dict with user-defined parse: 9.6801/10 s
+
+query perf:
+py query: 1.2138/1000000 s
+py query(load dict with user-defined parse): 1.2110/1000000 s
+```
+
+我们可以对比发现，Pypy 本身（PyPy 2.5.1）的性能还是十分不错的，非常接近 C++ 扩展的性能，内存大约占用 153M 左右，内存占用较大。
+
+**内存占用这里都只是运行加载字典后的情况，未测试在大量查询之后的内存情况，内存情况只是参考，可能不同环境不同版本的内存占用有不同。**
 
 # 参考
 
