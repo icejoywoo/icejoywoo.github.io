@@ -11,7 +11,7 @@ Python 有个非常好用的包管理工具——pip，在国内的网络环境�
 
 经过在 Google 进行搜索之后发现了 [PEP 381](https://www.python.org/dev/peps/pep-0381/) 和 [Create a local PyPI mirror](https://aboutsimon.com/2012/02/24/create-a-local-pypi-mirror/)，尝试运行后得到的结果是空的，pep381client已经很久未更新了，pypi 现在已经从 http 换成了 https，在 google 中查到一个[stackoverflow上的回答](http://stackoverflow.com/questions/17667835/pep381clientpep381run-wont-download-packages-from-the-official-pypi-server)，发现了 bandersnatch，最新版是 1.8，上传日期为 2015.03.16。
 
-# 搭建私有pypi
+# 搭建私有 pypi
 
 我使用的环境是 Python 2.7.3，搭建pypi的机器是需要有公网权限的，用来更新 pypi，然后其他机器可以通过这个机器上的 pypi 来进行更新。
 
@@ -77,24 +77,31 @@ Linux 的配置如下（Windows 下的配置文件在用户目录的 pip 目录�
 
 ```bash
 mkdir -p $HOME/.pip/
-echo -e "[global]\nindex-url = http://xxx.com/pypi/simple" >> $HOME/.pip/pip.conf
-echo -e "[install]\ntrusted-host = xxx.com" >> $HOME/.pip/pip.conf
+echo -e "[global]\nindex-url = http://pypi.xxx.com/simple" >> $HOME/.pip/pip.conf
+echo -e "[install]\ntrusted-host = pypi.xxx.com" >> $HOME/.pip/pip.conf
 # 下面这行是给 easy_install 用的
-echo -e "[easy_install]\nindex-url = http://xxx.com/pypi/simple" >> $HOME/.pydistutils.cfg
+echo -e "[easy_install]\nindex-url = http://pypi.xxx.com/simple" >> $HOME/.pydistutils.cfg
 ```
 
-pip.conf 文件内容如下
+以国内常用的豆瓣 pypi 为例，配置文件 pip.conf 文件内容如下（Linux 下的位置为 ${HOME}/.pip/pip.conf）
 
 ```ini
 [global]
-index-url = http://xxx.com/pypi/simple
+index-url = http://pypi.douban.com/simple
 [install]
-trusted-host = xxx.com
+trusted-host = pypi.baidu.com
 ```
 
 trusted-host 的配置是因为服务是 http，不是 https，会有警告，设置信任的 http。
 
 配置好之后，可以通过 pip 来尝试安装一个包来测试一下。
+
+easy_install 的配置文件为 ${HOME/.pydistutils.cfg}，配置内容如下
+
+```ini
+[easy_install]
+index-url = http://pypi.baidu.com/simple
+```
 
 # 常见问题
 
