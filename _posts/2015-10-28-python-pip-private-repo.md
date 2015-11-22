@@ -89,7 +89,7 @@ echo -e "[easy_install]\nindex-url = http://pypi.xxx.com/simple" >> $HOME/.pydis
 [global]
 index-url = http://pypi.douban.com/simple
 [install]
-trusted-host = pypi.baidu.com
+trusted-host = pypi.douban.com
 ```
 
 trusted-host 的配置是因为服务是 http，不是 https，会有警告，设置信任的 http。
@@ -100,7 +100,7 @@ easy_install 的配置文件为 ${HOME/.pydistutils.cfg}，配置内容如下
 
 ```ini
 [easy_install]
-index-url = http://pypi.baidu.com/simple
+index-url = http://pypi.douban.com/simple
 ```
 
 # 常见问题
