@@ -164,7 +164,7 @@ def even_filter():
     return r
 ```
 
-列表表达式的系列包含生成器表达式（Generator comprehension）和[Dict comprehension](https://www.python.org/dev/peps/pep-0274/)，这种语法相当简洁。
+列表表达式的系列包含生成器表达式（Generator comprehension）和 Dict comprehension，这种语法相当简洁。
 
 ```python
 # 字典的 key value 反转
