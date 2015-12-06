@@ -223,3 +223,4 @@ PyPy 是一个 Python 的另一种实现，使用前首先需要考虑两个问�
 
 1. [7 ways to improve your Python performance](http://www.monitis.com/blog/2015/05/25/7-ways-to-improve-your-python-performance/)
 2. [Python 代码性能优化技巧](https://www.ibm.com/developerworks/cn/linux/l-cn-python-optim/)
+3. [PerformanceTips](https://wiki.python.org/moin/PythonSpeed/PerformanceTips)
