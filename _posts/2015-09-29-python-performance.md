@@ -177,6 +177,29 @@ even_t = {i for i in t if i % 2 == 0}
 
 本节中相关的 PEP：[PEP 202 -- List Comprehensions](https://www.python.org/dev/peps/pep-0202/)、[PEP 0289 -- Generator Expressions](https://www.python.org/dev/peps/pep-0289/) 和 [PEP 274 -- Dict Comprehensions](https://www.python.org/dev/peps/pep-0274/)。
 
+## 临时小文件的处理
+
+临时小文件是一些逻辑中不可避免的，比如生成一个文件然后发送 HTTP POST 请求上传到服务器等。这样处理，其中有一次磁盘 IO 操作，最好是内存中生成一个“文件”，然后来使用，这里的文件只要满足实现了文件接口就可以，就是所谓的 Duck type。
+
+在 Python 中，提供了 StringIO 可以用来模拟文件，非常方便。
+
+```python
+import StringIO
+
+import requests
+
+f = StringIO.StringIO()
+f.write('test file')
+f.flush()
+f.seek(0)
+
+requests.post('http://xxx.com/upload', files={
+    'file': f,
+})
+```
+
+示例代码中使用了 [requests](http://docs.python-requests.org/en/latest/)。
+
 # 其它
 
 程序性能是一个需要权衡的东西，就需要考虑代价的问题，也就是性价比是否高，性能提升可以带来多大的收益，当然天下武功唯快不破。性能提升最理想的状态是代价很小，性能提升很大，可是现实很骨感。
