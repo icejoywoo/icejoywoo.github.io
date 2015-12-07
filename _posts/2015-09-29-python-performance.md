@@ -147,6 +147,25 @@ query_e = query_wrapper_e()
 
 用异常机制来判断字典未被初始化，然后在异常捕获中加载字典。相对于前一种实现来说，这样使得后续的调用都不需要在判断 bool 标记变量，少了一次判断，在频繁被调用 的时候，获得的性能提升还是很可观的。
 
+在参考资料中，也有一个例子，以初始化 dict 为例，这个例子也是使用了异常机制来进行了优化。
+
+```python
+# version 1
+wdict = {}
+for word in words:
+    if word not in wdict:
+        wdict[word] = 0
+    wdict[word] += 1
+
+# version 2
+wdict = {}
+for word in words:
+    try:
+        wdict[word] += 1
+    except KeyError:
+        wdict[word] = 1
+```
+
 ## 列表表达式
 
 列表表达式（List comprehension）是一种 Python 的语法，主要用来替换之前的 map 和 filter 方法，并且性能相对普通的写法有一定的性能提升。
