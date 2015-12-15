@@ -246,6 +246,11 @@ end
 
 vagrant 拥有 plugin 插件系统，可以通过 plugin 子命令进行插件的管理。
 
+常用插件有：
+
+1. [vagrant-hostmanager](https://github.com/smdahlen/vagrant-hostmanager)
+2. [vagrant-hosts](https://github.com/oscar-stack/vagrant-hosts)
+
 # 参考资料
 
 1. [使用 Vagrant 打造跨平台开发环境](http://segmentfault.com/a/1190000000264347)
