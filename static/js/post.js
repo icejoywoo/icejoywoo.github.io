@@ -4,7 +4,6 @@
 $(document).ready(function() {
     generateContent();
     share();
-    $('.container img').magnificPopup({type:'image'});
 });
 
 /**
