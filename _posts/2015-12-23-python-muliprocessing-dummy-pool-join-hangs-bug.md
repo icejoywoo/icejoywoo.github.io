@@ -30,7 +30,7 @@ def f(x):
 p.map(f, a)
 
 p.close()
-p.join()  # hangs here
+p.join()  # hang here
 ```
 
 出现此问题的 Python 版本为：2.7.3，在 2.7.10 版本运行同样的代码没有发现问题。应该在新版已经修复。
