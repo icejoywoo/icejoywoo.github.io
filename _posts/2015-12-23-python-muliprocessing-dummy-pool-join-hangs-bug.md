@@ -39,4 +39,5 @@ p.join()  # hang here
 
 # 参考资料
 
-1. [multiprocessing.dummy: pool.map hangs on empty list](https://bugs.python.org/issue25656)
+1. [Issue6433: multiprocessing: pool.map hangs on empty list](https://bugs.python.org/issue6433)
+2. [Issue25656: multiprocessing.dummy: pool.map hangs on empty list](https://bugs.python.org/issue25656)
