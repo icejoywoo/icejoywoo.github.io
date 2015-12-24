@@ -13,6 +13,8 @@ Python 内置了一个线程池的实现，隐藏在 multiprocessing.dummy 这�
 
 dummy 提供了一套 threading 的 wrapper，这样就可以替换 Process 的实现，来让 multiprocessing 中的各种工具类变成使用线程的了。
 
+本文讨论的 bug 都是 2.7.3 的，因为项目环境目前都依赖 2.7.3，暂时无法全部升级，在当前 2.7.x 分支的新版中，bug 都已经修复。版本间的 bug，相对比较难调适，可能本地开发都没问题，上线就出问题了，环境问题也是个大问题。
+
 # Bug: pool.map hangs on empty list
 
 内置的线程池还是非常方便的，在使用过程中，在处理一个空的 iterable 的时候，发现程序会 hang 死在 pool.join 的地方。
