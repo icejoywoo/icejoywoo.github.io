@@ -572,6 +572,8 @@ src/log.py:9:1: E402 module level import not at top of file
 6. [*Python Algorithms: Mastering Basic Algorithms in the Python Language*](http://book.douban.com/subject/4915945/)
 7. [Google's Python Class](https://developers.google.com/edu/python/)
 8. [PyGarden: Python Packages info & stats](http://pygarden.com/)（可以查看 Python Package 各个版本的支持情况）
+9. [Python 文档中文翻译](http://python.usyiyi.cn/)
+10. [Python 漫游指南](http://docs.python-guide.org/en/latest/)
 
 [list comprehensions]: https://www.python.org/dev/peps/pep-0202/ "PEP 202"
 [dict comprehensions]: https://www.python.org/dev/peps/pep-0274/ "PEP 274"
