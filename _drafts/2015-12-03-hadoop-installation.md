@@ -24,6 +24,34 @@ HUE 安装配置
 
 $ mvn package -Pdist,native -DskipTests -Dtar
 
+Mac 下编译 Hadoop 2.6.0 的问题
+
+编译步骤：
+
+protobuf 2.5.0，下载编译安装，protoc 添加到 PATH 中。
+
+```bash
+$ cd hadoop-maven-plugins
+$ mvn install
+
+$ cd ..
+$ mvn eclipse:eclipse -DskipTests
+```
+
+http://wiki.apache.org/hadoop/EclipseEnvironment
+
+> Exception in thread "main" java.lang.AssertionError: Missing tools.jar at: /Library/Java/JavaVirtualMachines/jdk1.7.0_15.jdk/Contents/Home/Classes/classes.jar
+
+解决方法：
+
+```bash
+# 请将 jdk 的名字进行替换
+$ sudo mkdir /Library/Java/JavaVirtualMachines/jdk1.7.0_15.jdk/Contents/Home/Classes/
+$ sudo ln -s /Library/Java/JavaVirtualMachines/jdk1.7.0_15.jdk/Contents/Home/jre/lib/rt.jar /Library/Java/JavaVirtualMachines/jdk1.7.0_15.jdk/Contents/Home/Classes/classes.jar
+```
+
+1. [java.lang.AssertionError: Missing tools.jar](https://issues.apache.org/jira/browse/HADOOP-9350)
+
 ## Spark 编译
 
 $ ./make-distribution.sh --name uts-spark --tgz -Phadoop-2.6 -Pyarn -Dhadoop.version=2.6.0 -DskipTests -Phive -Phive-thriftserver

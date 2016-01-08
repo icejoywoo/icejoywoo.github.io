@@ -552,6 +552,7 @@ src/log.py:9:1: E402 module level import not at top of file
 2. [autopep8](https://github.com/hhatto/autopep8)
 3. [pep8 Error Codes](http://pep8.readthedocs.org/en/latest/intro.html#error-codes)
 4. [PEP 008](https://www.python.org/dev/peps/pep-0008/)
+5. [The Elements of Python Style](https://github.com/amontalenti/elements-of-python-style)
 
 ## 延伸阅读
 
