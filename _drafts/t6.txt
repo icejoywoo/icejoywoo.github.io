@@ -2,35 +2,63 @@
 
 1. UTS 2.1（设计研发）
 地址: http://iuts.baidu.com/
-主要目标：通过提升系统的稳定性和易用性，释放人力，解决系统中的不稳定因素
+文档：http://wiki.baidu.com/pages/viewpage.action?pageId=38014403
+主要目标：通过提升系统的稳定性和易用性，释放人力，解决系统中的遗留问题
+
+主要工作：
 
 a. UTS 集合运算 2.0
 	解决问题：主要解决 1.0 内存占用高，服务单点问题，任务并发量瓶颈
 	目标：内存占用量可控，性能与原先基本保持一致，构建运算集群，支持并发数在 50 以上，提升集合运算的稳定性，提供更加详细的调试信息，方便问题定位
-	角色：独立完成整个服务的设计、研发、测试和上线运维等工作
+	角色：设计研发
 	wiki：http://wiki.baidu.com/display/ipcsUTS/UTS+Set+Server+2.0
-	现状：2.0 已经于开发测试完成，已经服务于 PCF、BAV、MM、Baidu Browser和小工具等产品线，并发数支持 96 个，于 2015.7 上线至今，服务不可用时间在 15 min 以内，累计执行计算任务 2w+，连续无故障时间 6 个月以上
+	成果：开发测试已经完成，在线上服务于 PCF、BAV、MM、Baidu Browser和小工具等产品线，并发数支持 96 个，多于 96 个任务会进入等待队列中，于 2015.7 上线至今，服务不可用时间在 15 min 以内，累计执行计算任务 2w+，连续无故障时间 6 个月以上
+
 b. UTS 元信息统一管理：
-	解决问题：主要解决 1.0 内存占用高，服务单点问题，任务并发量瓶颈
+	解决问题：各个产品的 UTS 集群与集合运算服务有一些全局的配置信息，采用配置文件，同步和修改需要每个地方都修改，并重启服务
+	目标：统一进行配置和管理，修改无需重启服务
+	角色：设计研发
+	wiki：http://wiki.baidu.com/pages/viewpage.action?pageId=108769739
+	成果：已经于 2015.8 上线至今，服务不可用时间在 10 min 以内，已稳定运行
 
-c. 
+c. 河图无障碍认证
+	解决问题：UTS 的平台化接入
+	目标：完成河图接入，通过无障碍认证，获得 P1 级别，达到 12 分
+	角色：负责人
+	wiki：http://wiki.baidu.com/pages/viewpage.action?pageId=38014403
+	成果：已经完成目标，目前为 13 分，编写和整理使用文档，SLA 和使用统计都已接入，并且正常运行 9 个月左右
 
-2. UTS 3.0（）
-地址: http://flux.baidu.com:8080/
-文档: 见附件
-现状: 共运行190+次评估, 服务可用性在99.9%, 线上问题3个, 平均修复时间在2小时内, 主要服务于PCF.
-系统主要特性
-a. worker是无状态的节点, 互相独立, 只依赖mongodb集群中任务的现有状态, 可水平扩展.
-b. 对从db中获取的数据进行文件缓存, 再次需要时无需重新拖取
-c. worker异常退出只影响一个任务, 不会影响其他的任务, 有supervisord对异常退出的worker进行重启操作
+2. UTS 3.0（设计研发）
+地址: http://hkg02-inf-uts-ssd30.hkg02.baidu.com:8457/index/
+文档: http://wiki.baidu.com/pages/viewpage.action?pageId=140042506
+现状: 已完成了一期及二期的设计开发工作，目前应用于 hao123、91、MM 和小工具等产品线
+主要工作
 
-4. 其他杂项
+a. 主导项目整体的设计和规划
+b. Hadoop 集群以及 Hive 集群搭建工作（wiki：http://wiki.baidu.com/pages/viewpage.action?pageId=92284711）
+c. 日志离线下载模块的设计和开发工作（wiki：http://wiki.baidu.com/pages/viewpage.action?pageId=141565238）
+c. 调度系统的设计
+d. MM 相关产品数据从 2.0 迁移到 3.0（wiki：http://wiki.baidu.com/pages/viewpage.action?pageId=152123352）
+e. 91 相关基础数据（活跃、新增、分发）的接入，MM 与 91 融合报表的数据计算（wiki：http://wiki.baidu.com/pages/viewpage.action?pageId=144090825）
+
+4. 其他
 a. UTS 机房迁移:
     wiki：http://wiki.baidu.com/pages/viewpage.action?pageId=80545150
+    主要工作：在 1 个月内独自完成了集群的数据和相关服务的迁移，累计迁移 40+ T 数据，16 个服务，涉及 hk01 机器 100+ 台，hkg02 机器 61 台，期间各个产品的不可用时间都在 15 小时内，保证了各个产品数据的正常产出，未造成报表的延迟
 
 b. UTS 日常运维：
+	wiki：http://wiki.baidu.com/pages/viewpage.action?pageId=59310496
+	主要工作：整理汇总了一些常见的运维操作，整理 wiki 供组内共享，例行运维值班
+
+c. Hao123 数据接入
+	wiki：http://wiki.baidu.com/pages/viewpage.action?pageId=128481979
+	主要工作：了解 hao123 原来的数据流及相关平台工具的使用方法，确定数据接入的方案
+
+d. 团队建设
+	新人学习资料：http://wiki.baidu.com/pages/viewpage.action?pageId=143960641
+	主要工作：介绍 UTS 的现状，整理一些基本学习资料，快速融入团队，快速成长
 
 二. 个人成长
-1. 组内分享两次(UTS监控平台和UPS&Mola简介, ppt见附件)
-2. 技术调研一次(redis集群调研, wiki: http://wiki.baidu.com/pages/viewpage.action?pageId=55879958)
-3. 参加一次Hackthon(展示通过DSL来进行数据查询分析, 角色: 队长)
+1. 组内分享两次(wordvector 简介、Programming Language, ppt见附件)
+2. 培养新人 1 个
+
