@@ -576,6 +576,8 @@ src/log.py:9:1: E402 module level import not at top of file
 9. [Python 文档中文翻译](http://python.usyiyi.cn/)
 10. [Python 漫游指南](http://docs.python-guide.org/en/latest/)
 
+{% gist 0f19fa8575ac664140fc %}
+
 [list comprehensions]: https://www.python.org/dev/peps/pep-0202/ "PEP 202"
 [dict comprehensions]: https://www.python.org/dev/peps/pep-0274/ "PEP 274"
 [hashable]: https://docs.python.org/2/glossary.html#term-hashable "hashable"
