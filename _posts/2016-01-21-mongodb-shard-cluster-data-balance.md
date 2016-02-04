@@ -70,6 +70,44 @@ for i in uid_keys:
         index += 1
 ```
 
+在新建一个 shard collection 的时候，这个时候，是默认只有一个 chunk，为了可以更好地分摊读写压力，可以考虑 pre-splitting。下面给出可以在 mongo shell 中运行的 javascript 代码示例。
+
+```javascript
+// 部分操作需要在 admin 下才可以生效
+use admin;
+
+sh.enableSharding("<db>")
+
+// <shard_key> 为 1，表示 range 分片，为 hashed，表示 hash 分片
+// range 分片的数据具有局部性
+sh.shardCollection('<db>.<collection>', {<shard_key>: 1})
+
+// pre-splitting
+
+// all shards
+var shards = [];
+db.getSiblingDB('config').shards.find().forEach(function(i) { shards.push(i._id); })
+
+// 这里举例，用的 shardkey 是 userid，是十六进制的数
+var keys = '0123456789ABCDEF';
+var subKey = '37BF';
+var index = 0;
+
+keys.split('').forEach(function(k) {
+    keys.split('').forEach(function(l) {
+        subKey.split('').forEach(function(m) {
+            var prefix = k+l+m;
+            var shard = shards[index%shards.length];
+            print("split key: " + prefix + ", to: " + shard);
+            db.runCommand({split: "<db>.<collection>", middle: {_id: prefix}});
+            // 移动 empty chunk 来平衡 chunk 个数
+            db.runCommand({moveChunk: "<db>.<collection>", find: {_id: prefix}, to: shard});
+            index++;
+        });
+    });
+});
+```
+
 # Merge Empty Chunks
 
 Empty chunks 主要产生的原因：批量删除数据导致了 chunk 数据都被删除；索引中带有 expireAfterSeconds，即设置了过期时间，数据会在过期后被删除，导致部分 chunk 为空；通过 split 创建一些 empty chunk，但是没有插入数据。
