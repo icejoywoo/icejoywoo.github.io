@@ -234,3 +234,4 @@ for chunk in chunks:
 1. [Create Chunks in a Sharded Cluster](https://docs.mongodb.org/manual/tutorial/create-chunks-in-sharded-cluster/)
 2. [Merge Chunks in a Sharded Cluster](https://docs.mongodb.org/manual/tutorial/merge-chunks-in-sharded-cluster/)
 3. [Manage Sharded Cluster Balancer](https://docs.mongodb.org/manual/tutorial/manage-sharded-cluster-balancer/)
+4. [Chunk Migration Across Shards](https://docs.mongodb.org/manual/core/sharding-chunk-migration/)
