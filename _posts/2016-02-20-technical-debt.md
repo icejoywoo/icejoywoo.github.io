@@ -2,7 +2,7 @@
 layout: post
 title: 对技术债务的一些理解
 category: 其他
-tags: ['其他]
+tags: ['其他']
 ---
 
 # 简介
