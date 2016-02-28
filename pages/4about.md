@@ -6,11 +6,24 @@ icon: octicon-heart
 isNavItem: true
 ---
 
-一名码农，目前从事大数据相关应用的研发，Python 程序员。
+目前就职于百度，从事大数据相关的平台建设。
 
 ### 读书列表
 
 - [《学习正则表达式》](http://book.douban.com/subject/22601258/) [Introducing Regular Expressions]({{ '/assets/ebook/Oreilly.Introducing.Regular.Expressions.Jul.2012.pdf' | prepend: site.baseurl | prepend: site.url }})
+- [Python基础教程](http://book.douban.com/subject/4866934/)
+- [编写高质量代码：改善Python程序的91个建议](http://book.douban.com/subject/25910544/)
+- [Python自动化运维：技术与最佳实践（介绍了大量的类库）](http://www.duokan.com/book/76165)
+- [JAVA核心技术（卷1）](http://book.douban.com/subject/3146174/)
+- [深入学习MongoDB](http://www.duokan.com/book/63369)
+- [MongoDB实战](http://www.duokan.com/book/41809)
+- [Redis设计与实现](http://www.duokan.com/book/53962)
+- [程序员跳槽全攻略](http://www.duokan.com/book/80213)
+- [Ruby元编程](http://www.duokan.com/book/47916)
+- [代码之髓：编程语言核心概念](http://www.duokan.com/book/95406)
+- [编写可读代码的艺术](http://www.duokan.com/book/51857)
+- [冒号课堂：编程范式与OOP思想](http://www.duokan.com/book/83113)
+- [产品设计七日修行（中国程序员）](http://www.duokan.com/book/44777)
 
 ### 其他博客
 - [博客园](http://icejoywoo.cnblogs.com/)
