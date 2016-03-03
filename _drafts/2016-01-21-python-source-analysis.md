@@ -6,6 +6,7 @@ tags: ['Python', 'CPython']
 ---
 
 
+
 # 参考资料
 
 1. [CPython internals: A ten-hour codewalk through the Python interpreter source code](http://pgbovine.net/cpython-internals.htm)
