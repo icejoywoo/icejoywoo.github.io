@@ -37,7 +37,7 @@ authorTwitter:  'icejoywoo'
 disqus_shortname: 'icejoywoo'
 github_username:  'icejoywoo'
 
-permalink:       /:categories/:year/:month/:day/:title.html
+permalink:       /:year/:month/:day/:title.html
 
 defaults:
     -
