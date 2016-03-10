@@ -3,10 +3,13 @@ layout: page
 title: Tag
 permalink: /tags/
 icon: octicon-tag
-styles: [article-list.css, category.css, tagCloud.css, tags.css]
-scripts: [tagCloud.js, tags.js]
 isNavItem: true
 ---
+
+<link rel="stylesheet" type="text/css" href="{{ '/static/css/article-list.css' | prepend: site.baseurl | prepend: site.url}}" />
+<link rel="stylesheet" type="text/css" href="{{ '/static/css/tags.css' | prepend: site.baseurl | prepend: site.url}}" />
+<link rel="stylesheet" type="text/css" href="{{ '/static/css/tagCloud.css' | prepend: site.baseurl | prepend: site.url}}" />
+<link rel="stylesheet" type="text/css" href="{{ '/static/css/category.css' | prepend: site.baseurl | prepend: site.url}}" />
 
 <div class="tags-header">
     <div class="dropdown">
@@ -53,4 +56,9 @@ isNavItem: true
     {% endfor %}
 </section>
 {% endfor %}
+</div>
+
+<div class="tag_script">
+  <script type="text/javascript" src="{{'/static/js/tagCloud.js' | prepend:site.baseurl | prepend: site.url }}"></script>
+  <script type="text/javascript" src="{{'/static/js/tags.js' | prepend:site.baseurl | prepend: site.url }}"></script>
 </div>
