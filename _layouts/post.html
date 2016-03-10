@@ -1,6 +1,5 @@
 ---
 layout: default
-styles: [post.css]
 ---
 <div class="row">
     <div class="content col-lg-9">
@@ -101,4 +100,10 @@ styles: [post.css]
         </div>
       </div>
     </div>
+</div>
+
+<div class="post_script">
+  <script type="text/javascript" src="{{'/static/js/toc.js' | prepend:site.baseurl | prepend: site.url }}"></script>
+  <script type="text/javascript" src="{{'/static/js/post.js' | prepend:site.baseurl  | prepend: site.url }}"></script>
+  <script type="text/javascript" src="{{'/static/js/disqus.js' | prepend:site.baseurl | prepend: site.url }}"></script>
 </div>
