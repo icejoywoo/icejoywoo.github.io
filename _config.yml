@@ -25,7 +25,7 @@ redcarpet:
    ,"prettify"
 #   ,"html_toc"
   ]
-highlighter: pygments
+highlighter: rouge
 
 paginate: 20
 paginate_path: ":num"
