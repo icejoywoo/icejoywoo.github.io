@@ -3,12 +3,13 @@ layout: default
 title: Category
 permalink: /category/
 icon: octicon-list-unordered
-styles: [article-list.css, category.css]
-scripts: [category.js]
 isNavItem: true
 ---
-<div class="row index">
 
+<link rel="stylesheet" type="text/css" href="{{ '/static/css/article-list.css' | prepend: site.baseurl | prepend: site.url}}" />
+<link rel="stylesheet" type="text/css" href="{{ '/static/css/category.css' | prepend: site.baseurl | prepend: site.url}}" />
+
+<div class="row index">
 
     <div class="col-sm-10 col-sm-offset-1 col-lg-9 col-lg-offset-1_5">
 
@@ -97,4 +98,8 @@ isNavItem: true
         </div>
 
     </div>
+</div>
+
+<div class="category_script">
+  <script type="text/javascript" src="{{'/static/js/category.js' | prepend:site.baseurl | prepend: site.url }}"></script>
 </div>
