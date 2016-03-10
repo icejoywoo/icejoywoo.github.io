@@ -35,3 +35,4 @@ isNavItem: true
 
 #### 校稿
 - [Python 内存管理方式和垃圾回收算法](http://python.jobbole.com/82446/)
+- [函数式 JavaScript 简介](http://web.jobbole.com/85266/)
