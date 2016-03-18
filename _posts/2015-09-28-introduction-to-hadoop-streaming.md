@@ -441,7 +441,7 @@ import os
 input_file = os.environ['mapreduce_map_input_file']
 ```
 
-# 输出结果使用 Gzip 压缩
+#＃ 输出结果使用 Gzip 压缩
 
 Hadoop 默认支持 Gzip 压缩，在 streaming 中只需要添加以下配置即可将输出结果压缩。
 
