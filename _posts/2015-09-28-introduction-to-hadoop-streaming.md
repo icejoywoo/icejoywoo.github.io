@@ -430,7 +430,7 @@ $ ${HADOOP_HOME}/bin/hadoop jar ${HADOOP_HOME}/share/hadoop/tools/lib/hadoop-str
 | mapreduce.map.input.length | long    | The number of bytes in the map input split     |
 | mapreduce.task.output.dir  | String  | The task's temporary output directory          |
 
-在Streaming job运行的过程中，这些mapreduce的参数格式会有所变化，所有的点（.）会变成下划线（_）。例如，mapreduce.job.id变成mapreduce_job_id。
+在Streaming job运行的过程中，这些mapreduce的参数格式会有所变化，所有的点（.）会变成下划线（\_）。例如，mapreduce.job.id变成mapreduce_job_id。
 所有的参数都可以通过环境变量来获取。
 
 回到上面的问题，可以通过mapreduce.map.input.file来获取输入的路径名称。
@@ -440,6 +440,19 @@ import os
 
 input_file = os.environ['mapreduce_map_input_file']
 ```
+
+# 输出结果使用 Gzip 压缩
+
+Hadoop 默认支持 Gzip 压缩，在 streaming 中只需要添加以下配置即可将输出结果压缩。
+
+```
+-D mapreduce.output.fileoutputformat.compress=true
+-D mapreduce.output.fileoutputformat.compress.codec=org.apache.hadoop.io.compress.GzipCodec
+```
+
+对 Gzip 压缩数据的读取，Hadoop 是可以自行处理的，无需特殊指明输入是 Gzip 压缩。
+
+Gzip 的特点是压缩比比较高，Hadoop 原生支持，缺点是压缩效率并不是很高，压缩比和效率不可兼得，需要考虑其他压缩方式。
 
 
 # 其他

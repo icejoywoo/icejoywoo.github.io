@@ -2,7 +2,7 @@
 layout: post
 title: 工程中使用的哈希函数汇总
 category: hash function
-tags: ['hash function', 'Murmurhash', '']
+tags: ['hash function', 'Murmurhash']
 ---
 
 
