@@ -36,3 +36,5 @@ isNavItem: true
 #### 校稿
 - [Python 内存管理方式和垃圾回收算法](http://python.jobbole.com/82446/)
 - [函数式 JavaScript 简介](http://web.jobbole.com/85266/)
+- [Python编码风格指南](http://python.jobbole.com/84618/)
+- [OpenJDK：是时候替换JDK了么？](http://www.importnew.com/18308.html)

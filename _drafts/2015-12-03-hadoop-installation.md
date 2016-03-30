@@ -50,6 +50,31 @@ $ sudo mkdir /Library/Java/JavaVirtualMachines/jdk1.7.0_15.jdk/Contents/Home/Cla
 $ sudo ln -s /Library/Java/JavaVirtualMachines/jdk1.7.0_15.jdk/Contents/Home/jre/lib/rt.jar /Library/Java/JavaVirtualMachines/jdk1.7.0_15.jdk/Contents/Home/Classes/classes.jar
 ```
 
+配置压缩 mapreduce.map.output 为 mapper 输出的结果是否压缩
+mapreduce.output.fileoutputformat.compress 最终结果是否压缩
+
+参考：http://hadoop.apache.org/docs/stable/hadoop-mapreduce-client/hadoop-mapreduce-client-core/mapred-default.xml
+
+```xml
+<!-- compression in mapred-site.xml -->
+<property>
+    <name>mapreduce.map.output.compress</name>
+    <value>true</value>
+</property>
+<property>
+    <name>mapreduce.map.output.compress.codec</name>
+    <value>org.apache.hadoop.io.compress.SnappyCodec</value>
+</property>
+<property>
+    <name>mapreduce.output.fileoutputformat.compress</name>
+    <value>true</value>
+</property>
+<property>
+    <name>mapreduce.output.fileoutputformat.compress.codec</name>
+    <value>org.apache.hadoop.io.compress.GzipCodec</value>
+</property>
+```
+
 1. [java.lang.AssertionError: Missing tools.jar](https://issues.apache.org/jira/browse/HADOOP-9350)
 
 ## Spark 编译
@@ -77,6 +102,38 @@ https://cwiki.apache.org/confluence/display/Hive/Setting+Up+HiveServer2
 HUE spark
 
 https://github.com/cloudera/hue/tree/master/apps/spark/java
+
+## compression
+
+```xml
+<!-- compression in hive-site.xml -->
+<property>
+  <name>hive.exec.compress.output</name>
+  <value>true</value>
+  <description>
+    This controls whether the final outputs of a query (to a local/HDFS file or a Hive table) is compressed.
+    The compression codec and other options are determined from Hadoop config variables mapred.output.compress*
+  </description>
+</property>
+<property>
+  <name>hive.exec.compress.intermediate</name>
+  <value>true</value>
+  <description>
+    This controls whether intermediate files produced by Hive between multiple map-reduce jobs are compressed.
+    The compression codec and other options are determined from Hadoop config variables mapred.output.compress*
+  </description>
+</property>
+<property>
+  <name>hive.intermediate.compression.codec</name>
+  <value>org.apache.hadoop.io.compress.SnappyCodec</value>
+  <description/>
+</property>
+<property>
+  <name>hive.intermediate.compression.type</name>
+  <value>BLOCK</value>
+  <description/>
+</property>
+```
 
 # FAQ
 
