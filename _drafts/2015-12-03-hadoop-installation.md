@@ -75,6 +75,14 @@ mapreduce.output.fileoutputformat.compress 最终结果是否压缩
 </property>
 ```
 
+Hadoop 提供的压缩 codec 选择
+
+```
+org.apache.hadoop.io.compress.SnappyCodec
+org.apache.hadoop.io.compress.GzipCodec
+org.apache.hadoop.io.compress.BZip2Codec
+```
+
 1. [java.lang.AssertionError: Missing tools.jar](https://issues.apache.org/jira/browse/HADOOP-9350)
 
 ## Spark 编译
