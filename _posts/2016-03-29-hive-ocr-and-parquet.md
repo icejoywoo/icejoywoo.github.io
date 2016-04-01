@@ -11,6 +11,7 @@ tags: ['hive', 'ORC', 'Parquet', 'hadoop']
 
 目前，比较有名的开源实现有 [Apache Parquet](https://parquet.apache.org/) 和 [Apache ORC](https://orc.apache.org/)。ORC 官网介绍 Facebook 和 Yahoo 都使用了 ORC。
 
+
 本文主要简单介绍两种列存储的使用，并且有一个简单的测试结果，测试主要看数据压缩比，简单查询的性能对比，仅供参考。
 
 # Parquet
@@ -70,6 +71,8 @@ select k1, sum(value) as num from test_table where k2 in ('a', 'b') and k3 = 'id
 根据二者的特点，根据数据的特点来进行技术选型：如果数据结构是比较扁平的，那么用 ORC 比较合适，如果嵌套较多，就用 Parquet。
 
 列存储主要有两个好处：数据压缩和查询性能提升，在节省了存储的同时还提升了查询性能，这个的收益是非常可观的。
+
+![压缩效果对比](/assets/blog/hive/326-orcfile.png)
 
 对于 Hadoop 来说，数据压缩是比较简单的，可以进行一些参数的设置来默认开启压缩，并且不需要明确指定压缩格式，在使用的时候会进行透明解压。
 
