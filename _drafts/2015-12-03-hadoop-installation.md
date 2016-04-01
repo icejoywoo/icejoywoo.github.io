@@ -24,6 +24,12 @@ HUE 安装配置
 
 $ mvn package -Pdist,native -DskipTests -Dtar
 
+build with snappy and copy snappy lib to dist tar
+
+先编译好 snappy 库，安装在 /path/to/snappy 中，然后再运行下面的编译命令
+
+$ mvn package -Pdist,native -DskipTests -Dtar -Dbundle.snappy  -Dsnappy.lib=/path/to/snappy/lib
+
 Mac 下编译 Hadoop 2.6.0 的问题
 
 编译步骤：
@@ -63,7 +69,7 @@ mapreduce.output.fileoutputformat.compress 最终结果是否压缩
 </property>
 <property>
     <name>mapreduce.map.output.compress.codec</name>
-    <value>org.apache.hadoop.io.compress.SnappyCodec</value>
+    <value>org.apache.hadoop.io.compress.GzipCodec</value>
 </property>
 <property>
     <name>mapreduce.output.fileoutputformat.compress</name>
@@ -78,9 +84,11 @@ mapreduce.output.fileoutputformat.compress 最终结果是否压缩
 Hadoop 提供的压缩 codec 选择
 
 ```
-org.apache.hadoop.io.compress.SnappyCodec
+org.apache.hadoop.io.compress.DefaultCodec (native zlib，一般系统自带了)
+org.apache.hadoop.io.compress.SnappyCodec (native snappy)
 org.apache.hadoop.io.compress.GzipCodec
 org.apache.hadoop.io.compress.BZip2Codec
+org.apache.hadoop.io.compress.Lz4Codec (native lz4)
 ```
 
 1. [java.lang.AssertionError: Missing tools.jar](https://issues.apache.org/jira/browse/HADOOP-9350)
@@ -190,3 +198,6 @@ http://stackoverflow.com/questions/27099898/java-net-urisyntaxexception-when-sta
 >	at org.apache.hadoop.util.RunJar.main(RunJar.java:136)
 
 http://stackoverflow.com/questions/28997441/hive-startup-error-terminal-initialization-failed-falling-back-to-unsupporte
+
+zeppelin web-based 查询界面
+https://zeppelin.incubator.apache.org/
