@@ -35,6 +35,10 @@ STORED AS PARQUET TBLPROPERTIES ("parquet.compression"="SNAPPY");
 INSERT OVERWRITE TABLE parquet_test SELECT * FROM old_test;
 ```
 
+数据存储格式图
+
+![Parquet 存储格式](/assets/blog/hive/ParquetFileLayout.gif)
+
 # ORC
 
 ORC（OptimizedRC File）也是 Apache 的顶级项目，也是自描述的列存储，源自于RC（RecordColumnar File），主要是在 Hive 中使用，支持数据压缩、索引功能、update 操作、ACID 操作、支持复杂类型等，其查询性能相对 Parquet 略有优势。
@@ -46,6 +50,10 @@ CREATE TABLE ORC_test (
   ...
 ) STORED AS ORC TBLPROPERTIES ("orc.compress"="NONE");
 ```
+
+数据存储格式图
+
+![Parquet 存储格式](/assets/blog/hive/OrcFileLayout.png)
 
 # 测试
 
@@ -72,7 +80,7 @@ select k1, sum(value) as num from test_table where k2 in ('a', 'b') and k3 = 'id
 
 列存储主要有两个好处：数据压缩和查询性能提升，在节省了存储的同时还提升了查询性能，这个的收益是非常可观的。
 
-![压缩效果对比](/assets/blog/hive/326-orcfile.png)
+![压缩效果对比](/assets/blog/hive/compression.png)
 
 对于 Hadoop 来说，数据压缩是比较简单的，可以进行一些参数的设置来默认开启压缩，并且不需要明确指定压缩格式，在使用的时候会进行透明解压。
 
