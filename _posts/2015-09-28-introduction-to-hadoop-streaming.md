@@ -464,7 +464,7 @@ org.apache.hadoop.io.compress.BZip2Codec
 org.apache.hadoop.io.compress.Lz4Codec (native lz4)
 ```
 
-需要注意的是：压缩格式不是全部都是可以切分的，经过查阅资料，这些压缩格式的特点是 GZip 是不可切分的，其他的格式都是可以切分的。
+需要注意的是：压缩格式不是全部都是可以切分的，下面是找到的部分参考资料，有些说法互相有冲突，可能是不同的版本支持不一样吧，后续需要进一步查阅和学习一下，看看如何检测压缩是否为可切分的。
 
 [Choosing a Data Compression Format](http://www.cloudera.com/documentation/enterprise/5-5-x/topics/admin_data_compression_performance.html)
 
@@ -481,9 +481,13 @@ org.apache.hadoop.io.compress.Lz4Codec (native lz4)
 [Compression Options in Hadoop - A Tale of Tradeoffs](http://www.slideshare.net/Hadoop_Summit/singh-kamat-june27425pmroom210c)
 
 ![p5 Data Compression in Hadoop’s MR Pipeline](/assets/blog/hive/data_compression_in_mr.png)
+
 ![p6 Compression Options in Hadoop (1/2)](/assets/blog/hive/hadoop_compression_codec_comprasion_1.png)
+
 ![p7 Compression Options in Hadoop (2/2](/assets/blog/hive/hadoop_compression_codec_comprasion_2.png)
+
 ![p8 Space-Time Tradeoff of Compression Options](/assets/blog/hive/Space-Time_Tradeoff_of_Compression_Options.png)
+
 ![p10 When to Use Compression and Which Codec](/assets/blog/hive/When_to_Use_Compression_and_Which_Codec.png)
 
 # 其他
