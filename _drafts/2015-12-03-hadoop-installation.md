@@ -91,6 +91,10 @@ org.apache.hadoop.io.compress.BZip2Codec
 org.apache.hadoop.io.compress.Lz4Codec (native lz4)
 ```
 
+org.apache.hadoop.io.compress.LzoCodec
+
+https://github.com/twitter/hadoop-lzo
+
 1. [java.lang.AssertionError: Missing tools.jar](https://issues.apache.org/jira/browse/HADOOP-9350)
 
 ## Spark 编译
@@ -201,3 +205,6 @@ http://stackoverflow.com/questions/28997441/hive-startup-error-terminal-initiali
 
 zeppelin web-based 查询界面
 https://zeppelin.incubator.apache.org/
+
+Hive mapreduce 任务的配置项
+mapreduce.workflow.name 可以看到完整的 hive SQL
