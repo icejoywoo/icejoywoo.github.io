@@ -49,6 +49,9 @@ ORC（OptimizedRC File）也是 Apache 的顶级项目，也是自描述的列�
 CREATE TABLE ORC_test (
   ...
 ) STORED AS ORC TBLPROPERTIES ("orc.compress"="NONE");
+
+-- merge small ORC files into a larger file, starting in hive 0.14
+ALTER TABLE ORC_test PARTITION(...) CONCATENATE;
 ```
 
 数据存储格式图

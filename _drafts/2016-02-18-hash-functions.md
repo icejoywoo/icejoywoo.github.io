@@ -22,7 +22,8 @@ SpookyHash：http://burtleburtle.net/bob/hash/spooky.html
 
 Karp-Rabin algorithm 字符串匹配算法，需要一个哈希函数，可以方便地 rehash
 
-linux 的 hash 函数
+linux 的 hash 函数如下。
+
 ```
 unsigned long hash_long(unsigned long val, unsigned int bits)
 {

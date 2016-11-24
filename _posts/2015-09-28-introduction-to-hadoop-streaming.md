@@ -441,7 +441,7 @@ import os
 input_file = os.environ['mapreduce_map_input_file']
 ```
 
-#＃ 输出结果使用 Gzip 压缩
+## 输出结果使用 Gzip 压缩
 
 Hadoop 默认支持 Gzip 压缩，在 streaming 中只需要添加以下配置即可将输出结果压缩。
 
@@ -454,6 +454,41 @@ Hadoop 默认支持 Gzip 压缩，在 streaming 中只需要添加以下配置�
 
 Gzip 的特点是压缩比比较高，Hadoop 原生支持，缺点是压缩效率并不是很高，压缩比和效率不可兼得，需要考虑其他压缩方式。
 
+压缩算法的 codec 默认也自带了多种，部分压缩算法（下面标有 native 的）需要其对应 C++ 的动态库才可以使用。
+
+```
+org.apache.hadoop.io.compress.DefaultCodec (native zlib，一般系统自带了)
+org.apache.hadoop.io.compress.SnappyCodec (native snappy)
+org.apache.hadoop.io.compress.GzipCodec
+org.apache.hadoop.io.compress.BZip2Codec
+org.apache.hadoop.io.compress.Lz4Codec (native lz4)
+```
+
+需要注意的是：压缩格式不是全部都是可以切分的，下面是找到的部分参考资料，有些说法互相有冲突，可能是不同的版本支持不一样吧，后续需要进一步查阅和学习一下，看看如何检测压缩是否为可切分的。
+
+[Choosing a Data Compression Format](http://www.cloudera.com/documentation/enterprise/5-5-x/topics/admin_data_compression_performance.html)
+
+> For MapReduce, if you need your compressed data to be splittable, BZip2, LZO, and Snappy formats are splittable, but GZip is not.
+
+[Best splittable compression for Hadoop input = bz2?](http://stackoverflow.com/questions/14820450/best-splittable-compression-for-hadoop-input-bz2)
+
+> BZIP2 is splittable in hadoop - it provides very good compression ratio but from CPU time and performances is not providing optimal results, as compression is very CPU consuming.
+
+> LZO is splittable in hadoop - leveraging hadoop-lzo you have splittable compressed LZO files. You need to have external .lzo.index files to be able to process in parallel. The library provides all means of generating these indexes in local or distributed manner.
+
+> LZ4 is splittable in hadoop - leveraging hadoop-4mc you have splittable compressed 4mc files. You don't need any external indexing, and you can generate archives with provided command line tool or by Java/C code, inside/outside hadoop. 4mc makes available on hadoop LZ4 at any level of speed/compression-ratio: from fast mode reaching 500 MB/s compression speed up to high/ultra modes providing increased compression ratio, almost comparable with GZIP one.
+
+[Compression Options in Hadoop - A Tale of Tradeoffs](http://www.slideshare.net/Hadoop_Summit/singh-kamat-june27425pmroom210c)
+
+![p5 Data Compression in Hadoop’s MR Pipeline](/assets/blog/hive/data_compression_in_mr.png)
+
+![p6 Compression Options in Hadoop (1/2)](/assets/blog/hive/hadoop_compression_codec_comprasion_1.png)
+
+![p7 Compression Options in Hadoop (2/2](/assets/blog/hive/hadoop_compression_codec_comprasion_2.png)
+
+![p8 Space-Time Tradeoff of Compression Options](/assets/blog/hive/Space-Time_Tradeoff_of_Compression_Options.png)
+
+![p10 When to Use Compression and Which Codec](/assets/blog/hive/When_to_Use_Compression_and_Which_Codec.png)
 
 # 其他
 
