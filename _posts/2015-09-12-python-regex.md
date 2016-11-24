@@ -294,6 +294,10 @@ import re
 print re.match(r'(good) (?!job)', 'good job')  # None
 print re.match(r'(good) (?!job)', 'good work').group()  # good
 print re.match(r'(good) (?!job)', 'good')  # None
+
+# 匹配非连续出现的数字，\1 这种语法表示之前捕获的组
+print re.match(r'(?:(\d)(?!\1))+', '3456').group()  # 3456
+print re.match(r'(?:(\d)(?!\1))+', '112233')  # None
 ```
 
 ### 正后顾（Positive Lookbehinds）
