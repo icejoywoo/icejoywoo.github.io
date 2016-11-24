@@ -24,6 +24,9 @@ isNavItem: true
 - [编写可读代码的艺术](http://www.duokan.com/book/51857)
 - [冒号课堂：编程范式与OOP思想](http://www.duokan.com/book/83113)
 - [产品设计七日修行（中国程序员）](http://www.duokan.com/book/44777)
+- [Spark快速大数据分析](https://book.douban.com/subject/26616244/)
+- [函数式编程思维](https://book.douban.com/subject/26587213/)
+- [技巧:如何用一年时间获得十年的经验](https://book.douban.com/subject/26874593/)
 
 ### 其他博客
 - [博客园](http://icejoywoo.cnblogs.com/)
