@@ -108,8 +108,8 @@ Maven 自带的源速度比较慢，下载依赖的时候非常漫长。国内�
 properties 提供了一个占位符的 property 语法，比如使用 property X，就可以用 ${X}，可以用在 dependency、plugin 等地方。包含 5 种不同的 property：
 
 1. env.X 代表 shell 环境变量，例如 env.PATH。
-2. project.X 代表 pom.xml 中相应的值，例如 <project><version>1.0</version></project> 可以用 ${project.version} 来访问。
-3. settings.X 代表 settings.xml 中相应的值，这个是 maven 的配置文件，例如 <settings><offline>false</offline></settings> 可以通过 ${settings.offline} 来访问。
+2. project.X 代表 pom.xml 中相应的值，例如 ```<project><version>1.0</version></project>``` 可以用 ${project.version} 来访问。
+3. settings.X 代表 settings.xml 中相应的值，这个是 maven 的配置文件，例如 ```<settings><offline>false</offline></settings>``` 可以通过 ${settings.offline} 来访问。
 4. Java 系统自带的 properties。
 5. 通过 <properties> 定义的。
 
