@@ -208,3 +208,4 @@ https://zeppelin.incubator.apache.org/
 
 Hive mapreduce 任务的配置项
 mapreduce.workflow.name 可以看到完整的 hive SQL
+hive.query.string
