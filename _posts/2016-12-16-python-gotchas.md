@@ -211,8 +211,6 @@ except (ValueError, IndexError) as e:
 
 # 参考
 
-本文
-
 1. [Common Gotchas](http://docs.python-guide.org/en/latest/writing/gotchas/)
 2. [Buggy Python Code: The 10 Most Common Mistakes That Python Developers Make](https://www.toptal.com/python/top-10-mistakes-that-python-programmers-make)
 3. [Python 2.x gotcha's and landmines](http://stackoverflow.com/questions/530530/python-2-x-gotchas-and-landmines)
