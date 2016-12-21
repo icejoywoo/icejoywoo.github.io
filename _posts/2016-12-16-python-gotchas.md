@@ -161,6 +161,54 @@ def foo():
 foo()()  # 11
 ```
 
+# try ... except ...
+
+异常捕获的语句，这里有个非常容易犯的错误，在我们希望捕获多个异常的时候，可能会写出下面的代码，最后发现不符合预期。
+
+```python
+try:
+    l = ["a", "b"]
+    int(l[2])
+except ValueError, IndexError:
+    pass
+
+# IndexError: list index out of range
+```
+
+上面的语法是错误的，因为历史问题，上面的语法等同于：
+
+```python
+try:
+    l = ["a", "b"]
+    int(l[2])
+except ValueError as IndexError:
+    pass
+```
+
+将异常赋值给了 IndexError 的变量，单个异常的捕获是有两种写法的。
+
+```python
+try:
+    # ...
+except ValueError as e:
+    print e
+
+try:
+    # ...
+except ValueError, e:
+    print e
+```
+
+捕获多个异常的正确写法如下：
+
+```python
+try:
+    l = ["a", "b"]
+    int(l[2])
+except (ValueError, IndexError) as e:
+    pass
+```
+
 # 参考
 
 本文
