@@ -223,8 +223,8 @@ print y  #: 0.333333333333
 print x == y  #: False
 
 # repr prints too many digits
-print repr(x)  #: 0.33333333333333331
-print repr(y)  #: 0.33333333333300003
+print repr(x)  #: 0.3333333333333333
+print repr(y)  #: 0.333333333333
 print x == 0.3333333333333333  #: True
 ```
 
