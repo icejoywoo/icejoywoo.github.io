@@ -209,8 +209,37 @@ except (ValueError, IndexError) as e:
     pass
 ```
 
+# Float Comparison & Precision
+
+Python 的浮点数（float）和很多其他语言一样，存在着精度问题，所以在浮点数比较的时候容易踩坑。
+
+下面的示例来源于[StackOverflow](http://stackoverflow.com/questions/530530/python-2-x-gotchas-and-landmines#890789)。
+
+```python
+x = 1.0 / 3
+y = 0.333333333333
+print x  #: 0.333333333333
+print y  #: 0.333333333333
+print x == y  #: False
+
+# repr prints too many digits
+print repr(x)  #: 0.33333333333333331
+print repr(y)  #: 0.33333333333300003
+print x == 0.3333333333333333  #: True
+```
+
+这种一般需要通过两者之差的绝对值小于一个非常小的数来实现，才能规避这个浮点数精度问题。
+
+在 [StackOverflow](http://stackoverflow.com/questions/5595425/what-is-the-best-way-to-compare-floats-for-almost-equality-in-python#33024979) 的回答中，得知Python 3.5 中增加了 [PEP 485: A function for testing approximate equality](https://docs.python.org/3/whatsnew/3.5.html#pep-485-a-function-for-testing-approximate-equality)，实现了 [PEP 485](https://www.python.org/dev/peps/pep-0485/)，并提供了一个[实现](https://www.python.org/dev/peps/pep-0485/#proposed-implementation)。
+
+```python
+def isclose(a, b, rel_tol=1e-09, abs_tol=0.0):
+    return abs(a-b) <= max(rel_tol * max(abs(a), abs(b)), abs_tol)
+```
+
 # 参考
 
 1. [Common Gotchas](http://docs.python-guide.org/en/latest/writing/gotchas/)
 2. [Buggy Python Code: The 10 Most Common Mistakes That Python Developers Make](https://www.toptal.com/python/top-10-mistakes-that-python-programmers-make)
 3. [Python 2.x gotcha's and landmines](http://stackoverflow.com/questions/530530/python-2-x-gotchas-and-landmines)
+4. [What is the best way to compare floats for almost-equality in Python?](http://stackoverflow.com/questions/5595425/what-is-the-best-way-to-compare-floats-for-almost-equality-in-python)
