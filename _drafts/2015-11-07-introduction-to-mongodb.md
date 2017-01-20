@@ -11,7 +11,7 @@ NoSQL 与 RDBMS 的简单对比和理解
 
 MongoDB 文档型数据库的特点和局限
 
-＃ 基本使用
+# 基本使用
 
 ## mongo shell
 
