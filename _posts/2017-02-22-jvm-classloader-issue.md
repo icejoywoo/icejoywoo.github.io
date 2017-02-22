@@ -159,10 +159,11 @@ Enter to continue.
 
 # 总结
 
-目前对其内部的原因还未搞明白，调试中发现相同 URL 加载的 JarFile 是同一个对象，应该是有某种缓存策略的。
+目前对其内部的原因还未搞明白，调试中发现相同 URL 加载的 JarFile 是同一个对象，应该是缓存了第一次打开的内容，外部更新后是不会被更新的。
 
-后续找到解释会更新本文。
+使用 1.7 之后的 JDK，可以直接使用 close，来实现一个 jar 资源的更新加载，还是非常方便的。在之前的版本需要实现类似的需求，可能需要自定义 ClassLoader。
 
 # 参考资料
 
 1. [URLClassLoader会“挂住”所有它已经打开了的在classpath上的文件](http://rednaxelafx.iteye.com/blog/628394)
+2. [Cache which java classes are in a jar when opening jar the first time during classloading](http://mail.openjdk.java.net/pipermail/core-libs-dev/2015-September/035016.html)
