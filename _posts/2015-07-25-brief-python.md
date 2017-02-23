@@ -554,6 +554,25 @@ src/log.py:9:1: E402 module level import not at top of file
 4. [PEP 008](https://www.python.org/dev/peps/pep-0008/)
 5. [The Elements of Python Style](https://github.com/amontalenti/elements-of-python-style)
 
+## 编码问题举例
+
+在开发和使用各类库的时候，最烦人的问题就是编码问题，中文的主要问题是乱码，防止这个问题的原则就是在 python 内部使用 unicode，在写入文件或读取外部的数据都使用 UTF-8。
+
+有时候我们会碰到一些已经是UTF8或其他编码的 str 内容的 unicode 字符串，有点绕口，这种情况下会导致乱码，下面用代码来说明。
+
+```python
+a = '中国'  # '\xe4\xb8\xad\xe5\x9b\xbd'
+b = u'中国'  # u'\u4e2d\u56fd'
+c = u'\xe4\xb8\xad\xe5\x9b\xbd'  # UTF8 str 的 unicode
+
+c.encode('utf-8')  # 会乱码：'\xc3\xa4\xc2\xb8\xc2\xad\xc3\xa5\xc2\x9b\xc2\xbd'
+
+# latin-1 可以恢复为 str
+c.encode('latin-1')  # '\xe4\xb8\xad\xe5\x9b\xbd'
+```
+
+这样可以恢复的原因主要是因为 latin-1 的字符集刚好和这块对应，在遇到乱码的时候可以尝试一下。
+
 ## 延伸阅读
 
 1. [PEP 343 -- The "with" Statement](https://www.python.org/dev/peps/pep-0343/)
