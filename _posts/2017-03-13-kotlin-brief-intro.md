@@ -82,6 +82,43 @@ fun main(args: Array<String>) {
 
 [Data Classes](https://kotlinlang.org/docs/reference/data-classes.html) 是 kotlin 支持的一种类定义方式，省去了 Java 中大量的 setters 和 getters 代码，更为简洁。
 
+## invoke 方法
+
+object 或 class 实现一个 invoke operator 方法，既可以拥有像函数一样被调用，这是一个相对比较特殊的运算符重载。
+
+```kotlin
+// object declarations: singleton，与 scala 类似
+object Foo {
+    operator fun invoke() = println("hello")
+    operator fun invoke(str: String) = println(str)
+}
+
+Foo()  // hello
+Foo("world")  // world
+
+class Bar {
+    operator fun invoke() = println("hello")
+    operator fun invoke(str: String) = println(str)
+}
+
+val b = Bar()
+b()  // hello
+b("world")  // world
+```
+
+# When 表达式
+
+When 表达式是一个类似 switch 语句的控制流语句，还可以使用 is 和 !is 来进行类型判断，算是有个阉割版的 Pattern Matching。用法很简单，看下面的示例：
+
+```kotlin
+val hasPrefix = when(x) {
+    is String -> x.startsWith("prefix")
+    else -> false
+}
+```
+
+官方文档[When Expression](https://kotlinlang.org/docs/reference/control-flow.html#when-expression)。
+
 # 函数及函数式编程
 
 ## Lambda
