@@ -9,7 +9,7 @@ kotlin 是 JetBrains 公司推出的一个语言，基于 JVM，100% 与 Java �
 
 通过[kotlin-koans](https://github.com/Kotlin/kotlin-koans) 的练习，对 kotlin 有了基本对了解，本文就描述一下个人觉得比较有意思的特性，不会十分完整。
 
-# 变量申明
+# Mutable Variable & Immutable Value
 
 kotlin 的变量申明分为两种，直接在申明时确定是否可变，val 为不可变变量，var 为可变变量。不可变变量是函数式编程中非常重要的，大部分都是不可变变量。
 
