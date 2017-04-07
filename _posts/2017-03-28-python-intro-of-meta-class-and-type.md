@@ -237,7 +237,7 @@ class DeclarativeMeta(type):
 
 这里的 DeclarativeMeta 是 type 的子类， 其 __init__ 会在 User 子类定义的时候被调用，这样可以通过这个方法在里面进行初始化的操作。
 
-这应该是一种 type 的用法，简化示例如下。
+这应该是一种 type 类继承的用法，简化示例如下。
 
 ```python
 class Meta(type):
