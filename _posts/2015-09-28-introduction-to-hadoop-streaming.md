@@ -361,7 +361,7 @@ packageJobJar: [mapper.py, reducer.py, /tmp/hadoop-unjar707084306300214621/] [] 
 1. The url to track the job: http://xxxxx:yyy/proxy/application_1440570785607_1597/ 点击这个url可以通过web页面查看任务的状态
 1. map 0% reduce 0% 显示任务map和reduce的进度
 1. 最后的Counters信息，包含系统默认的counter，可以自定义counter来统计一些任务的状态信息
-1. Output directory: /user/<username>/wordcount/output 结果输出目录
+1. Output directory: /user/\<username\>/wordcount/output 结果输出目录
 
 # 常见问题和解决方法
 
