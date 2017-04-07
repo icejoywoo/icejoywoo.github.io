@@ -79,6 +79,7 @@ class MetaClassUpdate(type):
     """ __metaclass__ = MetaClassUpdate """
 
     def __new__(cls, future_class_name, future_class_parents, future_class_attr):
+        """ ___init___ 或 __new__ 方法都可以 """
         print future_class_name, future_class_parents, future_class_attr
         # 这里也可以使用 return type(future_class_name, future_class_parents, future_class_attr)
         return type.__new__(cls, future_class_name, future_class_parents, future_class_attr)
@@ -101,7 +102,9 @@ print f.foo, f.a
 
 # 应用
 
-这里介绍一个 type 的实际应用，是个人项目中碰到的一个问题。
+# tornado 的 url routers
+
+这里介绍一个 type 的实际应用，是个人项目中碰到的一个为了兼容旧接口的问题，旧接口的逻辑是比较多重复的，并且使用了 CGI 的方式。
 
 使用 tornado 开发 web 后端，需要加载配置文件来兼容一批老旧的接口，旧接口的逻辑是基本一致的，只是部分配置不同，映射的 url 也不同，tornado 的 url router 需要针对不同的 url 设置类，如果每个接口对应的逻辑都继承实现一个类来配置，就会有太多的冗余代码。
 
@@ -158,6 +161,101 @@ if __name__ == "__main__":
     application.listen(8888)
     tornado.ioloop.IOLoop.current().start()
 ```
+
+# sqlalchemy 简单分析
+
+sqlalchemy 是非常强大的 ORM 框架，简单分析一下其申明类的过程。
+
+sqlalchemy 的简单示例如下：
+
+```python
+from sqlalchemy import create_engine
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import Column, Integer, String
+
+engine = create_engine('sqlite:///:memory:', echo=True)
+Base = declarative_base()
+
+
+class User(Base):
+     __tablename__ = 'users'
+
+     id = Column(Integer, primary_key=True)
+     name = Column(String)
+     fullname = Column(String)
+     password = Column(String)
+
+     def __repr__(self):
+        return "<User(name='%s', fullname='%s', password='%s')>" % (self.name, self.fullname, self.password)
+
+print type(User)  # <class 'sqlalchemy.ext.declarative.api.DeclarativeMeta'>
+```
+
+Base 就是一个动态创建的类。
+
+```python
+# sqlalchemy/ext/declarative/base.py
+def declarative_base(bind=None, metadata=None, mapper=None, cls=object,
+                     name='Base', constructor=_declarative_constructor,
+                     class_registry=None,
+                     metaclass=DeclarativeMeta):
+    lcl_metadata = metadata or MetaData()
+    if bind:
+        lcl_metadata.bind = bind
+
+    if class_registry is None:
+        class_registry = weakref.WeakValueDictionary()
+
+    # 1. 基类
+    bases = not isinstance(cls, tuple) and (cls,) or cls
+    # 2. 两个类成员
+    class_dict = dict(_decl_class_registry=class_registry,
+                      metadata=lcl_metadata)
+
+    if isinstance(cls, type):
+        class_dict['__doc__'] = cls.__doc__
+
+    if constructor:
+        class_dict['__init__'] = constructor
+    if mapper:
+        class_dict['__mapper_cls__'] = mapper
+
+    # 3. 动态创建并返回一个类
+    return metaclass(name, bases, class_dict)
+
+# sqlalchemy/ext/declarative/api.py
+class DeclarativeMeta(type):
+    def __init__(cls, classname, bases, dict_):
+        # 这个标记应该是保证这个只执行一次
+        if '_decl_class_registry' not in cls.__dict__:
+            _as_declarative(cls, classname, cls.__dict__)
+        type.__init__(cls, classname, bases, dict_)
+
+    def __setattr__(cls, key, value):
+        _add_attribute(cls, key, value)
+```
+
+这里的 DeclarativeMeta 是 type 的子类， 其 __init__ 会在 User 子类定义的时候被调用，这样可以通过这个方法在里面进行初始化的操作。
+
+这应该是一种 type 的用法，简化示例如下。
+
+```python
+class Meta(type):
+    def __init__(cls, classname, bases, dict_):
+        print classname, bases, dict_
+        type.__init__(cls, classname, bases, dict_)
+
+Base = Meta('Base', (), {})
+
+
+class User(Base):
+    pass
+# output:
+# Base () {}
+# User (<class '__main__.Base'>,) {'__module__': '__main__'}
+```
+
+简单分析 sqlalchemy，元类还是非常强大的，但是也很难读懂，会有比较多的技巧在里面，需要习惯和适应。
 
 # 参考
 
