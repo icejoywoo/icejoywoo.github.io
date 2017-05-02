@@ -57,7 +57,49 @@ decimal.Decimal(0.1) + decimal.Decimal(0.2)  # Decimal('0.3000000000000000166533
 
 ## string / unicode
 
+Python 2.x 的一个字符串编码问题，是初学者的一个痛，主要是由于有两种字符串的类型存在导致。
 
+unicode 是一种统一的编码方式，string 是带有编码的二进制字符串，可以用来保存二进制。
+
+为了避免中文编码问题，有两条好的实践：在 Python 内部尽量全部使用 unicode；在与外部交互的时候尽量使用 utf-8 编码的 string。这样可以有效地解决编码问题，各类问题的排查也是从这两类问题开始。
+
+一点说明：Python 的单引号和双引号完全等价，就是说 Python 没有 char 这样的类型，只能用单个字符的字符串来表示。
+
+```python
+a = u'中国'
+repr(a)  # u'\u4e2d\u56fd'
+
+# 在某些类库中可能会获得下面的字符串，这个很可能是因为使用 latin-1 来转换为了 unicode 导致的
+a = u'\xe4\xb8\xad\xe5\x9b\xbd'
+unicode('中国', 'latin-1')  # u'\xe4\xb8\xad\xe5\x9b\xbd'
+
+# 解决方法是用 latin-1 编码 encode 回去，在 decode 为 utf-8 即可
+a.encode('latin-1')  # '\xe4\xb8\xad\xe5\x9b\xbd'
+a.encode('latin-1').decode('utf-8')  # u'\u4e2d\u56fd'
+```
+
+字符串定义的时候带有 u 前缀，表示为 unicode 类型。
+
+> 在 Python 3 中默认即为 unicode，定义 str 需要使用 b 前缀；在 Python 2 中默认是 str，定义 unicode 需要使用 u 前缀。
+
+另外还有 r 前缀，表示里面 \\ 无需转移，一般在正则表达式的时候使用，减少 \\ 的输入次数，较为方便。
+
+多行字符串的定义有两种方式，一种是使用 """&lt;string&gt;""" 来定义，还有一种使用多个单行字符串拼接。
+
+```python
+multi_lines = """This is a test.
+This is second line."""
+
+# 这里使用来括号，而非 \ 来换行，代码更容易阅读
+multi_lines = ("This is a test.\n"
+               "This is second line.")
+
+# 下面用 \ 来换行的会影响代码阅读的流畅度，不推荐使用
+multi_lines = "This is a test.\n"\
+              "This is second line."
+```
+
+字符串不要进行频繁的拼接操作，会直接影响性能，可以考虑采用 list 来保存，最后 join 完成拼接。这点在 Java 中会使用 StringBuffer 来进行拼接，JVM 还为此做了针对性的优化，Python 中我们需要自己来做优化。
 
 ## tuple
 
