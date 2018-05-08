@@ -9,7 +9,11 @@ tags: ['Python']
 
 # 集合类型
 
+在 Python 文档中，有一个类型 [Sequence Types](https://docs.python.org/2/library/stdtypes.html#sequence-types-str-unicode-list-tuple-bytearray-buffer-xrange)，其中包括了 str 和 unicode，因为字符串是 char 的 container。但是，在本系列文章中，将 str 和 unicode 归类为基本类型。
+
 ## tuple
+
+
 
 ## list
 

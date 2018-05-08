@@ -20,3 +20,10 @@ vagrant的简单使用方法
 # tornado异步编程
 
 # tornado源码剖析
+
+Python 源码编译：https://docs.python.org/devguide/setup.html
+
+unix domain socket
+
+https://pymotw.com/2/socket/uds.html
+https://gist.github.com/bdarnell/1073945
