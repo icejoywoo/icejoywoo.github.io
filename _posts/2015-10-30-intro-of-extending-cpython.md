@@ -99,13 +99,13 @@ static PyObject* load_dict_function(PyObject *self, PyObject *args) {
 
 这段代码有两个重要的点需要说明：
 
-1. 函数参数形式有三种：无参数，带 args 参数的，带 args 和 kwargs 参数的。形式是这样的static PyObject* <func_name>(PyObject* self[, PyObject* args[, PyObject* kwds])，这个和 Python 的函数是一样的，可以通过 [PyArg_ParseTuple](https://docs.python.org/2/c-api/arg.html#c.PyArg_ParseTuple) 和 [PyArg_ParseTupleAndKeywords](https://docs.python.org/2/c-api/arg.html#c.PyArg_ParseTupleAndKeywords) 两个函数进行解析。
+1. 函数参数形式有三种：无参数，带 args 参数的，带 args 和 kwargs 参数的。形式是这样的static PyObject* <func_name>(PyObject* self[, PyObject* args[, PyObject* kwds])，这个和 Python 的函数是一样的，可以通过 [PyArg\_ParseTuple](https://docs.python.org/2/c-api/arg.html#c.PyArg_ParseTuple) 和 [PyArg\_ParseTupleAndKeywords](https://docs.python.org/2/c-api/arg.html#c.PyArg_ParseTupleAndKeywords) 两个函数进行解析。
 2. 引用计数的宏：针对 PyObject* 类型的，某些函数的返回值或输出值，是不需要进行计数操作的，例如 [PyArg_ParseTuple](https://docs.python.org/2/c-api/arg.html#c.PyArg_ParseTuple) 获取的参数中如果有 PyObject*，是不需要进行计数减一的（即，调用 Py_DECREF）。
 
 代码中的其他函数的说明：
 
-1. PyString_* 是 PyStringObject 的方法，PyString_Check 是一个类型检查操作，PyString_AsString 是将 PyObject*  转换为 char*，可以通过阅读[文档](https://docs.python.org/2/c-api/string.html)来了解更多。
-2. PyErr_SetString 是 Exception 和 Error相关的部分，PyErr_SetString 是设置异常信息，return NULL 来表明函数有异常，通过[文档](https://docs.python.org/2/extending/extending.html#intermezzo-errors-and-exceptions)来了解更多。
+1. PyString\_* 是 PyStringObject 的方法，PyString\_Check 是一个类型检查操作，PyString\_AsString 是将 PyObject*  转换为 char*，可以通过阅读[文档](https://docs.python.org/2/c-api/string.html)来了解更多。
+2. PyErr_SetString 是 Exception 和 Error相关的部分，PyErr\_SetString 是设置异常信息，return NULL 来表明函数有异常，通过[文档](https://docs.python.org/2/extending/extending.html#intermezzo-errors-and-exceptions)来了解更多。
 
 接下来我们来编写另外两个函数：
 
@@ -649,3 +649,4 @@ py query(load dict with user-defined parse): 1.2110/1000000 s
 1. [Extending Python with C or C++](https://docs.python.org/2/extending/extending.html)
 2. [Defining New Types](https://docs.python.org/2/extending/newtypes.html)
 3. [Parsing arguments and building values](https://docs.python.org/2/c-api/arg.html)
+4. [Python Extension Patterns](http://pythonextensionpatterns.readthedocs.io/en/latest/refcount.html)
