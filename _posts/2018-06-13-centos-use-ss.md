@@ -155,6 +155,14 @@ socks5  127.0.0.1 1080
 
 ProxyList 的配置要与上面的 ss 配置一致，即可通过代理访问网络，使用起来还是很方便的。
 
+## 用法
+
+proxychains 可以通过启动一个 bash 来使得当前终端全局走代理
+
+```bash
+proxychains4 bash
+```
+
 # 参考资料
 
 1. [CentOS 7安装配置Shadowsocks客户端](https://www.zybuluo.com/ncepuwanghui/note/954160)
