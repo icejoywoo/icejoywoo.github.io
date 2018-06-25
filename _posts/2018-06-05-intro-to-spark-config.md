@@ -27,11 +27,23 @@ tags: ['spark', 'scala']
 5. --executor-cores 指定单个 executor 使用的核数，即开多少线程来并发执行 task
 6. --driver-memory 配置 driver 的内存大小，driver 内存在需要获取结果比较大的时候需要额外调整，否则会 OOM
 
+Spark 任务中的最高并发的 task 数量为 num-executors * executor-cores。
+
 配置部分详情可以参考[官网配置文档](https://spark.apache.org/docs/latest/configuration.html)。
+
+# shuffle 参数
+
+在 Spark SQL 中，shuffle partition 的数量可以通过 spark.sql.shuffle.partitions 来配置，默认为 200。
+
+shuffle partition 数量过小的话，会导致单个 reduce task 的处理数据量增多，内存大小有限的情况下，会溢写（spill）到磁盘上，从而影响 SQL 的整体性能，并且可能产生比较严重的 GC 问题或者 OOM；shuffle partition 数量过大的话，会导致 reduce task 每个执行时间很短，任务调度的负担比较大，上游的 mapper task 切分的 hash bucket 数据量小，导致拉取数据的时候频繁的小数据量读写，磁盘 IO 性能比较差，从而影响了 SQL 整体的性能。
+
+实践中，需要实际测试来选取一个合适的 shuffle partition 大小，shuff partition 参数是在 spark 任务中所有的 stage 都生效的，所以这个参数的调节会需要进行较多的权衡。
+
+如果上游数据量波动不是特别大的话，可以考虑通过配置 off-heap 来缓解内存问题，有限内存下可以保存更多的数据，而且性能会更高一些；如果数据量波动过大的话，目前这块没有特别好的解决方法。
 
 # 控制结果文件数
 
-结果文件数的个数大致与 task 个数相当，经常出现一种情况，就是单个文件很小，文件数目很多的情况，这种需要合并结果文件。
+在 Spark SQL 中，结果文件数的个数大致与 task 个数相当，经常出现一种情况，就是单个文件很小，文件数目很多的情况，这种需要合并结果文件。
 
 目前需要预估整体的大小，单个文件不易过大，否则可能导致 executor 在写入结果的时候出现 OOM 等情况，与具体的输出格式等有关。根据经验来说，单个文件控制在 HDFS block 大小比较合适，再次读取的性能一般会好一些，应该注意避免文件过小数目过多。
 
