@@ -191,22 +191,69 @@ d.viewitems()
 
 ## set / frozenset
 
+set 就是元素唯一的集合，对元素本身有要求，需要可以计算 hash，例如 list 或 dict 就不可以作为 set 的元素。
+
+set 的实现是一个忽略 value 的 dict，dict 本身的 key 就是唯一的，这种实现方式很常见。
+
 ```python
 # 直接定义
 {1, 1, 3, 4}  # {1, 3, 4}
 
 # 从 list 或 tuple 转换而来
 set([1, 2, 3, 3, 4])  # {1, 2, 3, 4}
+
+# 判断是否存在
+a = {1, 2, 3, 4}
+1 in a  # True
+5 in a  # False
 ```
 
-frozenset 是一个不可变的 set。
+set 还有个非常重要的 API，就是支持交集、并集、差集等的集合计算，这个在很多场景下都需要使用。
 
-开一个新的 3
+```python
+a = {1, 2, 3, 4}
+b = {3, 4, 5, 6}
+
+# 并集
+a | b  # set([1, 2, 3, 4, 5, 6])
+a.union(b)  # set([1, 2, 3, 4, 5, 6])
+
+# 交集
+a & b  # set([3, 4])
+a.intersection(b)  # set([3, 4])
+
+# 差集
+a - b  # set([1, 2])
+a.difference(b)  # set([1, 2])
+
+# 对等差分
+a ^ b  # set([1, 2, 5, 6])
+a.symmetric_difference(b)  # set([1, 2, 5, 6])
+
+# 包含与被包含（子集或超集）
+c = {2, 3}
+
+a > c  # True a 包含 c
+c > c  # False
+c >= c  # True
+c < a  # True
+```
+
+frozenset 是一个不可变的 set，API 与 set 一致。例如：set 可以通过 add 新增元素，frozenset 不可以。
+
+```python
+a = frozenset([1, 1, 2, 3])
+
+a.add(5)  # raise AttributeError: 'frozenset' object has no attribute 'add'
+```
+
 # 标准库中的数据结构
+
+Python 标准库中还有一些数据结构，可以满足对数据结构的需求，使用方便，效率比较快。
 
 ## deque
 
-## dict 扩展类型
+## collections
 
 OrderedDict
 
