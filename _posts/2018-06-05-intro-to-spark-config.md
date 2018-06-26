@@ -39,6 +39,17 @@ Spark 任务中的最高并发的 task 数量为 num-executors * executor-cores�
 spark-shell ... --driver-java-options "-Dfile.encoding=UTF-8 -Dsun.jnu.encoding=UTF-8"
 ```
 
+## 日志配置
+
+在 Spark Shell 中调试代码，会碰到日志过多的情况，可以通过 log4j 来进行设置。
+
+```scala
+import org.apache.log4j.Logger
+import org.apache.log4j.Level
+Logger.getLogger("org").setLevel(Level.WARN)
+Logger.getLogger("akka").setLevel(Level.WARN)
+```
+
 # shuffle 参数
 
 在 Spark SQL 中，shuffle partition 的数量可以通过 spark.sql.shuffle.partitions 来配置，默认为 200。
