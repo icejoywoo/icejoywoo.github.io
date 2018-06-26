@@ -249,20 +249,72 @@ a.add(5)  # raise AttributeError: 'frozenset' object has no attribute 'add'
 
 # 标准库中的数据结构
 
-Python 标准库中还有一些数据结构，可以满足对数据结构的需求，使用方便，效率比较快。
+Python 标准库中还有一些数据结构，可以满足对数据结构的需求，使用方便，效率比较快。详细的使用方法，可以去参考官方文档，本节只简单介绍。
 
 ## deque
 
-## collections
+deque（double-ended queue）是一个双端队列，在前后插入元素的时间复杂度为 O(1)，list 在前面或中间 insert 元素的时间复杂度为 O(n)。
 
-OrderedDict
+deque 的 API 和 list 比较类似，但是多了在前面操作的一些方法，例如 appendleft、extendleft、popleft。
 
-defaultdict
+## namedtuple
 
-counter
+namedtuple 是一个可以通过属性名来访问元素的 tuple，实现是通过创建一个 tuple 子类，相对于 tuple 只能通过下标来访问，在代码可读性上有很大提高。
+
+需要注意的是，namedtuple 性能上比 tuple 差很多，所以在对性能有要求的场景还是使用 tuple 比较好。
+
+```python
+Point = namedtuple('Point', ['x', 'y'])
+
+p = Point(1, 2)
+p  # Point(x=1, y=2)
+p.x  # 1
+p.y  # 2
+```
+
+## OrderedDict
+
+一个 key 按照插入顺序的 dict，API 与 dict 一致，解决了某些场景需要依赖 key 的插入顺序。
+
+```python
+d = OrderedDict()
+d['b'] = 1
+d['a'] = 2
+# OrderedDict([('b', 1), ('a', 2)])
+
+d = {}
+d['b'] = 1
+d['a'] = 2
+# {'a': 2, 'b': 1}
+```
+
+## defaultdict
+
+带有默认值的 dict，当 key 不存在的时候，使用默认值。使用 defaultdict 可以在很多场景下简化代码逻辑，例如计数场景，每次需要判断 key 是否存在，不存在就初始化为 0，这种场景下 defaultdict 非常适用。
+
+```python
+a = defaultdict(int)
+a['a']  # 0
+a['b'] += 1
+# defaultdict(int, {'a': 1, 'b': 1})
+```
+
+## Counter
+
+类似 multiset 的类，可以允许元素有重复，会统计元素的重复个数。
+
+```python
+# 用 iterable 来初始化
+a = Counter('gallahad')  # Counter({'a': 3, 'd': 1, 'g': 1, 'h': 1, 'l': 2})
+b = Counter({'red': 4, 'blue': 2})  # Counter({'blue': 2, 'red': 4})
+
+a + b  # Counter({'a': 3, 'blue': 2, 'd': 1, 'g': 1, 'h': 1, 'l': 2, 'red': 4})
+```
 
 ## heapq
 
-## bisect
+heapq 是一个堆实现，可以用于构建和维护一个堆，里面有个比较重要的方法，heapq.merge 可以将多个有序的 iterable 合并为有序的一个，归并排序的方法，这个方法可以用于实现外排。
 
-#
+# 总结
+
+Python 内建类型和标准库中都包含了很多集合类型，灵活使用这些类型，可以写出更灵活简单的代码。
