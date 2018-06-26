@@ -31,6 +31,14 @@ Spark 任务中的最高并发的 task 数量为 num-executors * executor-cores�
 
 配置部分详情可以参考[官网配置文档](https://spark.apache.org/docs/latest/configuration.html)。
 
+## 终端中文乱码问题
+
+在 Spark Shell 中调试代码，可能会输入中文，但是会出现乱码情况，需要对字符编码进行申明才可以。
+
+```bash
+spark-shell ... --driver-java-options "-Dfile.encoding=UTF-8 -Dsun.jnu.encoding=UTF-8"
+```
+
 # shuffle 参数
 
 在 Spark SQL 中，shuffle partition 的数量可以通过 spark.sql.shuffle.partitions 来配置，默认为 200。
