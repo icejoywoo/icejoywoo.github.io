@@ -11,7 +11,6 @@ tags: ['hive', 'ORC', 'Parquet', 'hadoop']
 
 目前，比较有名的开源实现有 [Apache Parquet](https://parquet.apache.org/) 和 [Apache ORC](https://orc.apache.org/)。ORC 官网介绍 Facebook 和 Yahoo 都使用了 ORC。
 
-
 本文主要简单介绍两种列存储的使用，并且有一个简单的测试结果，测试主要看数据压缩比，简单查询的性能对比，仅供参考。
 
 # Parquet
