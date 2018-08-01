@@ -91,6 +91,10 @@ tungsten 相关资料：
 1. [Project Tungsten: Bringing Apache Spark Closer to Bare Metal](https://databricks.com/blog/2015/04/28/project-tungsten-bringing-spark-closer-to-bare-metal.html)
 2. [Deep Dive into Project Tungsten: Bringing Spark Closer to Bare Metal](https://databricks.com/session/deep-dive-into-project-tungsten-bringing-spark-closer-to-bare-metal)
 
+# 预测执行
+
+有时候预测执行会产生大量的任务，并且会导致任务大量失败，可以考虑尝试关闭预测执行。可以通过 spark.speculation 设置为 true 或 false 来开启或关闭预测执行。
+
 # 结束语
 
 目前只汇总了比较简单的一些配置，Spark 还在快速发展中，本文的配置不一定在将来还适用，使用过程中还需多自行验证效果。
