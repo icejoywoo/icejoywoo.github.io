@@ -44,6 +44,8 @@ private static long getUnsignedInt(int data) {
 
 # bytes 类型转换
 
+一般来说，无符号的位运算结束后，会将 bytes 转换为 String 或者数字类型，Java 对这类转换的支持还是比较好的，标准库都有相应的 API 支持。
+
 ## int/long 与 bytes 的互相转换
 
 类型间的转换也属于很常见的操作，C++ 中经常使用这样的技巧来将 4 个 char 的数组变为一个 int。
