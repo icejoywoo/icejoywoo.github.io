@@ -111,7 +111,7 @@ properties 提供了一个占位符的 property 语法，比如使用 property X
 2. project.X 代表 pom.xml 中相应的值，例如 ```<project><version>1.0</version></project>``` 可以用 ${project.version} 来访问。
 3. settings.X 代表 settings.xml 中相应的值，这个是 maven 的配置文件，例如 ```<settings><offline>false</offline></settings>``` 可以通过 ${settings.offline} 来访问。
 4. Java 系统自带的 properties。
-5. 通过 <properties> 定义的。
+5. 通过 \<properties\> 定义的。
 
 示例定义：
 
