@@ -207,7 +207,7 @@ $ python test.py
 
 前两个用于解析函数输入的 PyObject，最后一个用于返回 PyObject，是非常重要的几个函数。这部分可以通过文档，快速掌握基本用法。
 
-** 注意：这三个函数都不需要关注引用计数，不要调用 Py_INCREF 和 Py_DECREF，注意代码示例。**
+**注意：这三个函数都不需要关注引用计数，不要调用 Py_INCREF 和 Py_DECREF，注意代码示例。**
 
 相关文档都 [Extending Python with C or C++](https://docs.python.org/2/extending/extending.html) 和 [Parsing arguments and building values](https://docs.python.org/2/c-api/arg.html)，后者是函数 API 文档。
 
