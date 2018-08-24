@@ -432,7 +432,7 @@ IP2Location_new(PyTypeObject *type, PyObject *args, PyObject *kwds) {
 }
 ```
 
-函数命名采用了 <type>\_funcname 的形式，是一种约定的方式，可以提升代码可读性。new 是用来创建对象的，相当于\_\_new\_\_，分配内存，dealloc 是用来回收内存的。
+函数命名采用了 \<type\>\_funcname 的形式，是一种约定的方式，可以提升代码可读性。new 是用来创建对象的，相当于\_\_new\_\_，分配内存，dealloc 是用来回收内存的。
 
 下面需要有构造函数，相当于\_\_init\_\_
 
