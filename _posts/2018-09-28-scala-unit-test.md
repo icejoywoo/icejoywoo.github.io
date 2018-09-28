@@ -15,7 +15,7 @@ JUnit 是 Java 中最常用的单测框架，目前已经有 [JUnit5](https://ju
 
 在 Scala 中也可以使用与 Java 一样的 Annotation 的方式来标记测试方法。
 
-```scala
+~~~scala
 import org.junit.Assert._
 import org.junit._
 
@@ -40,13 +40,13 @@ class UsingJUnit {
     assertNotEquals(List("b", "a"), list)
   }
 }
-```
+~~~
 
 断言的使用也基本和 Java 保持一致，Before 和 After 是在每个测试用例的前后执行。
 
 JUnit4 还提供了 BeforeClass 和 AfterClass 在整个测试的前后执行一次，要求方法必须是 static 的。在 Java 中通过 static 关键字来定义，在 Scala 中需要实用伴生对象，定义一个 object 来实现 static 方法。
 
-```scala
+~~~scala
 object UsingJUnit {
   @BeforeClass
   def beforeClass(): Unit = {
@@ -58,7 +58,7 @@ object UsingJUnit {
     println("after class")
   }
 }
-```
+~~~
 
 除了 static 的方法外，基本与 Java 保持了一致。
 
@@ -68,7 +68,7 @@ ScalaTest 是 Scala 原生的单元测试框架，本身与 JUnit 没有太多�
 
 ScalaTest 加入了很多的 DSL，使得测试的描述融合在代码中。先看一个示例（从 Scala 实用指南中的示例少许更改而来）
 
-```scala
+~~~scala
 import org.scalatest._
 
 class UsingScalaTest1 extends FlatSpec with Matchers {
@@ -87,22 +87,22 @@ class UsingScalaTest1 extends FlatSpec with Matchers {
     list.size should be(2)
   }
 }
-```
+~~~
 
 代码中对测试 case 的描述，会在执行后格式化输出到终端，这点非常方便，可以很方便地查看。
 
-```bash
+~~~bash
 UsingScalaTest1:
 a list
 - should be empty on create
 - should increase in size upon add
-```
+~~~
 
 ## maven 配置 plugin
 
 在与 maven 继承的过程中，需要配置相应的插件才可以。参考资料 5。
 
-```xml
+~~~xml
 ...
 <build>
     <plugins>
@@ -139,7 +139,7 @@ a list
     </plugins>
 </build>
 ...
-```
+~~~
 
 需要说明的是 disable surefire 这步，其实可以不用，这样可以将 JUnit 和 ScalaTest 的测试用例都跑一下，并不冲突。
 
@@ -155,7 +155,7 @@ GivenWhenThen 是 ScalaTest 特有的，是用来对 case 内部的细节进行�
 
 ### BeforeAndAfter
 
-```scala
+~~~scala
 class UsingBeforeAndAfter extends FlatSpec with BeforeAndAfter with Matchers {
 
   var list: java.util.List[String] = _
@@ -183,11 +183,11 @@ class UsingBeforeAndAfter extends FlatSpec with BeforeAndAfter with Matchers {
     list.size should be(2)
   }
 }
-```
+~~~
 
 测试的输出如下
 
-```bash
+~~~bash
 before
 after
 before
@@ -196,13 +196,13 @@ UsingBeforeAndAfter:
 a list
 - should be empty on create
 - should increase in size upon add
-```
+~~~
 
 before 和 after 打印了两次，因为每个测试 case 的前后都需要执行一次。
 
 ### BeforeAndAfterAll
 
-```scala
+~~~scala
 class UsingBeforeAndAfterAll extends FlatSpec with BeforeAndAfterAll with Matchers {
 
   var list: java.util.List[String] = _
@@ -232,24 +232,24 @@ class UsingBeforeAndAfterAll extends FlatSpec with BeforeAndAfterAll with Matche
     list.size should be(2)
   }
 }
-```
+~~~
 
 测试的输出如下
 
-```bash
+~~~bash
 before all...
 after all...
 UsingBeforeAndAfterAll:
 a list
 - should be empty on create
 - should increase in size upon add
-```
+~~~
 
 before all 和 after all 只打印了一次，因为这个是 test suite 中只执行一次。
 
 ### GivenWhenThen
 
-```scala
+~~~scala
 class UsingGivenWhenThen extends FlatSpec with GivenWhenThen with Matchers {
   trait EmptyArrayList {
     val list = new java.util.ArrayList[String]
@@ -272,11 +272,11 @@ class UsingGivenWhenThen extends FlatSpec with GivenWhenThen with Matchers {
     list.size should be(2)
   }
 }
-```
+~~~
 
 输出如下：
 
-```bash
+~~~bash
 UsingGivenWhenThen:
 a list
 - should be empty on create
@@ -286,7 +286,7 @@ a list
   + Given a empty list
   + When add 2 elements
   + Then list size should be 2
-```
+~~~
 
 我们可以看到通过使用 Given、When、Then 三个方法，可以对最终的输出有影响，描述性更强，三段式的描述可以满足大多数场景。
 
