@@ -26,15 +26,16 @@ layout: default
           </article>
           <hr class="boundary">
           <div style="margin: auto; text-align: center;">
-            <p>如果觉得文章对您有帮助，请作者喝杯咖啡，他会更有动力，分享更多更好的知识！</p>
+            <p>如果觉得文章对您有帮助，用微信请作者喝杯咖啡吧！这样他会更有动力，分享更多更好的知识！</p>
             <img src="{{'/static/img/donate.png' | prepend:site.baseurl | prepend: site.url }}" style="width: 300px;" alt="赞赏">
           </div>
-          <hr class="boundary">
+          <div style="margin: auto; text-align: center;">
+            <p>技术人员都需要科学上网！<a href="https://agentneo.rocks/?rc=caf9052be42d17e913a9267b39bb8c09">AgentNEO</a>稳定多线路支持，注册购买服务即可获赠5金币，金币可 1:1 抵扣订单金额。</p>
+          </div>
           <div class="bdsharebuttonbox">
               <a href="#" class="bds_more" data-cmd="more"></a>
               <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a>
               <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
-              <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博"></a>
               <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
               <a href="#" class="bds_douban" data-cmd="douban" title="分享到豆瓣网"></a>
           </div>
@@ -99,7 +100,7 @@ layout: default
                     {% if postsAfterFilter.size > 0 %}
                         {% for p in postsAfterFilter limit: 15 %}
                             <li>
-                                <a class="word-keep" href="{{ p.url | prepend: site.baseurl | prepend: site.url }}">{{ p.title }}</a>
+                                <a class="word-keep" href="{{ p.url | prepend: site.baseurl | prepend: site.url }}">{{ p.title | truncate: 15 }}</a>
                             </li>
                         {% endfor %}
                     {% endif %}
