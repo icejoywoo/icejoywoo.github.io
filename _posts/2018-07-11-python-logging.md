@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Python 日志配置总结
-category: Python
+category: python
 tags: ['python', 'logging']
 ---
 

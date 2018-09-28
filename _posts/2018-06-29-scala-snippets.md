@@ -1,8 +1,8 @@
 ---
 layout: post
 title: Scala 代码片段收集
-category: Scala
-tags: ['Scala']
+category: scala
+tags: ['scala']
 ---
 
 # 简介
