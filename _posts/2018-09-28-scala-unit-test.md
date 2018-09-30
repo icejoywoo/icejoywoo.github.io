@@ -62,6 +62,39 @@ object UsingJUnit {
 
 除了 static 的方法外，基本与 Java 保持了一致。
 
+## JUnit 检查异常
+
+我们在编写代码的时候，会预期抛出一些异常，对这些异常的检查，也是单测中需要做的事情。下面举例，说明异常检测的方法，一种只检查抛出的异常类，另外一种是检查异常类的类型和 Message 信息。
+
+Scala 在使用 JUnit @Rule 的时候有些问题，一定需要是 public 才可以，下面是一个变通的实现方式。
+
+```scala
+import org.junit.Assert._
+import org.junit._
+
+class JunitCheckException {
+
+  val _thrown = rules.ExpectedException.none
+
+  @Rule
+  def thrown = _thrown
+
+  @Test(expected = classOf[IndexOutOfBoundsException])
+  def testStringIndexOutOfBounds(): Unit = {
+    val s = "test string"
+    s.charAt(-1)
+  }
+
+  @Test
+  def testStringIndexOutOfBoundsExceptionMessage(): Unit = {
+    val s = "test string"
+    thrown.expect(classOf[IndexOutOfBoundsException])
+    thrown.expectMessage("String index out of range: -1")
+    s.charAt(-1)
+  }
+}
+```
+
 ## JUnit 完整示例
 
 {% gist 2c7b6960e4cbbacf901a8f57f951333b UsingJUnit.scala %}
@@ -146,6 +179,24 @@ a list
 ```
 
 需要说明的是 disable surefire 这步，其实可以不用，这样可以将 JUnit 和 ScalaTest 的测试用例都跑一下，并不冲突。
+
+## ScalaTest 检测异常
+
+ScalaTest 也同样提供了对异常的检测，而且易用性更好，更加像英语表达。
+
+```scala
+// 验证抛出的异常
+// check the exception thrown by method
+class ScalaTestCheckException extends FlatSpec with Matchers {
+  "string" should "throw IndexOutOfBoundsException when index is illegal" in {
+    val s = "test string"
+    an [IndexOutOfBoundsException] should be thrownBy s.charAt(-1)
+
+    val thrown = the [IndexOutOfBoundsException] thrownBy s.charAt(-1)
+    thrown.getMessage should equal ("String index out of range: -1")
+  }
+}
+```
 
 ## trait 的用法
 
@@ -309,3 +360,4 @@ a list
 3. [Scala and Apache Spark in Tandem as a Next-Generation ETL Framework](https://www.red-gate.com/simple-talk/sql/bi/scala-apache-spark-tandem-next-generation-etl-framework/)
 4. [Scala 实用指南 - 第16章 单元测试](https://book.douban.com/subject/30249691/)
 5. [Using the ScalaTest Maven plugin](http://www.scalatest.org/user_guide/using_the_scalatest_maven_plugin)
+6. [(StackOverflow) Using JUnit @Rule with ScalaTest (e.g. TemporaryFolder)](https://stackoverflow.com/questions/32160549/using-junit-rule-with-scalatest-e-g-temporaryfolder)
