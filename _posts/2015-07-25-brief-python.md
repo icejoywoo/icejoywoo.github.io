@@ -39,14 +39,12 @@ dir(5)  # 显示对应类型所有的方法和属性
 abs.__doc__  # 显示对象的文档属性
 ```
 
-
 # 基本类型
 
 官方文档中基本类型的说明：
 
-  - [Data Model](https://docs.python.org/2/reference/datamodel.html)
-  - [Sequence Types](https://docs.python.org/2/library/stdtypes.html#sequence-types-str-unicode-list-tuple-bytearray-buffer-xrange)
-
+- [Data Model](https://docs.python.org/2/reference/datamodel.html)
+- [Sequence Types](https://docs.python.org/2/library/stdtypes.html#sequence-types-str-unicode-list-tuple-bytearray-buffer-xrange)
 
 ## 字符串（str & unicode）
 
