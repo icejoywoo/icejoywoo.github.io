@@ -5,7 +5,7 @@ category: python
 tags: ['Python']
 ---
 
-本篇继续讲解 Python 的数据类型，本篇主要讲解集合类型：tuple、list、set和dict。
+[上一篇]({% post_url 2017-04-30-python-builtin-data-types-1 %})中讲解了 Python 的基本类型，本篇继续讲解 Python 的数据类型，本篇主要讲解集合类型：tuple、list、set和dict。
 
 # 集合类型
 

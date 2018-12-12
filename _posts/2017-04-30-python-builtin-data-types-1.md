@@ -107,4 +107,4 @@ multi_lines = "This is a test.\n"\
 
 # 未完待续
 
-下一篇，ice 将会带领大家来内置集合类型（tuple、list、set、dict）的讲解，欢迎大家讨论和补充。
+[下一篇]({% post_url 2017-05-03-python-builtin-data-types-2 %})，ice 将会带领大家来内置集合类型（tuple、list、set、dict）的讲解，欢迎大家讨论和补充。
