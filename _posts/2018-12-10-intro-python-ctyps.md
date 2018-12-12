@@ -8,7 +8,7 @@ tags: ['python', 'ctypes']
 Python 调用 C/C++ 的程序主要有两种方式：
 
 1. 使用 ctypes 调用动态库
-2. 通过[Python C 扩展](2015-10-30-intro-of-extending-cpython.md)的方式
+2. 通过[Python C 扩展]({% post_url 2015-10-30-intro-of-extending-cpython %})的方式
 
 ctypes 的方式相对来说成本较低，首先 ctypes 是内置库，使用方便，使用的过程中与 C/C++ 动态库的逻辑是完全独立的，互相可以单独维护。但是相对也有明显的缺点，C++ 在编译后的函数名会变，ctypes 使用起来不方便，API 相对也比较繁琐，写起来略微麻烦一些，使用出错的话会导致进程退出。
 
