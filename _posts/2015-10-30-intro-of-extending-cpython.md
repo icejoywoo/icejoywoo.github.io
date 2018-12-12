@@ -61,7 +61,7 @@ _iputils.cleanup()
 
 >Note Since Python may define some pre-processor definitions which affect the standard headers on some systems, you must include Python.h before any standard headers are included.
 
-Python 提供的函数和宏等都是Py或PY开头的，此外还包含几个标准库的头文件：<stdio.h>、<string.h>、<errno.h> 和 <stdlib.h>。
+Python 提供的函数和宏等都是Py或PY开头的，此外还包含几个标准库的头文件：\<stdio.h\>、\<string.h\>、\<errno.h\> 和 \<stdlib.h\>。
 
 因为现有的 C++ 代码中是一个类封装了几个方法，所以首先初始化一个全局的对象。
 
