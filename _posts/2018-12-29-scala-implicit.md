@@ -131,6 +131,21 @@ implicit class DateHelperImplicitClass(offset: Int) extends AnyVal {
 
 在 Scala 隐式包装类都是作为值类实现的，例如 RichInt 等。
 
+# implicitly 函数
+
+在 Scala 的 Predef 中定义有一个函数 implicitly，定义如下
+
+```scala
+def implicitly[T](implicit e: T): T = e
+```
+
+通过这个函数的定义，我们可以根据前文来理解，是用来获取当前范围内某种类型的隐式参数。我们来大概看一下用法。
+
+```scala
+implicit val a = "test"
+val b = implicitly[String]  // "test"
+```
+
 # 实例分析
 
 Spark 的 RDD 就内部实现了隐式转换，在 RDD 的 T 为不对形式时会进行隐式转换，从而提供了针对特定类型 RDD 的方法支持。
@@ -195,3 +210,4 @@ object Demo {
 2. [Scala 实用指南(3.5, 5.5.1, 5.5.2)](https://book.douban.com/subject/30249691/)
 3. [IMPLICIT CLASSES](https://docs.scala-lang.org/zh-cn/overviews/core/implicit-classes.html)
 4. [TOUR OF SCALA: IMPLICIT PARAMETERS](https://docs.scala-lang.org/tour/implicit-parameters.html)
+5. [What is the Scala identifier “implicitly”?](https://stackoverflow.com/questions/3855595/what-is-the-scala-identifier-implicitly)
