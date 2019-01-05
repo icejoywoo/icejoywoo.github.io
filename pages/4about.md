@@ -6,10 +6,16 @@ icon: octicon-heart
 isNavItem: true
 ---
 
-目前就职于百度，从事大数据相关的平台建设。
+# 基本信息
 
-### 读书列表
+目前就职于某互联网公司。
 
+1. 用户日志数据平台的建设，基于 MongoDB/Hadoop 构建，自研例行任务调度。
+2. 数据流时效性的提升，使用 Spark 替代 Mapreduce 任务，开始接触和使用流式计算平台。
+
+## 读书列表
+
+- [数据密集型应用系统设计](https://book.douban.com/subject/30329536/) [设计数据密集型应用（影印版）](https://book.douban.com/subject/27154352/)
 - [《学习正则表达式》](http://book.douban.com/subject/22601258/) [Introducing Regular Expressions]({{ '/assets/ebook/Oreilly.Introducing.Regular.Expressions.Jul.2012.pdf' | prepend: site.baseurl | prepend: site.url }})
 - [Python基础教程](http://book.douban.com/subject/4866934/)
 - [编写高质量代码：改善Python程序的91个建议](http://book.douban.com/subject/25910544/)
@@ -29,15 +35,18 @@ isNavItem: true
 - [技巧:如何用一年时间获得十年的经验](https://book.douban.com/subject/26874593/)
 - [图解密码技术](https://book.douban.com/subject/26265544/)
 
-### 其他博客
+## 其他博客
+
 - [博客园](http://icejoywoo.cnblogs.com/)
 
-### 翻译作品
+## 翻译作品
 
-#### 翻译
+### 翻译
+
 - [【Python HOWTOs系列】Descriptor指南](http://python.jobbole.com/83562/)
 
-#### 校稿
+### 校稿
+
 - [Python 内存管理方式和垃圾回收算法](http://python.jobbole.com/82446/)
 - [函数式 JavaScript 简介](http://web.jobbole.com/85266/)
 - [Python编码风格指南](http://python.jobbole.com/84618/)
