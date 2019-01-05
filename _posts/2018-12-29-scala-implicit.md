@@ -92,7 +92,7 @@ object DaysDSL extends App {
 
 # 隐式类
 
-隐式类（implicit class）和上述的隐式函数一样，如果一个类本身只是为了扩展的话，可以直接申明为 implicit 类。下面我们重写上面的例子，本例同样来自《Scala 实用指南》的 5.5.2。
+隐式类（implicit class）和上述的隐式函数一样，是从 2.10 版本开始引入的，本质是隐式函数的一个语法糖。如果一个类本身只是为了扩展的话，可以直接申明为 implicit 类。下面我们重写上面的例子，本例同样来自《Scala 实用指南》的 5.5.2。
 
 需要注意：因为隐式转换太过强大，隐式类只能是局部定义的类，不可以是全局类，否则编译器会报错。
 
@@ -123,6 +123,12 @@ object DaysDSL extends App {
 }
 ```
 
+在上述的隐式类示例中，编译器会为隐式类生成一个类似的隐式方法，从而可以实现隐式转换的功能。
+
+```scala
+implicit def DateHelperImplicitClass(offset: Int) = new DateHelperImplicitClass(offset)
+```
+
 基本与隐式函数的效果和使用方法一致，但是在实际每次执行的时候，会有创建一个隐式类的实例，然后调用方法，这样就是有短生命周期的对象的创建和销毁。Scala 有一种值类（[Value Class](https://docs.scala-lang.org/zh-cn/overviews/core/value-classes.html)）的方法，可以消除这种额外的开销。唯一的改变就是继承 AnyVal。
 
 ```scala
@@ -147,6 +153,88 @@ val b = implicitly[String]  // "test"
 ```
 
 # 实例分析
+
+本节前两个例子来自《Scala 编程（第3版）》的 21 章，例子非常典型，很值得借鉴学习。
+
+第三个例子，是模拟 Spark RDD 的隐式转换，RDD 转换 PairRDD 用到了隐式转换，简化的示例代码说明其实现方式。
+
+## Swing ActionListener
+
+Java 自带的 Swing 因为 Java 的局限导致 API 比较臃肿，Scala 有了匿名函数，但是受限于 API 都是接口类型而无法使用。
+
+```scala
+val button = new JButton
+button.addActionListener(
+    new ActionListener {
+        def actionPerformed(event: ActionEvent) = {
+            println("pressed!")
+        }
+    }
+)
+```
+
+啰嗦的语法导致代码逻辑不够清晰，虽然用 Scala 但是实际写的是 Java 风格。隐式转换可以简化这个语法，解决这个啰嗦的语法问题。
+
+```scala
+implicit def function2ActionListener(f: ActionEvent => Unit) =
+    new ActionListener {
+      def actionPerformed(event: ActionEvent) = f(event)
+    }
+
+button.addActionListener(
+    (_: ActionEvent) => println("pressed!")
+)
+```
+
+隐式转换有利于写出更加简洁的代码，可以去平滑 Java 类库或其他第三方类库使用上的不便，提升代码可读性。
+
+## 有理数的加法
+
+我们来定义一个有理数（分数）类，方便使用，希望他可以与 Int 进行随意的加法操作。
+
+```scala
+class Rational(n: Int, d: Int) {
+
+  private val g = gcd(n, d)
+  val x: Int = n / g
+  val y: Int = d / g
+
+  def +(that: Int): Rational = new Rational(x + that * y, y)
+  def +(that: Rational): Rational = new Rational(x * that.y + that.x * y, y * that.y)
+
+  def gcd(a: Int, b: Int): Int = {
+    if (b == 0) a else gcd(b, a % b)
+  }
+
+  override def toString: String = s"$x/$y"
+}
+```
+
+为了实现 Rational + Int 定义了方法，但是这里无法支持 Int + Rational 的写法。测试代码如下，我们可以知道最后一行会编译出错
+
+```scala
+val oneHalf = new Rational(1, 2)
+println(oneHalf) // 1/2
+println(oneHalf + oneHalf) // 1/1
+println(oneHalf + 1) // 3/2
+println(1 + oneHalf) // compile error
+```
+
+这里我们可以借助隐式转换轻松地实现这个功能，在伴生对象中定义隐式转换函数即可。
+
+```scala
+object Rational {
+  implicit def int2Rational(i: Int): Rational = new Rational(i, 1)
+}
+```
+
+再来测试一下，就会发现代码ok了。
+
+```scala
+println(1 + oneHalf) // 3/2
+```
+
+## Spark RDD
 
 Spark 的 RDD 就内部实现了隐式转换，在 RDD 的 T 为不对形式时会进行隐式转换，从而提供了针对特定类型 RDD 的方法支持。
 
@@ -185,17 +273,19 @@ object Demo {
 
 # 隐式转换规则
 
-笔者根据资料和实验，自行整理的规则，可能存在遗漏，读者有疑惑的部分可以进行留言交流。
+该部分笔者主要根据《Scala编程（第3版）》和《深入理解 Scala》内部对规则的描述整理而来，可以更好地指导对该规则的使用。
 
-隐式转换的规则有个基本的方向，就是隐式转换功能太过强大，规则是给予了比较多的约束，可以让其被更恰当合适地实用，基本规则总结整理如下：
+基本规则如下：
 
-1. 首先，隐式转换的变量、函数、类都是带有 implicit 关键词的，这个是最基本的语言要求。
-2. 隐式参数的查找范围是有明确限制的。第一规则：在使用的位置可见，必须是可以无需前缀引用的，不可以是 foo.x，必须是 x；第二规则：第一规则未找到的情况下，会在类型的隐式作用域内查找，隐式作用域是指与该类型相关联的全部伴生模块。此部分参见《深入理解 Scala》的 5.1.3，笔者对第二规则目前的理解只停留在伴生 object 会被查找，其他的情况暂时未碰到。
-3. 隐式转换触发的时机是在编译器出现了查找方法失败的情况下才会被触发，并且只可以进行一次隐式转换。
+1. 标记规则：隐式转换中涉及到的变量、函数、类都是带有 implicit 关键词的，也就是说隐式转换必须有 implicit 定义才能生效。
+2. 作用域规则：在隐式转换使用的位置必须是单标识符可见的，也就是可以无前缀引用，例如，可以是x，但不可以是 foo.x
+3. 作用域规则延伸：作用域规则未找到的情况下，会在类型的隐式作用域（伴生对象中）内查找，隐式作用域是指与该类型相关联的全部伴生模块，此部分参见《深入理解 Scala》的 5.1.3。笔者对隐式作用域的理解，一般只需要关注伴生 object 即可，伴生 object 对应 Java 中类的 static 变量和函数。
+4. 代码优先规则：隐式转换触发的时机是在编译器出现了查找方法失败的情况下才会被触发，因此如果代码可以正常执行的话，是不会触发隐式转换的。
+5. 有且只有一次隐式转换规则：触发一次隐式转换，只能转换一次。例如 x + y 的 x 触发隐式转换，只会被隐式转换为 convert(x) + y，而不会进行两次隐式转换 convert2(convert1(x)) + y。
 
 需要注意的点：
 
-1. 在使用的时候，不要再一个作用域内不要定义多个相同类型的隐式变量，因为隐式变量是根据类型匹配，所以定义多个相同类型的隐式变量，会报编译错误，编译器无法进行选择。另外，隐式变量本身也是可以在作用域内使用和变量一样的遮蔽（shadow）。
+1. 在使用的时候，不要再一个作用域内不要定义多个相同类型的隐式变量，因为隐式变量是根据类型匹配，所以定义多个相同类型的隐式变量，会报编译错误，编译器无法进行选择。另外，隐式变量本身也是可以在作用域内使用和变量一样的遮蔽（shadow）。实践中，建议新建特定的只包含一个变量的类，来保证可以明确地进行预期的隐式转换，不会被其他不经意的代码 shadow。
 2. 在使用隐式函数的时候，请 import scala.language.implicitConversions，否则编译的时候会有一个警告：warning: there was one feature warning; re-run with -feature for details。
 
 # 总结
@@ -204,6 +294,12 @@ object Demo {
 
 想进一步深入了解 implicit，可以考虑从本文的参考文献入手。
 
+# 变更记录
+
+* 2019.1.5 更新规则，新增两个示例
+
+* 2018.12.29 初稿
+
 # 参考文献
 
 1. [深入理解 Scala(5.1.3)](https://book.douban.com/subject/26302645/)
@@ -211,3 +307,4 @@ object Demo {
 3. [IMPLICIT CLASSES](https://docs.scala-lang.org/zh-cn/overviews/core/implicit-classes.html)
 4. [TOUR OF SCALA: IMPLICIT PARAMETERS](https://docs.scala-lang.org/tour/implicit-parameters.html)
 5. [What is the Scala identifier “implicitly”?](https://stackoverflow.com/questions/3855595/what-is-the-scala-identifier-implicitly)
+6. [Scala编程（第3版）](https://book.douban.com/subject/27591387/)
