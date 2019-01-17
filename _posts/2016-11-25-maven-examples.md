@@ -292,13 +292,6 @@ Apache Spark 的应用可以使用 scala 或 java 来编写，scala 相对简洁
         <version>${spark.version}</version>
         <scope>provided</scope>
     </dependency>
-
-    <dependency>
-        <groupId>junit</groupId>
-        <artifactId>junit</artifactId>
-        <version>${junit.version}</version>
-        <scope>test</scope>
-    </dependency>
 </dependencies>
 ```
 
@@ -384,7 +377,7 @@ Apache Spark 的应用可以使用 scala 或 java 来编写，scala 相对简洁
 
 运行测试：
 
-```
+```bash
 $ java -cp target/protobuf-demo-project-1.0.jar AddPerson address.pb
 address.pb: File not found.  Creating a new file.
 Enter person ID: 1
