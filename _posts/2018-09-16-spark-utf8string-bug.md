@@ -25,7 +25,7 @@ select length(query) from test_db.test_table;
 
 测试的字段是包含中文的，数量比较大，来源比较复杂，存在乱码的可能性，如何来提取乱码数据来验证异常是由乱码引起的呢？
 
-笔者经过一番尝试，找到了一个比较简单的方式，可以通过正则的方式粗略过滤到乱码字符。UTF8 中文字符的取件大概为 \\u4e00-\\u9fa5，粗略的方式即可过滤到正常的中文，提取到乱码数据，可以通过下面的 SQL 验证。
+笔者经过一番尝试，找到了一个比较简单的方式，可以通过正则的方式粗略过滤到乱码字符。UTF8 中文字符的区间大概为 \\u4e00-\\u9fa5，粗略的方式即可过滤到正常的中文，提取到乱码数据，可以通过下面的 SQL 验证。
 
 ```sql
 select query from test_db.test_table where query rlike '[^%0-9a-zA-Z\\\u4e00-\\\u9fa5]+';
@@ -227,3 +227,4 @@ case class Length(child: Expression) extends UnaryExpression with ImplicitCastIn
 # 参考资料及延伸阅读
 
 1. [Apache Spark as a Compiler: Joining a Billion Rows per Second on a Laptop](https://databricks.com/blog/2016/05/23/apache-spark-as-a-compiler-joining-a-billion-rows-per-second-on-a-laptop.html)
+2. [探索Spark Tungsten的秘密](https://github.com/hustnn/TungstenSecret)
