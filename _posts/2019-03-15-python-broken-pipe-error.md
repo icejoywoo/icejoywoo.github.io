@@ -1,8 +1,8 @@
 ---
 layout: post
 title: Python 的 Broken Pipe 错误问题分析 
-category: java
-tags: ['java', 'antlr4']
+category: python
+tags: ['python', 'broken pipe']
 ---
 
 # 概述
