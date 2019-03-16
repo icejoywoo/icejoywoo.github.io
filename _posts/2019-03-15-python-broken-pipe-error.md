@@ -5,7 +5,7 @@ category: python
 tags: ['python', 'broken pipe']
 ---
 
-本文是笔者重写了旧博客中部分文章主题，增加了一些新的理解和认识。
+本文是笔者重写了旧博客中的[Python的问题解决: IOError: [Errno 32] Broken pipe](https://www.cnblogs.com/icejoywoo/p/3908290.html)，并增加了一些更为深入的内容。
 
 # 概述
 

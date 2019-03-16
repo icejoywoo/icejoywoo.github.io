@@ -5,7 +5,7 @@ category: python
 tags: ['python', 'TypeError']
 ---
 
-本文是笔者重写了旧博客中部分文章主题，增加了一些新的理解和认识。
+本文是笔者重写了旧博客中的[python使用set来去重碰到TypeError: unhashable type](https://www.cnblogs.com/icejoywoo/p/3426310.html)，并增加了一些更为深入的内容。
 
 # 概述
 
