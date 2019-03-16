@@ -5,6 +5,8 @@ category: python
 tags: ['python', 'broken pipe']
 ---
 
+本文是笔者重写了旧博客中部分文章主题，增加了一些新的理解和认识。
+
 # 概述
 
 我们在使用 Python 的过程中，偶尔会碰到这样的错误。
