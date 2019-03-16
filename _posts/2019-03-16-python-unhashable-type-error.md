@@ -1,6 +1,6 @@
 ---
 layout: post
-title: [TypeError: unhashable type: 'list'] 错误分析及解决
+title: Python 的 unhashable type 错误分析及解决
 category: python
 tags: ['python', 'TypeError']
 ---
