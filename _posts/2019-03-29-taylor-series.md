@@ -59,5 +59,5 @@ if __name__ == '__main__':
 
 # 参考资料
 
-1. [Taylor series | Essence of calculus, chapter 11](https://www.youtube.com/watch?v=3d6DsjIBzJ4)
+1. [Taylor series \| Essence of calculus, chapter 11](https://www.youtube.com/watch?v=3d6DsjIBzJ4)
 2. [如何理解最小二乘法？](https://www.zhihu.com/question/37031188/answer/411760828) [备用](https://www.matongxue.com/madocs/818.html)
