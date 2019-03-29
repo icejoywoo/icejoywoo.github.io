@@ -15,7 +15,7 @@ tags: ['math', 'calculus']
 
 看下面的图是 e^x 与其4阶泰勒展示的曲线的曲线，我们可以看到拟合程度很高。
 
-![sinx taylor series](/assets/blog/taylor-series/ex-taylor-chart.png)
+![exp taylor series chart](/assets/blog/taylor-series/ex-taylor-chart.png)
 
 下面通过一个数据拟合的问题，来理解下泰勒展开式。
 
