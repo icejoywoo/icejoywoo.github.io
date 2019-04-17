@@ -101,3 +101,7 @@ String newData = new String(bytes, 0, bytes.length, charset);
 以上便是个人的一些经验，笔者通过对上述方法的使用，较为顺利地完成了代码翻译为 Java 的工作，并且测试通过。
 
 希望可以帮助有需要的朋友。欢迎留言讨论。
+
+# 扩展阅读
+
+1. [Unsigned comparison in Java/Scala](https://www.drmaciver.com/2008/08/unsigned-comparison-in-javascala/)
