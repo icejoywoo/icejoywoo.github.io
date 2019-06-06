@@ -5,15 +5,17 @@ category: scala
 tags: ['scala']
 ---
 
-# 简介
+# Scala 代码片段收集
+
+## 简介
 
 Scala 有很多语言技巧，目前对 Scala 还在学习中，收集各种代码片段供自己学习查看。
 
-# Scala REPL -- Ammonite
+## Scala REPL -- Ammonite
 
 Ammonite 是一款更好用的 Scala REPL，可以查看 [Github 主页](https://github.com/lihaoyi/Ammonite)。
 
-# 不编译执行 Scala 脚本
+## 不编译执行 Scala 脚本
 
 Scala 是有编译过程的，但是也支持不编译执行。
 
@@ -36,7 +38,7 @@ Loading hello.scala...
 hello, world!
 ```
 
-# 查看类型
+## 查看变量类型
 
 调试代码过程中，难免需要去查看变量的类型的需求。
 
@@ -76,3 +78,19 @@ erasure 和 <:< 方法已经标记为 Deprecated，<:< 是测试是否为子类�
 上面的代码摘自[how to know type of a variable in scala](https://www.scala-lang.org/old/node/6410)。
 
 上述代码在 Scala 2.12.6 测试均可执行。
+
+## 将 Array 转换为 Tuple
+
+Scala 的 Array 是与 Java 的相对应的，例如 scala 的 Array[String] 和 java String[] 是一样的。没有直接的 toTuple 方法，如何才能转换为 Tuple 了。
+
+一个常见的使用场景是 Spark 中将原始的日志行进行拆分后返回了Array，但是需要转换为 Tuple，然后再用 toDF 转换为 dataframe。
+
+```scala
+spark.read.text("/path/to/file").map(row => {
+    // 建设使用 \t 分割的 3 个字段，分别是 a、b、c
+    val line = row.getAs[String]("value")
+    line.split("\t") match {
+        Array(a, b, c) => (a, b, c)
+    }
+}).toDF("a", "b", "c")
+```
