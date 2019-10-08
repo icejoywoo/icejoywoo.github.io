@@ -7,7 +7,7 @@ tags: ['algorithm', 'fibonacci']
 
 本文主要是通过斐波那契来引入问题，开始逐步分析递归的解法缺点，使用缓存和尾递归进行优化，最后将尾递归展开为循环迭代逻辑，通过这个思路来加深对递归的理解。
 
-本文主要用Python 2.7为例，讲解斐波那契的多种解法和思路。
+本文主要用Python 2.7为例，讲解斐波那契的递归到迭代的递进思路，本文受到[拜托，面试别再问我斐波那契数列了！！！](https://mp.weixin.qq.com/s?__biz=MjM5ODYxMDA5OQ==&mid=2651961606&idx=1&sn=0ad1a2eec0c2a0187034c258ef63fab2&chksm=bd2d0cda8a5a85cc1cee07fca7d877a79d7146aac5021c55340a8b6ae595942319d496d51806&scene=21#wechat_redirect)的启发，不过这篇文章对递归部分的讲解比较少，本文会对递归部分做更多的展开。
 
 ## 斐波那契数列
 
