@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 斐波那契数列胡扯（Python篇）
+title: 斐波那契数列从递归到迭代的实现
 category: algorithm
 tags: ['algorithm', 'fibonacci']
 ---
