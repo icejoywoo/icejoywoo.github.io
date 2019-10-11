@@ -90,3 +90,7 @@ if __name__ == '__main__':
     assert s.min() is None
 
 ```
+
+## 参考资料
+
+1. [min stack](https://leetcode.com/problems/min-stack/)
