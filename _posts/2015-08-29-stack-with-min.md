@@ -34,9 +34,6 @@ Stack是一种常见的数据结构，是一种后进先出（LIFO，Last In Fir
 #!/bin/env python
 # encoding: utf-8
 
-__author__ = 'icejoywoo'
-
-
 class Stack(object):
 
     def __init__(self):
@@ -81,12 +78,81 @@ if __name__ == '__main__':
     s.push(1)
     assert s.min() == 1
 
-    s.pop()
+    assert s.pop() == 1
     assert s.min() == 3
 
-    s.pop()
-    s.pop()
-    s.pop()
+    assert s.pop() == 5
+    assert s.pop() == 4
+    assert s.pop() == 3
+    assert s.min() is None
+
+```
+
+我们可以分析出该方法的空间复杂度为O(n)，时间复杂度为O(1)。
+
+最近发现了这个算法有一个空间复杂度O(1)，是通过stack存储差值而不是原始数据的方式来实现，这种方法获取元素的方法也需要进行还原，详细分析可以看[这里](https://www.cxyxiaowu.com/2968.html)，我这里的代码是根据最后一个方法来实现的。
+
+```python
+#!/bin/env python
+# encoding: utf-8
+
+class Stack(object):
+
+    def __init__(self):
+        self._stack = []
+        self._min = None
+
+    def push(self, element):
+        if self._stack:
+            r = element - self._min
+            self._stack.append(element - self._min)
+            self._min = element if r < 0 else self._min
+        else:
+            self._stack.append(0)
+            self._min = element
+
+    def pop(self):
+        ret = None
+        if self._stack:
+            last = self._stack.pop()
+            ret = self._min if last < 0 else self._min + last
+            self._min = self._min - last if last < 0 else self._min
+
+        if not self._stack:
+            self._min = None
+
+        return ret
+
+
+    def min(self):
+        return self._min
+
+    def __len__(self):
+        return len(self._stack)
+
+
+if __name__ == '__main__':
+
+    s = Stack()
+
+    assert s.min() is None
+
+    s.push(3)
+    assert s.min() == 3
+    s.push(4)
+    assert s.min() == 3
+    s.push(5)
+    assert s.min() == 3
+
+    s.push(1)
+    assert s.min() == 1
+
+    assert s.pop() == 1
+    assert s.min() == 3
+
+    assert s.pop() == 5
+    assert s.pop() == 4
+    assert s.pop() == 3
     assert s.min() is None
 
 ```
@@ -94,3 +160,4 @@ if __name__ == '__main__':
 ## 参考资料
 
 1. [min stack](https://leetcode.com/problems/min-stack/)
+2. [【被虐了】详解一次shopee面试算法题：最小栈的最优解](https://www.cxyxiaowu.com/2968.html)
