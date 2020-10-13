@@ -11,7 +11,7 @@
         <scala.major.version>2.11</scala.major.version>
         <scala.version>2.11.8</scala.version>
         <spark.version>2.0.1</spark.version>
-        <junit.version>4.11</junit.version>
+        <junit.version>4.13.1</junit.version>
         <hadoop.version>2.6.0</hadoop.version>
 
         <maven-shade-plugin.version>2.3</maven-shade-plugin.version>
