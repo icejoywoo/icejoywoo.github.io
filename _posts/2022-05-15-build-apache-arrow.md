@@ -127,11 +127,7 @@ only arrow-jni:
 $ mvn -Darrow.cpp.build.dir=../java-dist/lib -Parrow-jni clean install -Drat.skip=true
 ```
 
-arrow-c-data 和 arrow-jni 一起编译：
-
-```bash
-$ mvn -Darrow.c.jni.dist.dir=../java-dist/lib -Parrow-c-data -Darrow.cpp.build.dir=../java-dist/lib -Parrow-jni clean install -Drat.skip=true
-```
+arrow-c-data 和 arrow-jni 一起编译的时候会报错，分别编译是可以的。官方文档也是分开编译的。
 
 ## 编译碰到的问题
 
