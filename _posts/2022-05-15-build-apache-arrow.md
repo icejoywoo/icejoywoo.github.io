@@ -7,7 +7,7 @@ tags: ['apache arrow']
 
 Apache Arrow 是一个内存的列式存储格式，其生态已经非常丰富，包含了计算引擎（gandiva、arrow compute layer等，计算向量化）、IPC 格式、网络传输 flight等。
 
-其文档相对比较少，因为有 jni 部分导致需要额外编译一部分 c++ 的部分。
+Arrow 文档相对较少，java 包含了 jni 的部分，导致需要额外编译 jni 动态库。
 
 本文介绍了在 Mac 下 Apache Arrow java 项目的编译流程以及一些常见问题。
 
@@ -38,7 +38,7 @@ Homebrew Bundle complete! 25 Brewfile dependencies now installed.
 
 下载速度比较慢，时间较长，请耐心等待。
 
-### c
+### build c data jni
 
 ```bash
 # 在 arrow 目录下执行
@@ -60,7 +60,7 @@ $ cmake --build . --target install
 编译完成后，会在 `../java-dist/lib` 有一个 `libarrow_cdata_jni.dylib`
 
 
-### cpp
+### build cpp jni (gandiva, dataset, orc)
 
 ```bash
 # 在 arrow 目录下执行
@@ -208,6 +208,22 @@ link_jni_lib dataset/src/test/resources/ libarrow_dataset_jni.dylib
 
 > In the Files tool window, find the path vector/target/generated-sources, right click the directory, and select Mark Directory as > Generated Sources Root. There is no need to mark other generated sources directories, as only the vector module generates sources.
 
+### M1 动态库不 match 的问题
+
+jdk 分为 x86_64 和 aarch64（M1），默认 jni 编译出来的是 aarch64（M1）的，需要使用的 jdk 也必须是 aarch64 的。否则会报动态库不 match 错误。
+
+### DirectReservationListener 报错 reservedMemory 找不到
+
+`TestReservationListener` 单测报错，找不到 field `reservedMemory`。
+
+在一些 jdk 版本中，`java.nio.Bits` 的 `reservedMemory` 是 `RESERVED_MEMORY`，只需要修改即可。
+
+我目前在 m1 的电脑上碰到了该问题，使用的 jdk 11 aarch64 非 oracle 的，是第三方的 zulu。
+
 ## 参考资料
 
 1. [Building Arrow Java](https://arrow.apache.org/docs/developers/java/building.html)
+
+## 拓展资料
+
+1. Apache Arrow - High-Performance Columnar Data Framework: [b站](https://www.bilibili.com/video/BV14R4y1s7Ew/) [youtube](https://www.youtube.com/watch?v=YhF8YR0OEFk)
