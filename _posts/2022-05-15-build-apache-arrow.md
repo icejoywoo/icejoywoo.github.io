@@ -210,6 +210,8 @@ link_jni_lib dataset/src/test/resources/ libarrow_dataset_jni.dylib
 
 jdk 分为 x86_64 和 aarch64（M1），默认 jni 编译出来的是 aarch64（M1）的，需要使用的 jdk 也必须是 aarch64 的。否则会报动态库不 match 错误。
 
+jdk 8 和 jdk 11 的 aarch64 的版本可以去[zulu](https://www.azul.com/downloads/)下载。
+
 ### DirectReservationListener 报错 reservedMemory 找不到
 
 `TestReservationListener` 单测报错，找不到 field `reservedMemory`。
