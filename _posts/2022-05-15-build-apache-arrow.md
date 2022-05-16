@@ -204,7 +204,9 @@ link_jni_lib dataset/src/test/resources/ libarrow_dataset_jni.dylib
 
 > In the Files tool window, find the path vector/target/generated-sources, right click the directory, and select Mark Directory as > Generated Sources Root. There is no need to mark other generated sources directories, as only the vector module generates sources.
 
-### M1 动态库不 match 的问题
+### 动态库加载报错 incompatible architecture
+
+报错信息为 `mach-o file, but is an incompatible architecture (have 'arm64', need 'x86_64')`
 
 jdk 分为 x86_64 和 aarch64（M1），默认 jni 编译出来的是 aarch64（M1）的，需要使用的 jdk 也必须是 aarch64 的。否则会报动态库不 match 错误。
 
@@ -212,9 +214,19 @@ jdk 分为 x86_64 和 aarch64（M1），默认 jni 编译出来的是 aarch64（
 
 `TestReservationListener` 单测报错，找不到 field `reservedMemory`。
 
-在一些 jdk 版本中，`java.nio.Bits` 的 `reservedMemory` 是 `RESERVED_MEMORY`，只需要修改即可。
+在 jdk11 中，`java.nio.Bits` 的 `reservedMemory` 是 `RESERVED_MEMORY`，只需要修改即可。
 
-我目前在 m1 的电脑上碰到了该问题，使用的 jdk 11 aarch64 非 oracle 的，是第三方的 zulu。
+在 jdk 8 中，无需修改。
+
+### cmake Error: could not load cache
+
+cmake 编译 jni 动态库的时候，有可能会碰到该问题，根据[stackoverflow](https://stackoverflow.com/questions/16319292/cmake-error-could-not-load-cache)，这个是因为 cmake 的缓存文件`CMakeCache.txt`导致，删除缓存文件后，重新编译即可。
+
+删除可以使用下面的命令，删除当前文件中所有的`CMakeCache.txt`：
+
+```bash
+find . -name CMakeCache.txt | xargs rm -v
+```
 
 ## 参考资料
 
