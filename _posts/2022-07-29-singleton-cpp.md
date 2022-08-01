@@ -20,7 +20,9 @@ tags: ['cpp', 'design pattern', 'singleton']
 * 在 GetInstance 方法中，使用 static local variables 来初始化 instance
 
 这里主要使用的就是 C++ 11 中对于 static local variables 的明确定义：
+
 > If multiple threads attempt to initialize the same static local variable concurrently, the initialization occurs exactly once.
+
 这样就保证了其线程安全，极大简化了单例的实现。
 
 实现代码如下：
