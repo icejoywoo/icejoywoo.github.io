@@ -1,9 +1,11 @@
 ---
 layout: post
-title: 使用 xsimd 进行一些简单的测试
+title: 使用 xsimd 进行简单的性能对比分析
 category: xsimd
 tags: ['xsimd', 'benchmark']
 ---
+
+# 概述
 
 随着硬件技术的发展，当前计算引擎的瓶颈已经从之前的IO（网络、存储等）重新变为了CPU，也就是计算的优化重新成为了当前发展的主流方向。其中，向量化计算引擎是近几年非常火热的发展方向，比较受人关注的是 Databricks 为 Spark 开发了基于 JNI 的 native engine -- Photon，使用了向量化来替代之前的 whole stage codegen。
 
@@ -16,6 +18,8 @@ tags: ['xsimd', 'benchmark']
 * mean 计算的测试：向量化数值计算，对比内存 aligned 和 unaligned 的情况下性能差异，aligned内存的情况下性能很好
 
 测试的机器配置为：ubuntu 20.04 (16 X 3500.16 MHz CPU s, 64GB mem)
+
+# 性能测试
 
 ## memset / memcpy
 
@@ -124,3 +128,5 @@ BM_iterate_without_xsimd/8192       3617 ns         3617 ns       193562 bytes_p
 1. [Photon: A Fast Query Engine for Lakehouse Systems](https://cs.stanford.edu/~matei/papers/2022/sigmod_photon.pdf)
 2. [xsimd](https://github.com/xtensor-stack/xsimd)
 3. [godbolt](https://godbolt.org/)
+4. [SSE/AVX加速时的内存对齐问题](https://xhy3054.github.io/memory-alignment/)
+5. [从Eigen向量化谈内存对齐](https://zhuanlan.zhihu.com/p/93824687)
