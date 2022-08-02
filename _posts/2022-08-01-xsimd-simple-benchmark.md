@@ -66,6 +66,8 @@ BM_simd_memcpy/8192        191 ns          191 ns      3672602 bytes_per_second=
 
 从上述的结果，我们可以看到在 bytes 小于512的时候，simd版本都存在一些优势，但是当 bytes 超过512之后，都是标准库的版本更好一些。
 
+另外，对比过 O2 和 O3 优化的版本，最终的结论依然是标准库的版本性能更好。
+
 这里我们可以得到一个初步的结论，就是标准库版本的 memset 和 memcpy 本身的效率还是很不错，没必要使用 simd 版本，并且无法获得标准库新版本的优化。
 
 测试代码：[xsimd_mem_bench.cpp](https://github.com/icejoywoo/modern-cpp-demo/blob/main/xsimd-demo/xsimd_mem_bench.cpp)
@@ -82,6 +84,8 @@ BM_simd_memcpy/8192        191 ns          191 ns      3672602 bytes_per_second=
 3. BM_aligned 向量化的版本，内存为 aligned（使用 xsimd::aligned_allocator）
 
 测试结果：
+
+1. -O3 测试结果
 ```
 Run on (16 X 3500.16 MHz CPU s)
 CPU Caches:
@@ -110,9 +114,39 @@ BM_iterate_without_xsimd/4096       1811 ns         1811 ns       386507 bytes_p
 BM_iterate_without_xsimd/8192       3617 ns         3617 ns       193562 bytes_per_second=2.10923G/s
 ```
 
+2. -O2 测试结果
+```
+Run on (16 X 3500.27 MHz CPU s)
+CPU Caches:
+  L1 Data 32 KiB (x8)
+  L1 Instruction 32 KiB (x8)
+  L2 Unified 1024 KiB (x8)
+  L3 Unified 36608 KiB (x1)
+Load Average: 0.27, 0.25, 0.10
+----------------------------------------------------------------------------------------
+Benchmark                              Time             CPU   Iterations UserCounters...
+----------------------------------------------------------------------------------------
+BM_unaligned/8                      3.46 ns         3.46 ns    202023030 bytes_per_second=2.15262G/s
+BM_unaligned/64                     22.7 ns         22.7 ns     31005897 bytes_per_second=2.63042G/s
+BM_unaligned/512                     222 ns          222 ns      3149903 bytes_per_second=2.14537G/s
+BM_unaligned/4096                   2017 ns         2017 ns       346356 bytes_per_second=1.89137G/s
+BM_unaligned/8192                   4045 ns         4044 ns       173192 bytes_per_second=1.88641G/s
+BM_aligned/8                        3.10 ns         3.10 ns    222135478 bytes_per_second=2.4016G/s
+BM_aligned/64                       12.6 ns         12.6 ns     55320537 bytes_per_second=4.71465G/s
+BM_aligned/512                       111 ns          111 ns      6326410 bytes_per_second=4.30862G/s
+BM_aligned/4096                     1466 ns         1465 ns       481292 bytes_per_second=2.60305G/s
+BM_aligned/8192                     2966 ns         2965 ns       239760 bytes_per_second=2.57278G/s
+BM_iterate_without_xsimd/8          5.20 ns         5.20 ns    134521295 bytes_per_second=1.43335G/s
+BM_iterate_without_xsimd/64         37.9 ns         37.9 ns     18654077 bytes_per_second=1.5722G/s
+BM_iterate_without_xsimd/512         413 ns          413 ns      1696411 bytes_per_second=1.1559G/s
+BM_iterate_without_xsimd/4096       3540 ns         3540 ns       197438 bytes_per_second=1103.42M/s
+BM_iterate_without_xsimd/8192       7115 ns         7115 ns        98524 bytes_per_second=1098.06M/s
+```
+
 从上述的测试结果，我们可以看到性能是 BM_aligned > BM_iterate_without_xsimd > BM_unaligned，从而我们可以获得两个简单的结论：
-1. 默认不使用 simd 的情况下，也可以获得不错的性能，尤其是当计算非常简单，compiler 还是可以做到非常好的优化，compiler 会有向量化的[优化](https://godbolt.org/z/8h4qbGe17)
-2. simd 的内存对齐 aligned 的情况下，性能会获得明显的提升
+1. 默认不使用 simd 的情况下，编译器在 O2 和 O3 的情况下差异很大，O3 可以做到非常不错的优化效果，并且会有向量化的[优化](https://godbolt.org/z/8h4qbGe17)
+2. simd 的实现在 O2 和 O3 的情况下差异不大，在生成环境中很多时候也不太会开启 O3 优化
+3. simd 的内存对齐 aligned 的情况下，性能会获得明显的提升
 
 测试代码：[xsimd_aligned_bench.cpp](https://github.com/icejoywoo/modern-cpp-demo/blob/main/xsimd-demo/xsimd_aligned_bench.cpp)
 
