@@ -16,6 +16,7 @@ tags: ['xsimd', 'benchmark']
 本文包含两个测试：
 * memset / memcpy 的测试：内存批量初始化的时候会使用，与标准库的实现进行对比，这类操作目前测试没有发现明显的性能优势，使用标准库的实现还是更加好的选择
 * mean 计算的测试：向量化数值计算，对比内存 aligned 和 unaligned 的情况下性能差异，aligned内存的情况下性能很好
+* lower upper 测试：ASCII字符串的大小写转换，这个是从 ClickHouse 拷贝过来的[实现](https://github.com/ClickHouse/ClickHouse/blob/master/src/Functions/LowerUpperImpl.h)
 
 测试的机器配置为：ubuntu 20.04 (16 X 3500.16 MHz CPU s, 64GB mem)
 
@@ -149,6 +150,65 @@ BM_iterate_without_xsimd/8192       7115 ns         7115 ns        98524 bytes_p
 3. simd 的内存对齐 aligned 的情况下，性能会获得明显的提升
 
 测试代码：[xsimd_aligned_bench.cpp](https://github.com/icejoywoo/modern-cpp-demo/blob/main/xsimd-demo/xsimd_aligned_bench.cpp)
+
+## LowerUpper 测试
+
+这里是一个大小写转换的实现，在只有 ASCII 码的情况下使用，测试case：
+1. simple_array 直接遍历计算，使用了 CK 的实现，移除了 sse2 的实现
+2. simd_array 向量化的版本，直接使用了 CK 的实现，包含 sse2 的实现
+
+测试结果：
+1. -O3 测试结果
+```
+Run on (16 X 3500.11 MHz CPU s)
+CPU Caches:
+  L1 Data 32 KiB (x8)
+  L1 Instruction 32 KiB (x8)
+  L2 Unified 1024 KiB (x8)
+  L3 Unified 36608 KiB (x1)
+Load Average: 0.07, 0.06, 0.08
+----------------------------------------------------------------------------
+Benchmark                  Time             CPU   Iterations UserCounters...
+----------------------------------------------------------------------------
+simd_array/8            6.94 ns         6.94 ns    100988091 bytes_per_second=1100.09M/s
+simd_array/64           3.75 ns         3.75 ns    186334231 bytes_per_second=15.8836G/s
+simd_array/512          26.0 ns         26.0 ns     26942146 bytes_per_second=18.3499G/s
+simd_array/4096          255 ns          255 ns      2742044 bytes_per_second=14.9389G/s
+simd_array/8192          505 ns          505 ns      1383740 bytes_per_second=15.0953G/s
+simple_array/8          6.36 ns         6.36 ns    109883144 bytes_per_second=1.17177G/s
+simple_array/64         2.60 ns         2.60 ns    269380953 bytes_per_second=22.9354G/s
+simple_array/512        18.8 ns         18.8 ns     37303256 bytes_per_second=25.4014G/s
+simple_array/4096        160 ns          160 ns      4388656 bytes_per_second=23.8658G/s
+simple_array/8192        313 ns          313 ns      2239601 bytes_per_second=24.3623G/s
+```
+
+2. -O2 测试结果
+```
+Run on (16 X 3499.87 MHz CPU s)
+CPU Caches:
+  L1 Data 32 KiB (x8)
+  L1 Instruction 32 KiB (x8)
+  L2 Unified 1024 KiB (x8)
+  L3 Unified 36608 KiB (x1)
+Load Average: 0.04, 0.04, 0.08
+----------------------------------------------------------------------------
+Benchmark                  Time             CPU   Iterations UserCounters...
+----------------------------------------------------------------------------
+simd_array/8            5.98 ns         5.98 ns    117127164 bytes_per_second=1.24632G/s
+simd_array/64           4.33 ns         4.33 ns    161770268 bytes_per_second=13.7663G/s
+simd_array/512          28.5 ns         28.5 ns     24566175 bytes_per_second=16.7381G/s
+simd_array/4096          255 ns          255 ns      2747132 bytes_per_second=14.9677G/s
+simd_array/8192          504 ns          504 ns      1388766 bytes_per_second=15.1404G/s
+simple_array/8          5.47 ns         5.47 ns    127990341 bytes_per_second=1.36224G/s
+simple_array/64         41.9 ns         41.9 ns     16721479 bytes_per_second=1.42368G/s
+simple_array/512         340 ns          340 ns      2059816 bytes_per_second=1.40296G/s
+simple_array/4096       2676 ns         2676 ns       261837 bytes_per_second=1.42562G/s
+simple_array/8192       5341 ns         5341 ns       131058 bytes_per_second=1.42859G/s
+```
+
+这里我们可以看到普通的实现版本，在 O2 和 O3 的情况下具有比较明显的差异，O3 优化下比 sse2 的性能更好。所以这里得到的结论与 mean 是一致的。
+
+测试代码：[LowerUpperBench.cpp](https://github.com/icejoywoo/modern-cpp-demo/blob/main/xsimd-demo/LowerUpperBench.cpp)
 
 
 # 总结
