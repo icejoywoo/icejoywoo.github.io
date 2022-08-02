@@ -18,7 +18,10 @@ tags: ['xsimd', 'benchmark']
 * mean 计算的测试：向量化数值计算，对比内存 aligned 和 unaligned 的情况下性能差异，aligned内存的情况下性能很好
 * lower upper 测试：ASCII字符串的大小写转换，这个是从 ClickHouse 拷贝过来的[实现](https://github.com/ClickHouse/ClickHouse/blob/master/src/Functions/LowerUpperImpl.h)
 
-测试的机器配置为：ubuntu 20.04 (16 X 3500.16 MHz CPU s, 64GB mem)
+测试环境：
+* 操作系统及配置：ubuntu 20.04 (16 X 3500.16 MHz CPU s, 64GB mem)
+* gcc 版本：gcc version 9.4.0 (Ubuntu 9.4.0-1ubuntu1~20.04.1)
+
 
 # 性能测试
 
@@ -206,7 +209,7 @@ simple_array/4096       2676 ns         2676 ns       261837 bytes_per_second=1.
 simple_array/8192       5341 ns         5341 ns       131058 bytes_per_second=1.42859G/s
 ```
 
-这里我们可以看到普通的实现版本，在 O2 和 O3 的情况下具有比较明显的差异，O3 优化下比 sse2 的性能更好。所以这里得到的结论与 mean 是一致的。
+这里我们可以看到普通的 simple_array 版本，在 O2 和 O3 的情况下具有比较明显的差异，O3 优化下比 sse2 的性能更好。所以这里得到的结论与 mean 是一致的。
 
 测试代码：[LowerUpperBench.cpp](https://github.com/icejoywoo/modern-cpp-demo/blob/main/xsimd-demo/LowerUpperBench.cpp)
 
