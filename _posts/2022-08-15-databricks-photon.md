@@ -44,6 +44,8 @@ photon 与 spark 会存在同一个 stage 中，photon task 也是单线程处�
 * Adaptor：将从 FileScan 读取的数据直接传给 Photon 算子
 * Transition：将 Photon 计算的结果传给 Spark 算子
 
+![A Spark SQL plan converted to a Photon plan](/assets/blog/databricks-photon/spark-plan-to-photon-plan.jpg)
+
 Photon 与 Spark 还有一个非常大的区别：Photon 是一个列存格式的计算引擎，Spark 是一个行存格式的计算引擎。
 
 在 databricks 的 lakehouse 场景下，读取的都是 parquet 文件，parquet 是列存格式的，所以在原先的 Spark 中就存在一次 ColumnToRow 的转换。
@@ -52,7 +54,7 @@ Photon 与 Spark 还有一个非常大的区别：Photon 是一个列存格式�
 
 整体的计划大致如下：
 
-![plan with photon](/assets/blog/databricks-photon/spark-plan-with-photon.jpg)
+![plan with photon](/assets/blog/databricks-photon/spark-plan-with-photon.png)
 
 因为 spark 与 photon 之间的转换是存在比较大的开销，所以目前对 Photon 算子的使用方法是比较保守的，就是从读取数据的源头 FileScan 开始，尽量使用 Photon 进行计算，在碰到不支持的计算后转换为 Spark，转换为 Spark 后不会再转换为 Photon。这样可以保证对 Photon 的使用都是有正向的收益。以后，可以考虑计算 Cost 来选择是否使用 Photon。
 
