@@ -76,6 +76,8 @@ Photon 和 Spark 是属于部署在相同节点上的，所以也共享了内存
 
 Photon 使用了 Execution Kernels 来进行向量化的优化（这个是受到 [MonetDB/X100](https://www.cidrdb.org/cidr2005/papers/P19.pdf) 的启发）。通过这些基础的 kernel 的实现，然后可以再组合成更为复杂的计算逻辑。
 
+向量化的部分在论文中提到还是主要以编译器来自动向量化为主，依赖编译的自动向量化需要开启 O3 的优化，目前自动向量化的效果还是挺好的，比起直接使用 SIMD 指令代码更加简单好维护。
+
 Adapative Execution 是 batch 粒度的，这里以 batch 中是否包含 null 为例。
 
 通过 template 的方式来去针对是否包含 null 进行优化，对于没有 null 的情况，就少了一次分支判断。因为是 batch 粒度的，所以只要局部的 batch 没有null，就可以使用这个没有 null 的版本，这样就可以得到性能上的提升。
