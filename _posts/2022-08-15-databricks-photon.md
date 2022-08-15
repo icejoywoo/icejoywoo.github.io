@@ -11,7 +11,7 @@ tags: ['spark', 'databricks', 'phton', 'olap']
 
 Photon 的实现方式是使用 JNI 的方式，在现有的 spark runtime 基础上单独开发了一套 native engine 的计算逻辑。因为 photon 并没有支持所有的计算特性，所以 photon 和 spark 会各自执行部分计算。
 
-Photon 目前并未开源，Data + AI Summit 2022 有一个类似的项目[Gluten](https://www.databricks.com/dataaisummit/session/gazelle-jni-middle-layer-offload-spark-sql-native-engines-execution)，由 intel 和 kyligence 共同开发的。
+Photon 目前并未开源，但是 Data + AI Summit 2022 上有一个类似的项目[Gluten](https://www.databricks.com/dataaisummit/session/gazelle-jni-middle-layer-offload-spark-sql-native-engines-execution)做了一个talk，由 intel 和 kyligence 共同开发的。
 
 本文主要根据笔者个人阅读 Photon 论文和其他资料，谈谈对 Photon 一些粗浅的理解。
 
