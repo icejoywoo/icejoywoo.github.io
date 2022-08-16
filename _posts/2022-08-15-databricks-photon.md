@@ -7,11 +7,18 @@ tags: ['spark', 'databricks', 'phton', 'olap']
 
 # 概述
 
-2022年 Databricks 发布了 Spark native engine - Photon 的论文，photon 在英文中是光子的意思，所以显而易见的 Photon 的特点就是追求更快的速度。
+2022年，Databricks 发布了 Photon —— 兼容 Spark 的 Native 引擎，并且还发布一篇 [paper](https://cs.stanford.edu/people/matei/papers/2022/sigmod_photon.pdf)。photon 在英文中是光子的意思，所以显而易见的 Photon 的特点就是追求更快的速度。
 
-Photon 的实现方式是使用 JNI 的方式，在现有的 spark runtime 基础上单独开发了一套 native engine 的计算逻辑。因为 photon 并没有支持所有的计算特性，所以 photon 和 spark 会各自执行部分计算。
+其实早在 2020 年，Databricks 的 Reynold Xin 就在 Spark + AI Summit 2020 上介绍过 [DeltaEngine](https://www.youtube.com/watch?v=o54YMz8zvCY)，这个应该就是 Photon 的前身。
 
-Photon 目前并未开源，但是 Data + AI Summit 2022 上有一个类似的项目[Gluten](https://www.databricks.com/dataaisummit/session/gazelle-jni-middle-layer-offload-spark-sql-native-engines-execution)做了一个talk，由 intel 和 kyligence 共同开发的。
+
+Photon 的实现方式是使用 JNI 的方式，在现有的 spark runtime 基础上单独开发了一套 native engine 的计算逻辑。因为 photon 并没有支持 Spark 所有的计算特性，所以 photon 和 spark 会各自执行部分计算。在 Databricks 的产品介绍上，会分为两个 Runtime：Databricks Runtime、Photon Runtime。
+
+![Relative Speedup of Databricks Runtime compared to version 2.1 using TPC-DS 1TB](/assets/blog/databricks-photon/photon-relative-speedup.png)
+
+Photon 的开发用了两年多的时间，整体的性能提升的幅度就和之前 Spark 调优多年的性能提升差不多了，这是 Photon 项目取得的最大成功。（图片来自于[Databricks PR blog](https://www.databricks.com/blog/2021/06/17/announcing-photon-public-preview-the-next-generation-query-engine-on-the-databricks-lakehouse-platform.html)）
+
+Photon 目前并未开源，但是 Data + AI Summit 2022 上有一个类似的项目[Gluten](https://www.databricks.com/dataaisummit/session/gazelle-jni-middle-layer-offload-spark-sql-native-engines-execution)做了一个talk，由 intel 和 kyligence 共同开发的。这也是值得后续关注的一个项目，但是 intel 做这类项目很可能会半途而废，目前代码算是半成品，依赖的开源项目都进行了一些定制开发，后续可持续发展上需要重点关注下。
 
 本文主要根据笔者个人阅读 Photon 论文和其他资料，谈谈对 Photon 一些粗浅的理解。
 
@@ -78,6 +85,11 @@ Photon 使用了 Execution Kernels 来进行向量化的优化（这个是受到
 
 向量化的部分在论文中提到还是主要以编译器来自动向量化为主，依赖编译的自动向量化需要开启 O3 的优化，目前自动向量化的效果还是挺好的，比起直接使用 SIMD 指令代码更加简单好维护。
 
+关于向量化和 codegen 的技术选型上，论文中提到使用 Weld 作为 codegen prototype 实现，与向量化进行对比后，最终选择了向量化的路线。向量化的优点如下：
+1. 易于开发调试，方便后续扩展
+2. 计算的指标监控容易获取，codegen 会涉及多个计算融合成一份代码，指标不好统计
+3. 根据每批数据（batch）的特征，进行适配，codegen 会涉及到 recompile 的开销，向量化则没有这个开销
+
 Adapative Execution 是 batch 粒度的，这里以 batch 中是否包含 null 为例。
 
 通过 template 的方式来去针对是否包含 null 进行优化，对于没有 null 的情况，就少了一次分支判断。因为是 batch 粒度的，所以只要局部的 batch 没有null，就可以使用这个没有 null 的版本，这样就可以得到性能上的提升。
@@ -123,3 +135,5 @@ Photon 是这一大背景下的产物，C++ native engine 是当前 OLAP 的一�
 3. [Photon Technical Deep Dive: How to Think Vectorized](https://www.youtube.com/watch?v=pNn5W4ujP3w)
 4. [Gazelle-Jni: A Middle Layer to Offload Spark SQL to Native Engines for Execution Acceleration (Gluten)](https://www.databricks.com/dataaisummit/session/gazelle-jni-middle-layer-offload-spark-sql-native-engines-execution)
 5. [Gluten github repo](https://github.com/oap-project/gluten)
+6. [Databricks Photon尝鲜](https://zhuanlan.zhihu.com/p/511493662)
+7. [Delta Engine: High Performance Query Engine for Delta Lake](https://www.youtube.com/watch?v=o54YMz8zvCY)
