@@ -73,7 +73,7 @@ JNIEXPORT void JNICALL Java_jni_JniDemo_nativeMethod
 #endif
 ```
 
-## 3. implemente header functions
+## 3. implementation
 
 引入头文件，实现其对应的函数
 
@@ -266,6 +266,8 @@ const char *str = env->GetStringUTFChars(jstr, 0);
 方法的名字都是一样的，C/C++ API 下的函数是一样的，仅使用方法不同。
 
 # 参考资料
+
+本文涉及的示例均在 [github](https://github.com/icejoywoo/java_jni_demo) 中。
 
 ## Java
 
