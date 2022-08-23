@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Java JNI 使用笔记
+title: JNI 使用笔记
 category: Java
 tags: ['Java', 'JNI']
 ---
@@ -8,6 +8,12 @@ tags: ['Java', 'JNI']
 # 简介
 
 JNI 的全称是 Java Native Interface，是一种 Java 的 Native 编程接口，支持 Java 与 C/C++ 直接相互调用，从 JDK 1.0 开始提供。
+
+> The JNI is a native programming interface. It allows Java code that runs inside a Java Virtual Machine (VM) to interoperate with applications and libraries written in other programming languages, such as C, C++, and assembly.
+> The most important benefit of the JNI is that it imposes no restrictions on the implementation of the underlying Java VM. Therefore, Java VM vendors can add support for the JNI without affecting other parts of the VM. Programmers can write one version of a native application or library and expect it to work with all Java VMs supporting the JNI.
+
+参考：[JNI ch1. Introduction](https://docs.oracle.com/javase/8/docs/technotes/guides/jni/spec/intro.html)
+
 
 # 基本使用流程
 
@@ -22,7 +28,6 @@ package jni;
 
 class JniDemo {
   static {
-    // 这里是加载一个名叫 libjnidemo 的动态库，后缀会根据OS不同而不同
     System.loadLibrary("jnidemo");
   }
   
@@ -140,7 +145,7 @@ Primitive Types and Native Equivalents
 
 array 数组的基础类型是独立的类型，从这里就可以理解为什么说 Java 中的基础类型和基础类型的数组是两个类型，因为底层实现确实是两个。
 
-比较特殊的是 String：有 jstring 的对应实现，但是其不属于 primitive type，属于 jobject，并且也没有单独的 array 实现。
+### jobject
 
 jobject:
 * jclass (java.lang.Class objects)
@@ -156,6 +161,8 @@ jobject:
   * jfloatArray (float arrays)
   * jdoubleArray (double arrays)
 * jthrowable (java.lang.Throwable objects)
+
+比较特殊的是 String：有 jstring 的对应实现，但是其不属于 primitive type，属于 jobject，并且也没有单独的 array 实现。
 
 ## Java VM Type Signatures
 
@@ -188,6 +195,8 @@ public class SimpleData {
 }
 ```
 
+### 读取Field的示例
+
 这个类在 jni 中读取其中的字段，就需要使用对应的 type signature，读取上述 class 的 field 方法如下：
 
 ```cpp
@@ -203,7 +212,9 @@ jboolean aBoolean = env->GetBooleanField(dataObject, data_aBoolean_);
 jstring aString = (jstring) env->GetObjectField(dataObject, data_aString_);
 ```
 
-# 其他
+# 最佳实践
+
+这里是一些使用的实践经验，主要是借鉴了 Arrow 项目中的部分代码。
 
 ## JNI 动态库的加载方式
 
@@ -283,6 +294,8 @@ target_link_libraries(hello_jni ${JAVA_JVM_LIBRARY})
 
 ## C/C++ API 差异
 
+为什么需要了解二者的差异？因为网络上搜索的大量 jni 的资料（android jni的资料更多一些），有些是 C，有些是 C++，看到同一个函数两种用法，会感到困惑。这里简单解释了二者的差异，方便读者更好地阅读网上各类资料。
+
 API 的差异主要是因为 C++ 支持 class（struct 与 class 的差异仅仅是可见性，struct 默认是 public，class 默认为 private），C 只能用 struct + function pointer 来实现，这样也就导致了二者的使用方法上存在差异，但是函数名是完全一样的。
 
 jni.h 中，对 JNIEnv 的定义如下：
@@ -322,6 +335,8 @@ JNI 动态库的编译都是使用 CMake 来进行编译，JniLoader 用于加�
     * [JniWrapper.java](https://github.com/apache/arrow/blob/master/java/gandiva/src/main/java/org/apache/arrow/gandiva/evaluator/JniWrapper.java)
 
 方法的名字都是一样的，C/C++ API 下的函数是一样的，仅使用方法不同。
+
+另外，Arrow 的 dataset 部分是通过封装 jni 在 java 提供了其对应的 c++ 实现，内存的管理都在 c++ 中，而 gandiva 刚好相反，内存全部在 java 中管理。
 
 # 参考资料
 
