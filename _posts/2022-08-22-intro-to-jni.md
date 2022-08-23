@@ -17,7 +17,7 @@ JNI 的全称是 Java Native Interface，是一种 Java 的 Native 编程接口�
 
 # 基本使用流程
 
-通过一个简单的例子来介绍下 JNI 的使用方法，对整体 JNI 有个初步的整体概念。
+JNI 的使用非常的简单，下面就通过轻松五步走，来完成一个 JNI 的调用。
 
 ## 1. native method
 
