@@ -119,17 +119,21 @@ g++ -dynamiclib -o libjnidemo.so JniDemo.o -lc
 java -cp . -Djava.library.path=/path/to/libjnidemo jni.JniDemo
 ```
 
-# JNI Types
+# JNI 基本介绍
 
-这里主要参考[Chapter 3: JNI Types and Data Structures](https://docs.oracle.com/javase/8/docs/technotes/guides/jni/spec/types.html)。
+在 JNI 中均通过 JNIEnv 来对 Java class 中的 field 和 method 进行访问，很多的 API 都需要涉及到 Type Signature，所以这里先介绍下 JVM 定义的 Type Signature。
 
-## Primitive Types
+JNI 整体的 API 都比较原始，很容易上手，只是使用比较繁琐。
 
-Java 的 Primitive Types 与 JNI 中的 Native 多有对应的类型，都是以 j 开头。
+Type Signature 主要参考[Chapter 3: JNI Types and Data Structures](https://docs.oracle.com/javase/8/docs/technotes/guides/jni/spec/types.html)。
+
+## JNI Primitive Types
+
+Java 的 Primitive Types 与 JNI 中的 Native 都有对应的类型，规律比较明显，在 JNI 都是以 j 开头。除了基础类型外，都是 jobject。
 
 这里在 Java 中定义 native 方法，其参数的类型都会被转换为对应的 native 类型。
 
-Primitive Types and Native Equivalents
+Primitive Types 和 Native 的对应关系
 
 | Java Type | Native Type |    Description   |
 |:---------:|:-----------:|:----------------:|
@@ -143,9 +147,10 @@ Primitive Types and Native Equivalents
 | double    | jdouble     | 64 bits          |
 | void      | void        | not applicable   |
 
-array 数组的基础类型是独立的类型，从这里就可以理解为什么说 Java 中的基础类型和基础类型的数组是两个类型，因为底层实现确实是两个。
 
 ### jobject
+
+除基础类型外，其余的类型均为 jobject，包括 java class、String、array 类型。
 
 jobject:
 * jclass (java.lang.Class objects)
@@ -162,13 +167,15 @@ jobject:
   * jdoubleArray (double arrays)
 * jthrowable (java.lang.Throwable objects)
 
-比较特殊的是 String：有 jstring 的对应实现，但是其不属于 primitive type，属于 jobject，并且也没有单独的 array 实现。
+额外说明：
+1. String 有单独的 jstring：String 有 jstring 的实现，属于 jobject，其对应的 array 是 jobjectarray，而没有像基础类型那样有单独的 array 类型。
+2. 基础类型的 array 是单独的类型：Java 中的基础类型和基础类型的数组是两个类型，JNI 底层也确实是两个不同的实现。
 
 ## Java VM Type Signatures
 
-Java 在底层实现来一套 Type Signatures，通过这套签名体系来表示 field 的类型、method 的签名、array 等。
+JVM 标准中有一套 Type Signatures，通过这套签名体系来表示 field 的类型、method 的签名、array 等。
 
-在 JNI 获取 field 和 method 等处均需要使用 Type Signature。这里的 Type Signature 是 Java 单独定义的，需要根据下面的定义来使用。
+在 JNI 获取 field 和 method 等处均需要使用 Type Signature。这里的 Type Signature 是 Java 单独定义的，与其他实现没有直接关系（例如，与 c-style print format 格式也无关）。
 
 Java VM Type Signatures 的表格如下：
 
@@ -186,7 +193,11 @@ Java VM Type Signatures 的表格如下：
 | [ type                    | type[]                |
 | ( arg-types ) ret-type    | method type           |
 
-这里简单举例说一下其使用方法，假设有一个 Java class 的定义如下：
+### 读取Field的示例
+
+这里简单举例说一下 Type Signature 的使用方法。
+
+假设有一个 Java class 的定义如下：
 
 ```java
 public class SimpleData {
@@ -195,9 +206,7 @@ public class SimpleData {
 }
 ```
 
-### 读取Field的示例
-
-这个类在 jni 中读取其中的字段，就需要使用对应的 type signature，读取上述 class 的 field 方法如下：
+我们需要在 JNI 中读取这个类的字段，这时就需要使用 Type Signature，使用示例如下：
 
 ```cpp
 
@@ -208,8 +217,42 @@ jfieldID data_aString_ = env->GetFieldID(kDummyDataClass, "aString", "Ljava/lang
 
 // 假设当前已经有 jobject dataObject，其对应的 java class 为 SimpleData
 jboolean aBoolean = env->GetBooleanField(dataObject, data_aBoolean_);
+
 // jstring 有单独的实现，但是其本质也是一个 jobject
 jstring aString = (jstring) env->GetObjectField(dataObject, data_aString_);
+```
+
+## 调用 Java Method
+
+JNI 也可以来访问 Java 的 method，只要先获取 jmethodID，就可以进行调用了，也是非常的简单。
+
+这里参考 gandiva 的 VectorExpander，进行了一些简化。
+
+假设 java 类 VectorExpander 如下，有一个 expandOutputVector 方法：
+
+```java
+class VectorExpander {
+  // ...
+  long expandOutputVector(long toCapacity) {
+    // ...
+  }
+}
+```
+
+首先，先获取 jmethodID。
+
+```cpp
+jclass vector_expander_class_ = env->FindClass("Lpath/to/VectorExpander;");
+// (J)J 表示参数列表为 long，返回值也为 long 的函数签名
+jmethodID vector_expander_method_ = env->GetMethodID(vector_expander_class_, "expandOutputVector", "(J)J");
+```
+
+通过 jmethodID 就可以对方法进行调用了。
+
+```cpp
+// 假设传入一个 jobject jexpander_，其对应的 java 类为 VectorExpander
+// 通过调用 CallObjectMethod 来完成方法的调用
+jlong ret = env->CallObjectMethod(jexpander_, vector_expander_method_, to_capacity);
 ```
 
 # 最佳实践
