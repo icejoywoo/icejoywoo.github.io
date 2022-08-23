@@ -73,6 +73,8 @@ JNIEXPORT void JNICALL Java_jni_JniDemo_nativeMethod
 #endif
 ```
 
+这里的 extern "C" 主要是为了保证在 c++ 的情况下，其函数名不被改写，保留原始函数名。 
+
 ## 3. implementation
 
 引入头文件，实现其对应的函数
@@ -201,6 +203,39 @@ jboolean aBoolean = env->GetBooleanField(dataObject, data_aBoolean_);
 jstring aString = (jstring) env->GetObjectField(dataObject, data_aString_);
 ```
 
+# 其他
+
+## JNI 动态库的加载方式
+
+加载的方式大致有两种：
+1. java.library.path下读取：在 class 的 static block 中，使用 System.loadLibrary 来读取
+2. cp路径下读取：在 classpath 中通过 resource 的方式读取动态库的内容，再写入临时文件，最后通过 System.load 来加载动态库
+
+两种方法的优缺点刚好相反，目前大多数都采用第二种方法。
+* 第一种方法的好处是逻辑简单直接，缺点是需要在启动 jvm 的时候设置 java.library.path，这样就需要使用者感知到 JNI 的存在，无法打包到 jar 中。
+* 第二种方法的缺点是逻辑相对复杂一些，优点是使用者不需要知道 JNI 的存在，可以打包到 jar 中。
+
+这里我们参考 arrow 的 [JniLoader.java](https://github.com/apache/arrow/blob/master/java/c/src/main/java/org/apache/arrow/c/jni/JniLoader.java)，其 load 方法如下：
+
+```java
+  private void load(String name) {
+    final String libraryToLoad = System.mapLibraryName(name);
+    try {
+      // 从 classpath 中读取 jni 动态库的内容，写入到临时文件中
+      File temp = File.createTempFile("jnilib-", ".tmp", new File(System.getProperty("java.io.tmpdir")));
+      try (final InputStream is = JniWrapper.class.getClassLoader().getResourceAsStream(libraryToLoad)) {
+        if (is == null) {
+          throw new FileNotFoundException(libraryToLoad);
+        }
+        Files.copy(is, temp.toPath(), StandardCopyOption.REPLACE_EXISTING);
+        // 从临时文件中 load 动态库
+        System.load(temp.getAbsolutePath());
+      }
+    } catch (IOException e) {
+      throw new IllegalStateException("error loading native libraries: " + e);
+    }
+  }
+```
 
 ## CMake 编译
 
@@ -222,6 +257,8 @@ set(JNI_HEADERS_DIR "${CMAKE_CURRENT_BINARY_DIR}/generated")
 include_directories(${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR}
                     ${JNI_INCLUDE_DIRS} ${JNI_HEADERS_DIR})
 
+# 生成 jar 包，包含参数中的 java 文件，这个 jar 后续不使用
+# 在 ${JNI_HEADERS_DIR} 目录下，生成 native method 的 jni header，这里就是 jni_JniWrapper.h
 add_jar(${PROJECT_NAME}
         src/main/java/jni/JniException.java
         src/main/java/jni/JniWrapper.java
@@ -230,10 +267,15 @@ add_jar(${PROJECT_NAME}
         DESTINATION
         ${JNI_HEADERS_DIR})
 
+# 编译生成动态库
 set(SOURCES src/main/cpp/jni_wrapper.cc)
 add_library(hello_jni SHARED ${SOURCES})
 target_link_libraries(hello_jni ${JAVA_JVM_LIBRARY})
 ```
+
+说明：
+* 因为 native method 一般变更也不频繁，制定好 api 后是不需要变更的，简化的逻辑是可以变更的时候重新生成一次，这样逻辑可以更简单。
+* jni 动态库只需要依赖 jni 头文件即可
 
 参考：
 * [CMake FindJNI](https://cmake.org/cmake/help/latest/module/FindJNI.html)
@@ -241,7 +283,7 @@ target_link_libraries(hello_jni ${JAVA_JVM_LIBRARY})
 
 ## C/C++ API 差异
 
-API 的差异主要是因为 C++ 支持 class（struct 与 class 的差异仅仅是可见性），C 只能用 struct + function pointer 来模拟。
+API 的差异主要是因为 C++ 支持 class（struct 与 class 的差异仅仅是可见性，struct 默认是 public，class 默认为 private），C 只能用 struct + function pointer 来实现，这样也就导致了二者的使用方法上存在差异，但是函数名是完全一样的。
 
 jni.h 中，对 JNIEnv 的定义如下：
 
@@ -263,6 +305,22 @@ const char *str = (*env)->GetStringUTFChars(env, jstr, 0);
 const char *str = env->GetStringUTFChars(jstr, 0);
 ```
 
+## Arrow JNI
+
+JNI 动态库的编译都是使用 CMake 来进行编译，JniLoader 用于加载动态库，JniWrapper 作为 native method 的类。
+
+下面以 Arrow Gandiva 为例，简单分析下其 JNI 实现：
+1. 数据传输的方式为 JVM 堆外内存（从 Netty 申请的），向 JNI 传递数据 input 和 output 的时候使用 buffer address + length 的方式
+2. JVM 堆外内存本质是需要在 Java 侧进行内存的管理，所以在 JNI 中如果需要进行内存扩容（project 场景下，output 的内存可能需要扩容），会在 C++ 中调用 Java 的 VectorExpander 来进行扩容，保证内存全在 Java 中进行申请管理
+
+相关主要代码如下：
+* [Arrow C Data API](https://github.com/apache/arrow/blob/master/java/c/README.md)
+    * [jni_wrapper.cc](https://github.com/apache/arrow/blob/master/java/c/src/main/cpp/jni_wrapper.cc)
+    * [JniWrapper.java](https://github.com/apache/arrow/blob/master/java/c/src/main/java/org/apache/arrow/c/jni/JniWrapper.java)
+* [Arrow Gandiva](https://github.com/apache/arrow/blob/master/java/gandiva/README.md)
+    * [jni_common.cc](https://github.com/apache/arrow/blob/master/cpp/src/gandiva/jni/jni_common.cc)
+    * [JniWrapper.java](https://github.com/apache/arrow/blob/master/java/gandiva/src/main/java/org/apache/arrow/gandiva/evaluator/JniWrapper.java)
+
 方法的名字都是一样的，C/C++ API 下的函数是一样的，仅使用方法不同。
 
 # 参考资料
@@ -278,18 +336,3 @@ const char *str = env->GetStringUTFChars(jstr, 0);
 * [CMake FindJNI](https://cmake.org/cmake/help/latest/module/FindJNI.html)
 * [CMake UseJava](https://cmake.org/cmake/help/latest/module/UseJava.html)
 
-## Arrow JNI
-
-JNI 动态库的编译都是使用 CMake 来进行编译，JniLoader 用于加载动态库，JniWrapper 作为 native method 的类。
-
-下面以 Arrow Gandiva 为例，简单分析下其 JNI 实现：
-1. 数据传输的方式为 JVM 堆外内存（从 Netty 申请的），向 JNI 传递数据 input 和 output 的时候使用 buffer address + length 的方式
-2. JVM 堆外内存本质是需要在 Java 侧进行内存的管理，所以在 JNI 中如果需要进行内存扩容（project 场景下，output 的内存可能需要扩容），会在 C++ 中调用 Java 的 VectorExpander 来进行扩容，保证内存全在 Java 中进行申请管理
-
-相关主要代码如下：
-* [Arrow C Data API](https://github.com/apache/arrow/blob/master/java/c/README.md)
-    * [cpp](https://github.com/apache/arrow/blob/master/java/c/src/main/cpp/jni_wrapper.cc)
-    * [java](https://github.com/apache/arrow/blob/master/java/c/src/main/java/org/apache/arrow/c/jni/JniWrapper.java)
-* [Arrow Gandiva](https://github.com/apache/arrow/blob/master/java/gandiva/README.md)
-    * [cpp](https://github.com/apache/arrow/blob/master/cpp/src/gandiva/jni/jni_common.cc)
-    * [java](https://github.com/apache/arrow/blob/master/java/gandiva/src/main/java/org/apache/arrow/gandiva/evaluator/JniWrapper.java)
