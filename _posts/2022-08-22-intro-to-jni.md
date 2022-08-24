@@ -255,6 +255,16 @@ jmethodID vector_expander_method_ = env->GetMethodID(vector_expander_class_, "ex
 jlong ret = env->CallObjectMethod(jexpander_, vector_expander_method_, to_capacity);
 ```
 
+## JNI_Onload 和 JNI_OnUnload
+
+看名字就知道，这两个方法是 JNI 在动态库 load 和 unload 的回调函数，含义为：
+* JNI_Onload 在JNI动态库被加载的时候调用，这个方法主要的用途就是进行动态库的全局初始化
+* JNI_OnUnload 在加载 JNI 动态库的 classloader 被gc回收的时候，会调用，对于全局状态进行清理
+
+参考[官方文档](https://docs.oracle.com/javase/8/docs/technotes/guides/jni/spec/invocation.html#JNJI_OnLoad)中查看更详细的解释。
+
+可以参考 arrow gandiva [jni_common.cc](https://github.com/apache/arrow/blob/master/cpp/src/gandiva/jni/jni_common.cc) 的实现，JNI_Onload 和 JNI_OnUnload 就对应的是全局状态的初始化和全局状态的清理。
+
 # 最佳实践
 
 这里是一些使用的实践经验，主要是借鉴了 Arrow 项目中的部分代码。
