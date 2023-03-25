@@ -103,7 +103,8 @@ MultilevelSplitQueue waitingSplits 多级优先队列，优先级有0～4共5个
 - waitingSplits.offer(split) 将未完成的split添加回队列
 
 ## 任务执行逻辑
-TaskRunner 是执行的逻辑
+
+TaskRunner 是执行的逻辑，其中最关键的就是 run 方法，关键部分增加了注释。
 ```java
 @Override
 public void run()
@@ -146,7 +147,7 @@ public void run()
                         waitingSplits.offer(split);
                     }
                     else {
-                    		// 等待 blocked 结束再添加回 waiting 队列
+                        // 等待 blocked 结束再添加回 waiting 队列
                         blockedSplits.put(split, blocked);
                         blocked.addListener(() -> {
                             blockedSplits.remove(split);
@@ -193,6 +194,7 @@ MultilevelSplitQueue 关键的方法：
 
 - offer(split)：添加 split 到队列中
    - 为了避免某个优先级队列为空的时候，导致其他优先级的队列饿死，所以会在添加split的时候进行补偿，将levelScheduledTime直接补偿到expected运行时间
+
 ```java
 /**
  * During periods of time when a level has no waiting splits, it will not accumulate
@@ -235,6 +237,7 @@ public void offer(PrioritizedSplitRunner split)
 
 - take：从多级队列中拿取一个split，用于执行
    - pollSplit 是选取ratio（预期执行时间 / 实际执行时间）> 1 的优先级，低优先级的会被先选到，因为从高到低遍历一次，然后从 levelWaitingSplits.get(selectedLevel).poll() 来获取
+
 ```java
 /**
  * Presto attempts to give each level a target amount of scheduled time, which is configurable
@@ -285,10 +288,12 @@ private PrioritizedSplitRunner pollSplit()
 - split.resetLevelPriority()：在 TaskRunner.run 方法中，会在 blocked split 被唤醒后进行reset，主要是为了防止其优先级过高，导致其他队列中执行的split饿死
 
 ## TaskPriorityTracker
+
 TaskPriorityTracker 包含了 updatePriority 和 resetLevelPriority 两个方法，优先级均在这个类进行更新，有两种策略：
 
 - TASK_FAIR：优先级的粒度是 task 级别的
 - QUERY_FAIR：优先级的粒度是 query 级别的
+
 ```java
 // TaskExecutor 的构造函数中
 
