@@ -317,9 +317,15 @@ MultilevelSplitQueue 的主要实现 PR：
 - [Change local scheduling to guarantee a time share to levels](https://github.com/prestodb/presto/commit/2395e964ce12aff1509f856895f1982d73101f7e)
 - [Change local scheduling to be fair within a level](https://github.com/prestodb/presto/commit/d743fb014eeeca43549e36b6b8d4dea42ecddabd)
 
+# 总结
+
+MultilevelSplitQueue 整体来说会更加公平一些，并且这个调度策略其实和操作系统的调度策略有一些相似度的。MultilevelSplitQueue 都是通过一个执行时间的长度来进行调度，会更偏向于小作业，这样的调度策略有利于整体的吞吐。另外，对于时间上可以考虑添加 ratio 值，来对时间的快慢进行调整，执行时间变化得慢就越有机会拿到更多的执行时间，是可以基于该思路设计一套优先级策略的。
+
+
 # 参考资料
 
 1. [Presto实现原理和美团的使用实践](https://tech.meituan.com/2014/06/16/presto.html)
 2. [惊闻Facebook开源大数据引擎Presto团队正在分裂](https://zhuanlan.zhihu.com/p/55628236)
 3. [Presto multilevel splitqueue discussion](https://cdmana.com/2021/07/20210723120047408f.html)
+4. [操作系统导论：多级反馈队列](https://zhuanlan.zhihu.com/p/367636084)
 
