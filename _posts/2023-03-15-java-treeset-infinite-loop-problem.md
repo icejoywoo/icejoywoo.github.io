@@ -5,13 +5,15 @@ category: Java
 tags: ['Java', 'TreeSet', 'Java Collections']
 ---
 
+# 概述
+
 Java 中的内置集合类型有很多是非线程安全的，本文主要是介绍 TreeSet 在多线程并发写入后可能会导致 iterator 读取死循环的问题。
 
 本文主要是介绍复现问题的方法，做一个简单的记录。出现死循环的原因是因为 TreeSet 底层是 TreeMap 实现的，数据结构是红黑树，红黑树在并发写入后，可能会出现 loop 的情况。
 
 另外，HashMap 在多线程下也会有类似的问题，主要是由于 HashMap 解决哈希冲突的方法是链表法，链表在并发修改后可能会出现死循环。
 
-# 复现方法
+# 复现
 
 两个步骤：
 1. 启动两个线程并发对 TreeSet 进行 add 操作
@@ -83,7 +85,7 @@ public class TreeSetInfiniteLoop {
 1. 出现死锁，然后检测发现
 2. 并发 add 的时候，有可能会报 NPE 错误
 
-# 修复方法
+# 修复
 
 目前比较简单的方式是直接使用 Collections.synchronizedSet 把 set 包起来，这样在修改的方法上就都加上了锁，可以保证多线程安全。
 
