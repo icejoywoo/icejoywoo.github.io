@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Presto 的 pending 队列分析
+title: Presto pendingSplits 的源码分析
 category: Presto, 大数据
 tags: ['大数据', 'Presto', '计算引擎']
 ---
