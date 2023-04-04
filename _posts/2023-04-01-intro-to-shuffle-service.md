@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Remote Shuffle Service 简介和概述
+title: Remote Shuffle Service 概述
 category: shuffle
 tags: ['大数据', 'shuffle']
 ---
