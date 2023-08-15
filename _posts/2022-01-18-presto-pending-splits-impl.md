@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Presto pendingSplits 的源码分析
-category: Presto, 大数据
+category: Presto
 tags: ['大数据', 'Presto', '计算引擎']
 ---
 
