@@ -263,7 +263,7 @@ jlong ret = env->CallObjectMethod(jexpander_, vector_expander_method_, to_capaci
 
 参考[官方文档](https://docs.oracle.com/javase/8/docs/technotes/guides/jni/spec/invocation.html#JNJI_OnLoad)中查看更详细的解释。
 
-可以参考 arrow gandiva [jni_common.cc](https://github.com/apache/arrow/blob/master/cpp/src/gandiva/jni/jni_common.cc) 的实现，JNI_Onload 和 JNI_OnUnload 就对应的是全局状态的初始化和全局状态的清理。
+可以参考 arrow gandiva [jni_common.cc](https://github.com/apache/arrow/blob/release-8.0.0/cpp/src/gandiva/jni/jni_common.cc) 的实现，JNI_Onload 和 JNI_OnUnload 就对应的是全局状态的初始化和全局状态的清理。
 
 # 最佳实践
 
@@ -279,7 +279,7 @@ jlong ret = env->CallObjectMethod(jexpander_, vector_expander_method_, to_capaci
 * 第一种方法的好处是逻辑简单直接，缺点是需要在启动 jvm 的时候设置 java.library.path，这样就需要使用者感知到 JNI 的存在，无法打包到 jar 中。
 * 第二种方法的缺点是逻辑相对复杂一些，优点是使用者不需要知道 JNI 的存在，可以打包到 jar 中。
 
-这里我们参考 arrow 的 [JniLoader.java](https://github.com/apache/arrow/blob/master/java/c/src/main/java/org/apache/arrow/c/jni/JniLoader.java)，其 load 方法如下：
+这里我们参考 arrow 的 [JniLoader.java](https://github.com/apache/arrow/blob/release-8.0.0/java/c/src/main/java/org/apache/arrow/c/jni/JniLoader.java)，其 load 方法如下：
 
 ```java
   private void load(String name) {
@@ -303,7 +303,7 @@ jlong ret = env->CallObjectMethod(jexpander_, vector_expander_method_, to_capaci
 
 ## CMake 编译
 
-这里的编译方法可以参考 Arrow 的 [c data api](https://github.com/apache/arrow/blob/master/java/c/CMakeLists.txt) 和 [gandiva](https://github.com/apache/arrow/blob/master/java/gandiva/CMakeLists.txt) 的编译。
+这里的编译方法可以参考 Arrow 的 [c data api](https://github.com/apache/arrow/blob/release-8.0.0/java/c/CMakeLists.txt) 和 [gandiva](https://github.com/apache/arrow/blob/release-8.0.0/java/gandiva/CMakeLists.txt) 的编译。
 
 下面是一个 CMake 的示例，通过 add_jar 来生成 jni 的头文件。
 
@@ -380,12 +380,12 @@ JNI 动态库的编译都是使用 CMake 来进行编译，JniLoader 用于加�
 2. JVM 堆外内存本质是需要在 Java 侧进行内存的管理，所以在 JNI 中如果需要进行内存扩容（project 场景下，output 的内存可能需要扩容），会在 C++ 中调用 Java 的 VectorExpander 来进行扩容，保证内存全在 Java 中进行申请管理
 
 相关主要代码如下：
-* [Arrow C Data API](https://github.com/apache/arrow/blob/master/java/c/README.md)
-    * [jni_wrapper.cc](https://github.com/apache/arrow/blob/master/java/c/src/main/cpp/jni_wrapper.cc)
-    * [JniWrapper.java](https://github.com/apache/arrow/blob/master/java/c/src/main/java/org/apache/arrow/c/jni/JniWrapper.java)
-* [Arrow Gandiva](https://github.com/apache/arrow/blob/master/java/gandiva/README.md)
-    * [jni_common.cc](https://github.com/apache/arrow/blob/master/cpp/src/gandiva/jni/jni_common.cc)
-    * [JniWrapper.java](https://github.com/apache/arrow/blob/master/java/gandiva/src/main/java/org/apache/arrow/gandiva/evaluator/JniWrapper.java)
+* [Arrow C Data API](https://github.com/apache/arrow/blob/release-8.0.0/java/c/README.md)
+    * [jni_wrapper.cc](https://github.com/apache/arrow/blob/release-8.0.0/java/c/src/main/cpp/jni_wrapper.cc)
+    * [JniWrapper.java](https://github.com/apache/arrow/blob/release-8.0.0/java/c/src/main/java/org/apache/arrow/c/jni/JniWrapper.java)
+* [Arrow Gandiva](https://github.com/apache/arrow/blob/release-8.0.0/java/gandiva/README.md)
+    * [jni_common.cc](https://github.com/apache/arrow/blob/release-8.0.0/cpp/src/gandiva/jni/jni_common.cc)
+    * [JniWrapper.java](https://github.com/apache/arrow/blob/release-8.0.0/java/gandiva/src/main/java/org/apache/arrow/gandiva/evaluator/JniWrapper.java)
 
 方法的名字都是一样的，C/C++ API 下的函数是一样的，仅使用方法不同。
 
