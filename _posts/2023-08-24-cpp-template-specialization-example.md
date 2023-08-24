@@ -101,7 +101,7 @@ Velox 中的复杂类型有三个：Array、Map、Row。
 
 ### Array
 
-hashArray 方法，来实现
+通过 hashArray 方法来实现 vector 的 hash 计算，逻辑上就是使用 hasher 计算每个元素的 hash，然后将其进行 combine 就获得了最后的结果。
 
 ```cpp
 static constexpr uint64_t nullHash = 1;
@@ -122,6 +122,8 @@ uint64_t hashArray(
   return hashArray(nullHash, elements);
 }
 ```
+
+上面通过一个单独的函数来实现，其实也可以直接写在 hasher 中。因为已经实现好的函数，所以 hasher 的实现就变成了对函数的简单包装。
 
 ```cpp
 template <typename T>
@@ -172,7 +174,11 @@ template <size_t I = 0, typename FuncT, typename... Tp>
 }
 ```
 
-至此，我们通过代码实例讲解了一些 C++ 模板的特性，有助于理解模板在实际项目中的使用方法，通过模仿来进行学习。
+
+至此，我们就基本介绍了 hasher 的实现，对于非 hasher 相关的实现，如果不想暴露给用户，可以使用匿名 namespace 的方式来将其屏蔽，这样我们对外就可以暴露一个干净的 hasher 实现。
+
+
+本文我们通过代码实例讲解了一些 C++ 模板的特性，有助于理解模板在实际项目中的使用方法，通过模仿来进行学习。
 
 # 参考资料
 
