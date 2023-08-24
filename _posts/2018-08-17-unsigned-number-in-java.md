@@ -19,14 +19,14 @@ Java 新版本中会引入无符号，这个不支持无符号的设计，本身
 
 ## 无符号右移
 
-目前对于无符号的支持，Java 只在位运算的右移支持了一个特殊的符号 >>>，支持右移忽略符号位，用 0 填充。但是这个在实践中肯定是远远不够的，很多场景无法满足。
+目前对于无符号的支持，Java 只在位运算的右移支持了一个特殊的符号 `>>>`，支持右移忽略符号位，用 0 填充。但是这个在实践中肯定是远远不够的，很多场景无法满足。
 
 ## 类型升级变相支持
 
 目前想要获得无符号的效果，当前的方法只能进行类型的升级，就是 byte 和 short 转换为 int，int 转换为 long，通过与运算来只保留与原本类型位数一致。因为本身 Java 对各个类型的长度是做了定义的，所以跨平台使用不会有问题。
 
 ```java
- // unsigned 注释：java 中没有 unsigned，所以为了实现 unsigned，需要使用比原本类型更大的类型，通过位运算获取其 unsigned 的值
+// unsigned 注释：java 中没有 unsigned，所以为了实现 unsigned，需要使用比原本类型更大的类型，通过位运算获取其 unsigned 的值
 // unsigned byte & short -> int，unsigned int -> long
 private static int getUnsignedByte(byte b) {
     return b & 0x0FF;
