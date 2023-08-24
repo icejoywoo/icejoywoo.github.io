@@ -11,7 +11,7 @@ tags: ['c++', 'template']
 
 目前开源社区中已经有一些在使用 Velox 引擎了。Meta 的 [Presto](https://github.com/prestodb/presto) 中有一个 presto-native-engine 的方向，在开发 C++ worker 来替换现有的 Java Worker。另外，[Gluten](https://github.com/oap-project/gluten) 是作 Spark 的 C++ 引擎插件，也使用 Velox 作为其中的一个引擎（另外一个引擎是 ClickHouse）。
 
-本文不是介绍 Velox，只是笔者对 Velox 代码进行了一些阅读，分析了其中 Type 计算 hash 的部分逻辑，来提取其实现逻辑，作为一个 C++ 模板特化的学习示例。Velox 中大量使用了 folly，这是 Meta 的 C++ 基础库。
+本文不是介绍 Velox，只是笔者对 Velox 代码进行了一些阅读，分析了其中 Type 计算 hash 的部分逻辑，来提取其实现逻辑，作为一个 C++ 模板特化的学习示例。
 
 # Velox hash 逻辑
 
@@ -20,7 +20,7 @@ Velox Type 的 hash 计算逻辑主要在两个地方：
 2. BaseVector 的接口中预留了 hashValueAt 方法，来计算 Vector 中某一个值的 hash 值
 
 这二者起始存在一定的重复，hash 计算整体分为两类：
-1. 基础类型：直接使用了 folly::hasher 计算，对于自定义的类型（Timestamp 等），也实现了对应的 hasher
+1. 基础类型：直接使用了 folly::hasher 计算，对于自定义的类型（Timestamp 等），也实现了对应的 hasher，folly 是 Meta 的 C++ 基础库，所以 Velox 中大量使用了 folly（与 Presto 中使用 airlift 一样）
 2. 复杂类型：通过基础类型计算的 hash，combine hash 来计算最终的 hash
 
 下面开始讲解如何实现一个等价的 hasher，复杂类型使用 STL 的 vector 和 map 来模拟，其完整代码在[这里](https://github.com/icejoywoo/cxx_snippets/blob/master/velox_/velox_hasher.cpp)。
