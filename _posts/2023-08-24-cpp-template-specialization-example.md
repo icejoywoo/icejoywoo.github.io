@@ -36,7 +36,7 @@ struct hasher;
 
 这个代码是直接从 folly 中抄过来的，这里是一个通用的接口，但是没有任何实现。struct 和 class 的作用差不多，这里面没有任何实现，所以当后续定义的特化实现没有被命中后，就会直接报错，这是一个挺好的实践。
 
-### bool
+### Bool
 
 当需要实现一个 bool 的 hasher 的时候，就需要进行特化。
  
@@ -54,7 +54,7 @@ struct hasher<bool> {
 
 基础类型大概有四类：bool、浮点数、整数（包含 char）、string，其中，bool 和 string 是上面这种简单直接的方式，而浮点数和整数使用了额外实现自己的 hasher，再对 hasher 进行特化，这样来减少代码的重复。下面我们以浮点数为例来看一下。
 
-### float
+### Float
 
 浮点数实现一个通用的 float_hasher，其逻辑就是直接将内存中的数据强转成 uint64_t 来进行计算。
 
@@ -174,6 +174,7 @@ template <size_t I = 0, typename FuncT, typename... Tp>
 }
 ```
 
+# 结语
 
 至此，我们就基本介绍了 hasher 的实现，对于非 hasher 相关的实现，如果不想暴露给用户，可以使用匿名 namespace 的方式来将其屏蔽，这样我们对外就可以暴露一个干净的 hasher 实现。
 
