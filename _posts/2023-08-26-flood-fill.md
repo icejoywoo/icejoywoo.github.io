@@ -141,6 +141,10 @@ public:
 };
 ```
 
+# 结语
+
+Flood fill 算法思想还是非常巧妙的，灵活应用确实可以简化代码实现，而且思路更加清晰。
+
 # 参考资料
 
 1. [Flood Fill - Wikipedia](https://zh.wikipedia.org/wiki/Flood_fill)
