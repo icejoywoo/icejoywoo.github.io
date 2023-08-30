@@ -174,6 +174,28 @@ template <size_t I = 0, typename FuncT, typename... Tp>
 }
 ```
 
+Row 这个类型其实和 std::tuple 是很相似的，都是支持不同类型的多个元素的容器。所以我们可以实现一个针对 std::tuple 的特化实现。
+
+```cpp
+template <typename... Ts>
+struct hasher<std::tuple<Ts...>> {
+  size_t operator()(const std::tuple<Ts...>& key) const {
+    uint64_t hash = nullHash;
+    bool isFirst = true;
+    // 这里使用了 apply 来展开 tuple 中的元素
+    std::apply([&hash, &isFirst](Ts... args) {
+      auto a = std::forward_as_tuple(args...);
+      // 这里重新调用 for_each 来遍历
+      for_each(a, [&hash, &isFirst](auto x) {
+        hash = isFirst ? hasher<decltype(x)>{}(x) : hashMix(hash, hasher<decltype(x)>{}(x));
+        isFirst = false;
+      });
+    }, key);
+    return hash;
+  }
+};
+```
+
 # 结语
 
 至此，我们就基本介绍了 hasher 的实现，对于非 hasher 相关的实现，如果不想暴露给用户，可以使用匿名 namespace 的方式来将其屏蔽，这样我们对外就可以暴露一个干净的 hasher 实现。
