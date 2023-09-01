@@ -95,6 +95,8 @@ public static int calculatePriorityLevel(long threadUsageNanos)
 
 # MultilevelSplitQueue 实现
 
+MultilevelSplitQueue 是当前版本 presto 的执行队列实现。
+
 整体的调度策略是基于执行时间的公平调度（fair），不可以自行设置查询的优先级，查询的优先级是执行的过程中根据执行的时间动态调度，且每个优先级都有独立的优先队列。选择任务的时候，先选择优先级，再从对应的优先队列中拿取任务来执行。每个优先级预期可以执行的时间是通过level 0优先级的时间 和 levelTimeMultiplier 系数来一起决定的（优先级越低，执行时间越短）。
 
 MultilevelSplitQueue waitingSplits 多级优先队列，优先级有0～4共5个优先级，每个优先级对应一个优先队列。
@@ -180,7 +182,7 @@ MultilevelSplitQueue 重要成员变量：
 - LEVEL_THRESHOLD_SECONDS = {0, 1, 10, 60, 300};
    - 新进来的split，优先级为0
    - computeLevel 根据这个数组计算优先级
-- List<PriorityQueue<PrioritizedSplitRunner>> levelWaitingSplits：
+- `List<PriorityQueue<PrioritizedSplitRunner>>` levelWaitingSplits：
    - list index 就是对应的优先级，目前优先级为1～4一共五个优先级
    - PriorityQueue 就是每个优先级对应的优先队列
 - levelScheduledTime：
@@ -312,6 +314,8 @@ switch (taskPriorityTracking) {
         throw new IllegalArgumentException("Unexpected taskPriorityTracking: " + taskPriorityTracking);
 }
 ```
+
+## 相关 PR
 
 MultilevelSplitQueue 的主要实现 PR：
 - [Change local scheduling to guarantee a time share to levels](https://github.com/prestodb/presto/commit/2395e964ce12aff1509f856895f1982d73101f7e)
