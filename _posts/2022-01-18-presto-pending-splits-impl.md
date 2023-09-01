@@ -8,13 +8,13 @@ tags: ['大数据', 'Presto', '计算引擎']
 
 # 简介
 
-Presto 是一款通用计算引擎，由 Facebook 开发。Presto 由 Coordinator 和 Worker 两个部分组成，Worker 是执行 task 的节点，task 在执行过程中会拆分为 pipeline，会在 Driver 中执行。Driver 默认的执行逻辑是时间片轮转的方式，每当时间片消耗完，都会重新进入 pending 队列等待下次调度。
+Presto 是一款由 Facebook 开发的通用计算引擎。它由 Coordinator 和 Worker 两部分组成。Worker 是执行 task 的节点，而 task 会在执行过程中被拆分为 pipeline，并在 Driver 中执行。Driver 默认的执行逻辑是采用时间片轮转的方式，即每当时间片消耗完毕，任务会重新进入 pending 队列等待下次调度。这种设计使得 Presto 能够高效地处理各种类型的计算任务，并且具有良好的可扩展性和容错性
 
-本文关注的就是 pending 队列的逻辑。整体上，Presto 的 pending 队列有两个实现：PriorityBlockingQueue 和 MultilevelSplitQueue，前者是 JDK 内置的 Queue，前期的实现方法，主要是修改了 compare 逻辑，后者是 Presto 自行实现的队列逻辑，是目前在使用的实现。
+本文着重探讨了 Presto 中 pending 队列的逻辑。Presto 的 pending 队列有两个实现：PriorityBlockingQueue 和 MultilevelSplitQueue。PriorityBlockingQueue 是 JDK 内置的队列，前期实现主要是修改了其 compare 逻辑。而 MultilevelSplitQueue 是 Presto 自行实现的队列逻辑，是目前正在使用的队列。
 
 Presto 目前社区分裂为两个 [presto](https://github.com/prestodb/presto) 和 [trino](https://github.com/trinodb/trino)，本文使用的是 prestodb 的代码。
 
-# PriorityBlockingQueue 实现
+# PriorityBlockingQueue
 
 参考代码分支：0.165
 
@@ -93,7 +93,7 @@ public static int calculatePriorityLevel(long threadUsageNanos)
 ```
 
 
-# MultilevelSplitQueue 实现
+# MultilevelSplitQueue
 
 MultilevelSplitQueue 是当前版本 presto 的执行队列实现。
 
@@ -175,7 +175,7 @@ public void run()
     }
 }
 ```
-## MultilevelSplitQueue 的主要逻辑
+## 核心逻辑
 
 MultilevelSplitQueue 重要成员变量：
 
@@ -289,7 +289,7 @@ private PrioritizedSplitRunner pollSplit()
 
 - split.resetLevelPriority()：在 TaskRunner.run 方法中，会在 blocked split 被唤醒后进行reset，主要是为了防止其优先级过高，导致其他队列中执行的split饿死
 
-## TaskPriorityTracker
+## 更新优先级
 
 TaskPriorityTracker 包含了 updatePriority 和 resetLevelPriority 两个方法，优先级均在这个类进行更新，有两种策略：
 
@@ -323,7 +323,7 @@ MultilevelSplitQueue 的主要实现 PR：
 
 # 总结
 
-MultilevelSplitQueue 整体来说会更加公平一些，并且这个调度策略其实和操作系统的调度策略有一些相似度的。MultilevelSplitQueue 都是通过一个执行时间的长度来进行调度，会更偏向于小作业，这样的调度策略有利于整体的吞吐。另外，对于时间上可以考虑添加 ratio 值，来对时间的快慢进行调整，执行时间变化得慢就越有机会拿到更多的执行时间，是可以基于该思路设计一套优先级策略的。
+MultilevelSplitQueue 是一种公平且高效的调度策略，与操作系统的调度策略具有一定的相似性。它通过考虑执行时间的长度来进行调度，更加偏向于小作业，从而有利于提高整体吞吐量。为了进一步优化调度效果，可以考虑添加一个 ratio 值，对时间（实际时间 * 系数）的快慢进行调整干预，使得执行时间变化较慢的任务有机会获得更多的执行时间。基于这个思路，可以设计一套优先级策略，确保在资源竞争的情况下，优先处理执行时间较长的任务，以平衡整体执行时间，提高系统的公平性和效率。
 
 
 # 参考资料
