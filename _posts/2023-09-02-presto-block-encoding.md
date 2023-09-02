@@ -196,6 +196,22 @@ RLE 编码，只是单个值，然后记录单个值出现的次数。
 
 不支持序列化，内部的 Block 可以是上述的 Block。通过 LazyBlockLoader 来进行加载，一般是 HDFS 等远端的数据，这个主要是源头的数据，TableScan 读取上来的数据，在真正需要的时候再去加载。
 
+# 额外说明
+
+## InterleavedBlock
+
+以前版本的 Map 是通过 `ArrayBlock<InterleavedBlock>` 来实现的，也没有 hash tables。ArrayBlock 的结构是一样的，只是 values block 换成了 InterleavedBlock。所以这里特殊对 InterleavedBlock 进行说明，新版本已经把这个删掉了。
+
+InterleavedBlock 是一个可以包含多种不同类型 block 的 block，在写入数据的时候，会逐个 block 的写入。对于 Map 来说，就是 key 和 value 两个 block 轮流写入数据。InterleavedBlock 目前已知也就只用在 MapBlock 这一个地方。
+
+| block encoding name | block count | block 1 name | block 2 name | ... |
+| --- | --- | --- | --- | --- |
+| LengthPrefixedString | int | LengthPrefixedString | LengthPrefixedString |  |
+
+说明：
+* block encoding name = INTERLEAVED
+* Array offsets 全部都是翻倍的：InterleavedBlock 的 positionCount 是会每个 block 都算进去，Map 有两个 block，所以 positionCount 就是 * 2 的，所以会导致在 Array 中的 offsets 也都是 * 2 的。对于新的 MapBlock 实现来说，这是一个比较大的差异点。
+
 # 总结
 
 至此，我们已经详细介绍了 Presto Block 的序列化格式。这是一种面向列设计的 Columnar 格式，从序列化这个入口切入，可以帮助我们更好地理解数据类型和存储方式。Presto Block 的序列化过程包括将数据块中的数据和元数据打包成字节流，以便于在网络中传输或者存储。这种序列化格式在数据传输、数据存储和数据共享等场景中得到了广泛应用。通过对 Presto Block 的深入了解，我们可以更好地理解 Presto 计算引擎的工作原理，以及它在处理大规模数据查询方面的优势。
