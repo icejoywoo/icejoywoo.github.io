@@ -51,6 +51,7 @@ Block Data:
 
 说明：
 * Page 支持对 block data 的部分进行压缩，支持多种算法：lz4、snappy、gzip、zstd，0.165 版本中只支持 lz4，代码 `PageFileWriterFactory`
+* Header 中有 UncompressedSize 表示未压缩前的大小，这个主要是用于解压的时候使用，lz4 算法是需要知道未压缩大小的
 * 0.165 版本中没有 checksum 字段
 * codec marker 是一个标记 byte，用 bit 的 0 和 1 来标记某个信息是否存在，用于标记三个信息：是否压缩、是否加密、是否有 checksum，代码 `PageCodecMarker`
 * Page 的 header 信息参考代码 `PagesSerdeUtils.writeSerializedPageMetadata`
