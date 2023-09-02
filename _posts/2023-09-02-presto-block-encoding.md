@@ -93,6 +93,7 @@ Block Data:
 | LengthPrefixedString | int | byte[] | long long[] |
 
 说明：
+* block encoding name = INT128_ARRAY
 * int128 是用两个 long 来表示的，在 0.165 版本的时候使用 FixedWidthBlock 来表示
 * int128 是用来表示 LongDecimal 类型
 
