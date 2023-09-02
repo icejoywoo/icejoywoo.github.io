@@ -34,6 +34,8 @@ Block 是实际底层存储类型，用于实现各种丰富的数据类型（Ty
 
 Presto 支持多个 Page 序列化，Page 有 header meta 信息用于标记长度等信息，用于反序列化的时候识别单个 Page 的长度。在序列化多个 Page 的时候，并没有记录 Page 的个数，需要逐个 Page 反序列化返回，直到读完所有数据。
 
+Page 的序列化格式分为两个部分：Header 和 Block Data，下面分别介绍其格式。
+
 Header:
 
 | positionCount | codec marker | UncompressedSize | Size | checksum |
@@ -44,7 +46,7 @@ Block Data:
 
 | block count | BLOCK 0 | BLOCK 1 | ... |
 | --- | --- | --- | --- |
-| int |  |  |  |
+| int | Block | Block | ... |
 
 
 说明：
@@ -121,7 +123,7 @@ Block Data:
 
 | block encoding name | key block | value block | hash table length | hash table bytes | positionCount | offsets | null bits |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| LengthPrefixedString | BLOCK | BLOCK | int | byte[] | int | int[] | byte[] |
+| LengthPrefixedString | Block | Block | int | byte[] | int | int[] | byte[] |
 
 说明：
 * block encoding name = MAP
@@ -132,7 +134,7 @@ Block Data:
 
 | block encoding name | block count | block 0 | block 1 | ... | positionCount | offsets | null bits |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| LengthPrefixedString | int | BLOCK | BLOCK |  | int | int[] | byte[] |
+| LengthPrefixedString | int | Block | Block | ... | int | int[] | byte[] |
 
 说明：
 * block encoding name = ROW
@@ -144,7 +146,7 @@ Block Data:
 
 | block encoding name | key block | value block | hash table length | hash table bytes |
 | --- | --- | --- | --- | --- |
-| LengthPrefixedString | BLOCK | BLOCK | int | byte[] |
+| LengthPrefixedString | Block | Block | int | byte[] |
 
 说明：
 * block encoding name = MAP_ELEMENT
@@ -157,7 +159,7 @@ Block Data:
 
 | block encoding name | block count | block 0 | block 1 | ... |
 | --- | --- | --- | --- | --- |
-| LengthPrefixedString | int | BLOCK | BLOCK |  |
+| LengthPrefixedString | int | Block | Block | ... |
 
 说明：
 * block encoding name = ROW_ELEMENT
@@ -172,7 +174,7 @@ RLE 编码，只是单个值，然后记录单个值出现的次数。
 
 | block encoding name | positionCount | single value block |
 | --- | --- | --- |
-| LengthPrefixedString | int | BLOCK |
+| LengthPrefixedString | int | Block |
 
 说明：
 * block encoding name = RLE
@@ -182,7 +184,7 @@ RLE 编码，只是单个值，然后记录单个值出现的次数。
 
 | block encoding name | positionCount | dictionary block | ids | MostSignificantBits | LeastSignificantBits | SequenceId |
 | --- | --- | --- | --- | --- | --- | --- |
-| LengthPrefixedString | int | BLOCK | byte[] | long | long | long |
+| LengthPrefixedString | int | Block | byte[] | long | long | long |
 
 说明：
 * block encoding name = DICTIONARY
