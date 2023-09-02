@@ -190,8 +190,7 @@ RLE 编码，只是单个值，然后记录单个值出现的次数。
 
 ### LazyBlock
 
-不支持序列化，内部的 Block 可以是上述的 Block。
-通过 LazyBlockLoader 来进行加载，一般是 HDFS 等远端的数据，这个主要是源头的数据，TableScan 读取上来的数据，在真正需要的时候再去加载。
+不支持序列化，内部的 Block 可以是上述的 Block。通过 LazyBlockLoader 来进行加载，一般是 HDFS 等远端的数据，这个主要是源头的数据，TableScan 读取上来的数据，在真正需要的时候再去加载。
 
 # 总结
 
