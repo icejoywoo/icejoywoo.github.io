@@ -62,9 +62,9 @@ Block Data:
 这个是一种序列化字符串的格式，length + bytes 的格式，length 用来记录字符串的长度，用 int 表示。bytes 就是 length 长度的字符串 byte 数据。
 
 
-| length prefixed string |
+| length | string |
 | --- | --- |
-| length(int) | bytes |
+| int | byte[] |
 
 在 Presto 的序列化中，LengthPrefixedString 用于保存 block encoding name，用于标记 Block 对应的类型，来选去对应的方式反序列化。
 
