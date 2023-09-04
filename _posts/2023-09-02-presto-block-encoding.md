@@ -23,12 +23,14 @@ Block 是实际底层存储类型，用于实现各种丰富的数据类型（Ty
 
 例如，ByteArrayBlock 可以实现 boolean 和 tinyint 两种 Type，tinyint 就是 int8_t，这个是数据库中的类型。
 
-下面我们介绍序列化的格式，就分为下面两类，总共四个部分：
-* Page
-* Block
-	* Primitive Block：基本类型，整数、boolean 等
-	* Complex Block：复杂类型，Array、Map等
-	* Other Block: 其他类型，RLE等
+下面我们介绍序列化的格式，就分为下面两类：
+* Page：一批数据
+* Block：一列数据
+
+Block 又可以分为三大类：
+* Primitive Block：基本类型，整数、boolean 等
+* Complex Block：复杂类型，Array、Map等
+* Other Block: 其他类型，RLE等
 
 ## Page
 
