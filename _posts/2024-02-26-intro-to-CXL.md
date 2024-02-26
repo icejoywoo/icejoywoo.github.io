@@ -33,7 +33,7 @@ TPP 是 Meta 公司对于 CXL 使用的探索。这篇论文提出了 Transparen
 CXL-memory 的速度介于 NVM(non-volatile memory) 与 Main Memory 之间，NVM 的代表技术就是 Intel PMem。
 
 
-![Chameleon](/assets/blog/intro-to-cxl/TPP-fig-6.png)
+![Chameleon](/assets/blog/intro-to-cxl/TPP-fig-6.jpg)
 
 这篇论文的主要面向的是 Meta 公司的数据中心，而非公有云的场景。如何区分 hot 和 cold page，本文提出了一个Chameleon的工具，是基于现代 CPU 的 PEBS 采样来分析内存使用情况。
 
