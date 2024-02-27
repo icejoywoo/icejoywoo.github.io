@@ -53,11 +53,11 @@ Microsoft Azure 的公有云规模比较大，成本上内存也是占了大头�
 
 作为一个云厂商，需要在保证 VM 性能的前提下，尽可能利用起来上面两部分内存。Pond 这套方案包含两个预测模型，基本的逻辑如下：
 
-1. 基于 CXL 的内存池，使用的内存是来自于 stranded memory。为了保证内存池的性能，使用的小池子，就是8-16 sockets共享一个 CXL 内存池。
-2. 对于 VM 中的 untouched memory，替换为 CXL pool memory，其性能是不会受到影响的。
+1. 基于 CXL 的内存池，使用的内存是来自于 stranded memory。
+2. 对于 VM 中的 untouched memory，替换为 CXL pool memory，其性能是不会受到影响的。memory offlining 速度比较慢，所以需要在 VM 创建的时候可以预测一个比较准确的 untouched memory 大小。
 3. 对于一些 memory latency 不敏感的 workload，可以使用 CXL pool memory，这个时候其性能受到的影响也不大。核心就是如何判断 workload 是不是 memory lantency 敏感型的，Pond 的方法是通过一个机器学习的预测模型来做这个事情。
-4. untouchecd memory 是可以直接使用 CXL pool memory，对于新进入的 workload 需要预测其可能有多少 untouched memory，因为 memory offlining 速度比较慢，所以最好启动的时候可以预测一个比较准确的 untouched memory 大小。
-5. QoS Monitor 是一个兜底机制，会监控内存的性能，看是否满足 PDM（performance degradation margin，用来定义性能相较于 NUMA-local DRAM slowdown的比例），不满足 PDM 的话会进行 vm memory reconfiguration，将内存全部切换为 local memory，保证 VM 的性能。
+4. QoS Monitor 是一个兜底机制，会监控内存的性能，看是否满足 PDM（performance degradation margin，用来定义性能相较于 NUMA-local DRAM slowdown的比例），不满足 PDM 的话会进行 vm memory reconfiguration，将内存全部切换为 local memory，保证 VM 的性能。
+5. 为了保证内存池的性能，使用的小池子，就是8-16 sockets共享一个 CXL 内存池。
 
 # 参考资料
 
