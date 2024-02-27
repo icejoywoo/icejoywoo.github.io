@@ -8,8 +8,8 @@ isNavItem: true
 
 # 基本信息
 
-* 目前就职于阿里云，从事数据库引擎的相关研发工作。
-* 曾就职于百度，建设国际化的用户日志分析平台，构建时效性更高的流式数据仓库，支持搜索、手机百度、好看视频等产品。
+* 目前就职于阿里云，从事OLAP数据库计算引擎的相关研发工作。
+* 曾就职于百度，建设国际化的用户日志分析平台；MEG构建流式数据仓库，支持搜索、手机百度等产品的实时数据中台。
 
 ## 读书列表
 
@@ -39,13 +39,15 @@ isNavItem: true
 
 ## 翻译作品
 
+**翻译的网站已经关闭了，所以下面的链接都失效了。**
+
 ### 翻译
 
-- [【Python HOWTOs系列】Descriptor指南](http://python.jobbole.com/83562/)
+- ~~[【Python HOWTOs系列】Descriptor指南](http://python.jobbole.com/83562/)~~
 
 ### 校稿
 
-- [Python 内存管理方式和垃圾回收算法](http://python.jobbole.com/82446/)
-- [函数式 JavaScript 简介](http://web.jobbole.com/85266/)
-- [Python编码风格指南](http://python.jobbole.com/84618/)
-- [OpenJDK：是时候替换JDK了么？](http://www.importnew.com/18308.html)
+- ~~[Python 内存管理方式和垃圾回收算法](http://python.jobbole.com/82446/)~~
+- ~~[函数式 JavaScript 简介](http://web.jobbole.com/85266/)~~
+- ~~[Python编码风格指南](http://python.jobbole.com/84618/)~~
+- ~~[OpenJDK：是时候替换JDK了么？](http://www.importnew.com/18308.html)~~
