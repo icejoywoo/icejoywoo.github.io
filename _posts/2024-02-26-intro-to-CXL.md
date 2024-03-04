@@ -41,7 +41,7 @@ TPP 这个方法对于应用程序来说是透明的，应用程序无需修改�
 
 ## Pond
 
-Pond 是 Microsoft Azure 关于 CXL 内存池化的方案，Pond 本质上是基于 CXL 的 memory pooling。
+Pond 是 Microsoft Azure 关于 CXL 内存池化的方案，Pond 本质上是基于 CXL 的 memory pooling。这里应该是使用了 CXL 2.0，因为 2.0 支持 switch，可以支持多台机器访问，这样才可以做内存池化。
 
 Microsoft Azure 的公有云规模比较大，成本上内存也是占了大头，所以希望提升内存的使用率，这个和 TPP 的背景基本类似。
 
