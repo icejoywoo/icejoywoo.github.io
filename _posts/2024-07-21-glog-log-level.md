@@ -44,7 +44,24 @@ VLOG(1) << "This is a VLOG log";
 
 另外一个 `vmodule` 参数提供了更好的灵活性，可以根据模块进行开启。这里的 `module` 含义是不包含路径和扩展名的文件名，例如 `/path/to/Foo.cpp` 的模块就是 `Foo`。另外，这个地方还支持通配符`*`，例如 `F*` 就可以适配以 `F` 开头的所有模块。
 
-`vmodule` 的格式为 `module1=level1,module2=level2`，可以配置多个模块，该参数也是可以通过 `GFLAGS_vmodule` 来动态修改的。
+`vmodule` 的格式为 `module1=level1,module2=level2`，可以配置多个模块，该参数也是可以通过 `GFLAGS_vmodule` 来动态修改的。下面举例说明。
+
+
+假设，我们有两个文件，分别叫`foo.cpp`和`bar.cpp`，都有一个`init`方法。
+
+```cpp
+// filename: /path/to/foo.cpp
+void initFoo() {
+	VLOG(1) << "Init foo";
+}
+
+// filename: /path/to/bar.cpp
+void initBar() {
+	VLOG(1) << "Init bar";
+}
+```
+
+通过配置`vmodule`设置为`foo=1`，就可以只打印`foo.cpp`中的`VLOG`日志。通过配置`vmodule`设置为`foo=1,bar=1`，就可以打印两个文件的日志。通过这种方式我们可以更细粒度地控制日志的打印。
 
 ## DLOG
 
