@@ -5,8 +5,6 @@ category: java
 tags: ['java', 'guava']
 ---
 
-# 深入 Guava Cache 源码：`get(key, Callable)` 如何保证 Loader 只执行一次
-
 ## 引言
 
 在高并发场景下，本地缓存是抵御下游服务压力的第一道防线。Guava Cache 的 `Cache.get(key, Callable)` 方法有一个重要承诺：**对于同一个 key，即使有 100 个线程同时 cache miss，Callable（loader）也只会被执行一次**，其余线程阻塞等待结果。
